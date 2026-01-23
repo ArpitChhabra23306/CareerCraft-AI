@@ -9,6 +9,8 @@ const MessageSchema = new mongoose.Schema({
 const InterviewSessionSchema = new mongoose.Schema({
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     role: { type: String, required: true }, // e.g. "Frontend Developer"
+    company: { type: String, default: "" }, // e.g. "Google"
+    skills: { type: [String], default: [] }, // e.g. ["React", "Node.js"]
     difficulty: { type: String, enum: ['Easy', 'Medium', 'Hard'], default: 'Medium' },
     messages: [MessageSchema],
     feedback: { type: String }, // Overall feedback from AI

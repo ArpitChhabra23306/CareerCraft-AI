@@ -105,10 +105,12 @@ export const generateQuiz = async (text, numQuestions = 5) => {
     ]);
 };
 
-export const getInterviewResponse = async (history, message, role, difficulty) => {
+export const getInterviewResponse = async (history, message, role, difficulty, company = "", skills = []) => {
     try {
-        // Construct chat history for Gemini
-        // history from DB: [{ role: 'user'|'model', parts: [{ text: ... }] }]
+        // Construct detailed prompt
+        const skillsStr = skills && skills.length > 0 ? `Skills to assess: ${skills.join(", ")}.` : "";
+        const companyStr = company ? `Target Company: ${company}. (Adopt the interview style of this company if known).` : "";
+
         // Create chat instance
         const chat = ai.chats.create({
             model: "gemini-2.5-flash",
@@ -116,15 +118,19 @@ export const getInterviewResponse = async (history, message, role, difficulty) =
             config: {
                 // systemInstruction in config, or use separate field depending on SDK version.
                 // For safety in this simplified SDK wrapper, passing it in config is standard.
-                systemInstruction: `You are an expert interviewer for the role of ${role}. Difficulty: ${difficulty}. 
-        Conduct a technical interview. Ask questions one by one. Provide feedback if the user answers incorrectly. 
+                systemInstruction: `You are an expert technical interviewer for the role of ${role}. Difficulty: ${difficulty}.
+        ${companyStr}
+        ${skillsStr}
+        Conduct a technical interview. Ask questions one by one. 
+        Start by introducing yourself and testing the candidate on the specified skills.
+        Provide feedback if the user answers incorrectly. 
         Keep responses professional but encouraging.`,
                 maxOutputTokens: 500,
             }
         });
 
-        // Send the message. Expects string or Array<string | Part>
-        const result = await chat.sendMessage(message);
+        // Send the message. Expects object { message: ... } per SDK test.
+        const result = await chat.sendMessage({ message: message });
         return result.text;
     } catch (error) {
         console.error("Interview Error:", error);

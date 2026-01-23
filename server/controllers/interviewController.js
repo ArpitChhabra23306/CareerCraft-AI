@@ -3,16 +3,19 @@ import { getInterviewResponse } from '../services/geminiService.js';
 
 export const startInterview = async (req, res) => {
     try {
-        const { role, difficulty } = req.body;
+        const { role, difficulty, company, skills } = req.body;
         const newSession = new InterviewSession({
             user: req.user.id,
             role,
             difficulty,
+            company: company || "",
+            skills: skills || [],
             messages: []
         });
 
         // Initial greeting from AI
-        const initialMessage = await getInterviewResponse([], "Start the interview.", role, difficulty);
+        // We pass the full session context object now or just expand args
+        const initialMessage = await getInterviewResponse([], "Start the interview.", role, difficulty, company, skills);
         newSession.messages.push({ role: 'model', content: initialMessage });
 
         await newSession.save();
@@ -42,7 +45,7 @@ export const sendInterviewMessage = async (req, res) => {
         session.messages.push({ role: 'user', content: message });
 
         // Get AI response
-        const aiResponse = await getInterviewResponse(history, message, session.role, session.difficulty);
+        const aiResponse = await getInterviewResponse(history, message, session.role, session.difficulty, session.company, session.skills);
 
         // Add AI response to DB
         session.messages.push({ role: 'model', content: aiResponse });
