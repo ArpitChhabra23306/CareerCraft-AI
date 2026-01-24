@@ -55,11 +55,11 @@ const Documents = () => {
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
-                <h1 className="text-3xl font-bold text-gray-800">My Documents</h1>
+                <h1 className="text-3xl font-bold text-gray-800 dark:text-white">My Documents</h1>
             </div>
 
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <h2 className="text-lg font-semibold mb-4">Upload New Document</h2>
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                <h2 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">Upload New Document</h2>
                 <form onSubmit={handleUpload} className="flex gap-4 items-center">
                     <input
                         type="file"
@@ -79,7 +79,7 @@ const Documents = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {docs.map((doc) => (
-                    <div key={doc._id} className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition">
+                    <div key={doc._id} className="bg-white dark:bg-gray-800 p-5 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition">
                         <div className="flex items-start justify-between mb-3">
                             <div className="p-2 bg-red-50 text-red-600 rounded-lg">
                                 <FileText size={24} />
@@ -88,8 +88,8 @@ const Documents = () => {
                                 <Trash2 size={18} />
                             </button>
                         </div>
-                        <h3 className="font-semibold text-gray-800 truncate mb-1" title={doc.filename}>{doc.filename}</h3>
-                        <p className="text-sm text-gray-500 mb-4">{(doc.fileSize / 1024 / 1024).toFixed(2)} MB • {new Date(doc.uploadDate).toLocaleDateString()}</p>
+                        <h3 className="font-semibold text-gray-800 dark:text-white truncate mb-1" title={doc.filename}>{doc.filename}</h3>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">{(doc.fileSize / 1024 / 1024).toFixed(2)} MB • {new Date(doc.uploadDate).toLocaleDateString()}</p>
 
                         <div className="flex gap-2">
                             <Link

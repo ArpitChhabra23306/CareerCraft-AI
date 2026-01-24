@@ -90,9 +90,9 @@ const Flashcards = () => {
 
                 <div
                     onClick={() => setIsFlipped(!isFlipped)}
-                    className="w-full h-80 bg-white rounded-2xl shadow-lg cursor-pointer perspective-1000 group relative flex items-center justify-center p-8 text-center transition-all hover:shadow-xl"
+                    className="w-full h-80 bg-white dark:bg-gray-800 rounded-2xl shadow-lg cursor-pointer perspective-1000 group relative flex items-center justify-center p-8 text-center transition-all hover:shadow-xl"
                 >
-                    <div className="text-2xl font-medium text-gray-800">
+                    <div className="text-2xl font-medium text-gray-800 dark:text-white">
                         {isFlipped ? card.back : card.front}
                     </div>
                     <div className="absolute bottom-4 right-4 text-xs text-gray-400">
@@ -123,15 +123,15 @@ const Flashcards = () => {
     // Render List Mode
     return (
         <div className="space-y-6">
-            <h1 className="text-3xl font-bold text-gray-800">Flashcard Decks</h1>
+            <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Flashcard Decks</h1>
 
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <h2 className="text-lg font-semibold mb-4">Generate New Deck</h2>
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                <h2 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">Generate New Deck</h2>
                 <div className="flex gap-4">
                     <select
                         value={selectedDoc}
                         onChange={(e) => setSelectedDoc(e.target.value)}
-                        className="flex-1 border p-2 rounded-lg"
+                        className="flex-1 border p-2 rounded-lg dark:bg-gray-700 dark:text-white dark:border-gray-600"
                     >
                         <option value="">Select a Document</option>
                         {docs.map(d => <option key={d._id} value={d._id}>{d.filename}</option>)}
@@ -148,12 +148,12 @@ const Flashcards = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {decks.map(deck => (
-                    <div key={deck._id} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition cursor-pointer" onClick={() => startStudy(deck)}>
+                    <div key={deck._id} className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition cursor-pointer" onClick={() => startStudy(deck)}>
                         <div className="flex items-center gap-3 mb-4">
                             <div className="p-2 bg-yellow-50 text-yellow-600 rounded-lg"><Layers size={24} /></div>
-                            <h3 className="font-semibold text-lg truncate">{deck.title}</h3>
+                            <h3 className="font-semibold text-lg truncate text-gray-800 dark:text-white">{deck.title}</h3>
                         </div>
-                        <p className="text-gray-600 text-sm mb-4">{deck.cards.length} Cards</p>
+                        <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">{deck.cards.length} Cards</p>
                         <button className="w-full bg-indigo-50 text-indigo-700 py-2 rounded-lg font-medium">Study Now</button>
                     </div>
                 ))}

@@ -1,6 +1,7 @@
 import Document from '../models/Document.js';
 import FlashcardDeck from '../models/FlashcardDeck.js';
 import Quiz from '../models/Quiz.js';
+import QuizResult from '../models/QuizResult.js';
 import { summarizeText, explainConcept, generateFlashcards, generateQuiz } from '../services/geminiService.js';
 import fs from 'fs';
 import { createRequire } from 'module';
@@ -145,8 +146,20 @@ export const updateQuizScore = async (req, res) => {
             return res.status(403).json({ message: 'Not authorized' });
         }
 
+        // Update main quiz score (latest attempt)
         quiz.score = score;
         await quiz.save();
+
+        // Create a historical QuizResult entry
+        const percentage = quiz.totalQuestions > 0 ? (score / quiz.totalQuestions) * 100 : 0;
+
+        await QuizResult.create({
+            user: req.user.id,
+            score: score,
+            totalQuestions: quiz.totalQuestions,
+            percentage: percentage,
+            quizTitle: quiz.title
+        });
 
         res.json(quiz);
     } catch (err) {

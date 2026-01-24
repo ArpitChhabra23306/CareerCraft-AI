@@ -32,3 +32,11 @@
         transform: translate(0px, 0px) scale(1);
     }
 }
+
+.dark {
+    color-scheme: dark;
+}
+
+body {
+    @apply transition-colors duration-300 ease-in-out text-gray-900 dark:text-gray-100;
+}

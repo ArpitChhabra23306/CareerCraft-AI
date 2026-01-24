@@ -10,7 +10,8 @@ import {
     BrainCircuit,
     ChevronLeft,
     ChevronRight,
-    Menu
+    Menu,
+    User
 } from 'lucide-react';
 
 const SidebarItem = ({ icon: Icon, label, path, active, collapsed }) => (
@@ -18,7 +19,7 @@ const SidebarItem = ({ icon: Icon, label, path, active, collapsed }) => (
         to={path}
         className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-all ${active
             ? 'bg-indigo-600 text-white shadow-md'
-            : 'text-gray-600 hover:bg-indigo-50 hover:text-indigo-600'
+            : 'text-gray-600 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-gray-900 hover:text-indigo-600 dark:hover:text-white'
             } ${collapsed ? 'justify-center px-2' : ''}`}
         title={collapsed ? label : ''}
     >
@@ -39,13 +40,14 @@ const Layout = () => {
         { icon: Layers, label: 'Flashcards', path: '/flashcards' },
         { icon: BrainCircuit, label: 'Quiz', path: '/quiz' },
         { icon: MessageSquare, label: 'Interview Prep', path: '/interview' },
+        { icon: User, label: 'Profile', path: '/profile' },
     ];
 
     return (
-        <div className="min-h-screen bg-gray-50 flex">
+        <div className="min-h-screen bg-gray-50 dark:bg-black flex">
             {/* Sidebar (Desktop) */}
-            <aside className={`bg-white border-r border-gray-200 hidden md:flex flex-col transition-all duration-300 relative ${isCollapsed ? 'w-20' : 'w-64'}`}>
-                <div className={`p-6 border-b border-gray-100 flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
+            <aside className={`bg-white dark:bg-black border-r border-gray-200 dark:border-gray-800 hidden md:flex flex-col transition-all duration-300 relative ${isCollapsed ? 'w-20' : 'w-64'}`}>
+                <div className={`p-6 border-b border-gray-100 dark:border-gray-800 flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
                     <h1 className={`text-2xl font-bold text-indigo-600 flex items-center gap-2 ${isCollapsed ? 'hidden' : 'flex'}`}>
                         <BrainCircuit className="text-indigo-600" />
                         AI Learn
@@ -74,20 +76,28 @@ const Layout = () => {
 
                 <div className="p-4 border-t border-gray-100">
                     {!isCollapsed ? (
-                        <div className="flex items-center gap-3 mb-4 px-2">
-                            <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold shrink-0">
-                                {user?.username?.[0]?.toUpperCase() || 'U'}
+                        <Link to="/profile" className="flex items-center gap-3 mb-4 px-2 hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded-lg transition-colors">
+                            <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold shrink-0 overflow-hidden">
+                                {user?.avatar ? (
+                                    <img src={user.avatar} alt="Profile" className="w-full h-full object-cover" />
+                                ) : (
+                                    user?.username?.[0]?.toUpperCase() || 'U'
+                                )}
                             </div>
                             <div className="overflow-hidden">
-                                <p className="text-sm font-medium text-gray-800 truncate">{user?.username || 'User'}</p>
-                                <p className="text-xs text-gray-500 truncate">{user?.email}</p>
+                                <p className="text-sm font-medium text-gray-800 dark:text-gray-200 truncate">{user?.username || 'User'}</p>
+                                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user?.email}</p>
                             </div>
-                        </div>
+                        </Link>
                     ) : (
                         <div className="flex justify-center mb-4">
-                            <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold cursor-help" title={user?.username}>
-                                {user?.username?.[0]?.toUpperCase() || 'U'}
-                            </div>
+                            <Link to="/profile" className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold cursor-help overflow-hidden" title={user?.username}>
+                                {user?.avatar ? (
+                                    <img src={user.avatar} alt="Profile" className="w-full h-full object-cover" />
+                                ) : (
+                                    user?.username?.[0]?.toUpperCase() || 'U'
+                                )}
+                            </Link>
                         </div>
                     )}
                     <button

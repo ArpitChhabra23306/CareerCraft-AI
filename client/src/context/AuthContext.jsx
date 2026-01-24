@@ -10,10 +10,29 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
-            setUser(JSON.parse(storedUser));
+            const parsedUser = JSON.parse(storedUser);
+            setUser(parsedUser);
+
+            // Apply theme on initial load
+            if (parsedUser.theme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
         }
         setLoading(false);
     }, []);
+
+    // Effect to listen to user changes and update theme if it changes in real-time
+    useEffect(() => {
+        if (user) {
+            if (user.theme === 'dark') {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+    }, [user]);
 
     const login = async (email, password) => {
         const res = await api.post('/auth/login', { email, password });
@@ -32,8 +51,16 @@ export const AuthProvider = ({ children }) => {
         setUser(null);
     };
 
+    const updateUserProfile = (userData) => {
+        setUser((prevUser) => {
+            const updatedUser = { ...prevUser, ...userData };
+            localStorage.setItem('user', JSON.stringify(updatedUser));
+            return updatedUser;
+        });
+    };
+
     return (
-        <AuthContext.Provider value={{ user, login, register, logout, loading }}>
+        <AuthContext.Provider value={{ user, login, register, logout, loading, updateUserProfile }}>
             {!loading && children}
         </AuthContext.Provider>
     );

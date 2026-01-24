@@ -1,4 +1,5 @@
 import express from 'express';
+// Checked
 import { chatWithDocument, generateDocumentSummary, createFlashcards, createQuiz, getDecks, getQuizzes, updateQuizScore } from '../controllers/aiController.js';
 import { verifyToken } from '../middleware/authMiddleware.js';
 

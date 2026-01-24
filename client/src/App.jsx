@@ -10,6 +10,7 @@ import DocumentView from './pages/DocumentView';
 import Flashcards from './pages/Flashcards';
 import Quiz from './pages/Quiz';
 import Interview from './pages/Interview';
+import Profile from './pages/Profile';
 import Home from './pages/Home';
 
 const ProtectedRoute = ({ children }) => {
@@ -41,6 +42,7 @@ function App() {
         <Route path="flashcards" element={<Flashcards />} />
         <Route path="quiz" element={<Quiz />} />
         <Route path="interview" element={<Interview />} />
+        <Route path="profile" element={<Profile />} />
       </Route>
     </Routes>
   );

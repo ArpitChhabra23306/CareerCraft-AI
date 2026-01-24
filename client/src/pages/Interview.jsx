@@ -73,10 +73,10 @@ const Interview = () => {
 
     if (activeSession) {
         return (
-            <div className="h-[calc(100vh-6rem)] flex flex-col bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                <div className="p-4 bg-white border-b flex justify-between items-center shadow-sm z-10">
+            <div className="h-[calc(100vh-6rem)] flex flex-col bg-white dark:bg-black rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 overflow-hidden">
+                <div className="p-4 bg-white dark:bg-gray-800 border-b flex justify-between items-center shadow-sm z-10 dark:border-gray-700">
                     <div>
-                        <h2 className="text-lg font-bold text-gray-800">{activeSession.role} Interview</h2>
+                        <h2 className="text-lg font-bold text-gray-800 dark:text-white">{activeSession.role} Interview</h2>
                         <span className={`text-xs px-2 py-1 rounded-full ${activeSession.difficulty === 'Hard' ? 'bg-red-100 text-red-700' :
                             activeSession.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
                                 'bg-green-100 text-green-700'
@@ -89,7 +89,7 @@ const Interview = () => {
                     </button>
                 </div>
 
-                <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-gray-50">
+                <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-gray-50 dark:bg-gray-900">
                     {messages.map((msg, idx) => (
                         <div key={idx} className={`flex gap-4 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
                             <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 shadow-sm ${msg.role === 'user' ? 'bg-indigo-600 text-white' : 'bg-white text-green-600 border border-green-100'}`}>
@@ -97,7 +97,7 @@ const Interview = () => {
                             </div>
                             <div className={`p-4 rounded-2xl max-w-[80%] text-sm leading-relaxed shadow-sm ${msg.role === 'user'
                                 ? 'bg-indigo-600 text-white rounded-tr-none'
-                                : 'bg-white text-gray-800 border border-gray-100 rounded-tl-none'
+                                : 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 border border-gray-100 dark:border-gray-700 rounded-tl-none'
                                 }`}>
                                 <div className={`prose prose-sm max-w-none ${msg.role === 'user' ? 'prose-invert text-white' : 'text-gray-800'}`}>
                                     <ReactMarkdown>{msg.content}</ReactMarkdown>
@@ -122,7 +122,7 @@ const Interview = () => {
                     <div ref={endRef} />
                 </div>
 
-                <form onSubmit={sendMessage} className="p-4 bg-white border-t border-gray-200 flex gap-4">
+                <form onSubmit={sendMessage} className="p-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 flex gap-4">
                     <input
                         type="text"
                         value={input}
@@ -145,22 +145,22 @@ const Interview = () => {
 
     return (
         <div className="space-y-6">
-            <h1 className="text-3xl font-bold text-gray-800">Interview Preparation</h1>
+            <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Interview Preparation</h1>
 
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <h2 className="text-lg font-semibold mb-4">Start New Session</h2>
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                <h2 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">Start New Session</h2>
                 <div className="flex gap-4 flex-wrap">
                     <input
                         type="text"
                         placeholder="Role (e.g., Frontend Developer)"
                         value={role}
                         onChange={(e) => setRole(e.target.value)}
-                        className="flex-1 border p-2 rounded-lg min-w-[200px]"
+                        className="flex-1 border p-2 rounded-lg min-w-[200px] dark:bg-gray-700 dark:text-white dark:border-gray-600"
                     />
                     <select
                         value={difficulty}
                         onChange={(e) => setDifficulty(e.target.value)}
-                        className="border p-2 rounded-lg"
+                        className="border p-2 rounded-lg dark:bg-gray-700 dark:text-white dark:border-gray-600"
                     >
                         <option>Easy</option>
                         <option>Medium</option>
@@ -178,7 +178,7 @@ const Interview = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {sessions.map(session => (
-                    <div key={session._id} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition cursor-pointer" onClick={() => enterSession(session)}>
+                    <div key={session._id} className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition cursor-pointer" onClick={() => enterSession(session)}>
                         <div className="flex justify-between items-start mb-4">
                             <div className="p-2 bg-green-50 text-green-600 rounded-lg"><MessageSquare size={24} /></div>
                             <span className={`text-xs px-2 py-1 rounded-full ${session.difficulty === 'Hard' ? 'bg-red-100 text-red-700' :
@@ -188,7 +188,7 @@ const Interview = () => {
                                 {session.difficulty}
                             </span>
                         </div>
-                        <h3 className="font-semibold text-lg truncate mb-1">{session.role}</h3>
+                        <h3 className="font-semibold text-lg truncate mb-1 text-gray-800 dark:text-white">{session.role}</h3>
                         <p className="text-gray-500 text-xs mb-4 flex items-center gap-1">
                             <Clock size={12} /> {new Date(session.createdAt).toLocaleDateString()}
                         </p>

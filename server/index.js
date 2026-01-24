@@ -10,6 +10,7 @@ import documentRoutes from './routes/documentRoutes.js';
 import aiRoutes from './routes/aiRoutes.js';
 import interviewRoutes from './routes/interviewRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import quizRoutes from './routes/quizRoutes.js';
 
 dotenv.config();
 
@@ -29,7 +30,8 @@ app.use('/auth', authRoutes);
 app.use('/docs', documentRoutes);
 app.use('/ai', aiRoutes);
 app.use('/interview', interviewRoutes);
-app.use('/user', userRoutes);
+app.use('/quiz', quizRoutes); // Use quiz routes (separate from AI routes which has generic quiz gen)
+app.use('/user', userRoutes); // New User Routes
 app.use('/uploads', express.static('uploads'));
 
 app.get('/', (req, res) => {

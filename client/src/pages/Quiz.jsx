@@ -127,8 +127,8 @@ const Quiz = () => {
                     <span className="font-bold text-gray-500">Question {currentQIndex + 1} of {activeQuiz.questions.length}</span>
                 </div>
 
-                <div className="bg-white p-8 rounded-xl shadow-md">
-                    <h2 className="text-xl font-bold mb-6 text-gray-800">{currentQ.question}</h2>
+                <div className="bg-white dark:bg-gray-800 p-8 rounded-xl shadow-md">
+                    <h2 className="text-xl font-bold mb-6 text-gray-800 dark:text-white">{currentQ.question}</h2>
                     <div className="space-y-3">
                         {currentQ.options.map((option, idx) => (
                             <button
@@ -136,7 +136,7 @@ const Quiz = () => {
                                 onClick={() => handleOptionSelect(option)}
                                 className={`w-full text-left p-4 rounded-lg border transition ${answers[currentQIndex] === option
                                     ? 'bg-indigo-100 border-indigo-500 text-indigo-700'
-                                    : 'hover:bg-gray-50 border-gray-200'
+                                    : 'hover:bg-gray-50 dark:hover:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-200'
                                     }`}
                             >
                                 {option}
@@ -168,15 +168,15 @@ const Quiz = () => {
 
     return (
         <div className="space-y-6">
-            <h1 className="text-3xl font-bold text-gray-800">AI Quizzes</h1>
+            <h1 className="text-3xl font-bold text-gray-800 dark:text-white">AI Quizzes</h1>
 
-            <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                <h2 className="text-lg font-semibold mb-4">Generate New Quiz</h2>
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                <h2 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">Generate New Quiz</h2>
                 <div className="flex gap-4">
                     <select
                         value={selectedDoc}
                         onChange={(e) => setSelectedDoc(e.target.value)}
-                        className="flex-1 border p-2 rounded-lg"
+                        className="flex-1 border p-2 rounded-lg dark:bg-gray-700 dark:text-white dark:border-gray-600"
                     >
                         <option value="">Select a Document</option>
                         {docs.map(d => <option key={d._id} value={d._id}>{d.filename}</option>)}
@@ -193,12 +193,12 @@ const Quiz = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {quizzes.map(quiz => (
-                    <div key={quiz._id} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition cursor-pointer" onClick={() => startQuiz(quiz)}>
+                    <div key={quiz._id} className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition cursor-pointer" onClick={() => startQuiz(quiz)}>
                         <div className="flex items-center gap-3 mb-4">
                             <div className="p-2 bg-purple-50 text-purple-600 rounded-lg"><BrainCircuit size={24} /></div>
-                            <h3 className="font-semibold text-lg truncate">{quiz.title}</h3>
+                            <h3 className="font-semibold text-lg truncate text-gray-800 dark:text-white">{quiz.title}</h3>
                         </div>
-                        <p className="text-gray-600 text-sm mb-4">{quiz.totalQuestions} Questions • Score: {quiz.score}</p>
+                        <p className="text-gray-600 dark:text-gray-400 text-sm mb-4">{quiz.totalQuestions} Questions • Score: {quiz.score}</p>
                         <button className="w-full bg-indigo-50 text-indigo-700 py-2 rounded-lg font-medium">Re-Take Quiz</button>
                     </div>
                 ))}
