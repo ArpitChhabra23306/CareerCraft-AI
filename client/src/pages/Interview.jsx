@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
+import ReactMarkdown from 'react-markdown';
 import api from '../utils/api';
 import { MessageSquare, Plus, Send, Bot, User, Clock } from 'lucide-react';
 
@@ -77,8 +78,8 @@ const Interview = () => {
                     <div>
                         <h2 className="text-lg font-bold text-gray-800">{activeSession.role} Interview</h2>
                         <span className={`text-xs px-2 py-1 rounded-full ${activeSession.difficulty === 'Hard' ? 'bg-red-100 text-red-700' :
-                                activeSession.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
-                                    'bg-green-100 text-green-700'
+                            activeSession.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
+                                'bg-green-100 text-green-700'
                             }`}>
                             {activeSession.difficulty}
                         </span>
@@ -95,10 +96,12 @@ const Interview = () => {
                                 {msg.role === 'user' ? <User size={20} /> : <Bot size={20} />}
                             </div>
                             <div className={`p-4 rounded-2xl max-w-[80%] text-sm leading-relaxed shadow-sm ${msg.role === 'user'
-                                    ? 'bg-indigo-600 text-white rounded-tr-none'
-                                    : 'bg-white text-gray-800 border border-gray-100 rounded-tl-none'
+                                ? 'bg-indigo-600 text-white rounded-tr-none'
+                                : 'bg-white text-gray-800 border border-gray-100 rounded-tl-none'
                                 }`}>
-                                {msg.content}
+                                <div className={`prose prose-sm max-w-none ${msg.role === 'user' ? 'prose-invert text-white' : 'text-gray-800'}`}>
+                                    <ReactMarkdown>{msg.content}</ReactMarkdown>
+                                </div>
                             </div>
                         </div>
                     ))}
@@ -179,8 +182,8 @@ const Interview = () => {
                         <div className="flex justify-between items-start mb-4">
                             <div className="p-2 bg-green-50 text-green-600 rounded-lg"><MessageSquare size={24} /></div>
                             <span className={`text-xs px-2 py-1 rounded-full ${session.difficulty === 'Hard' ? 'bg-red-100 text-red-700' :
-                                    session.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
-                                        'bg-green-100 text-green-700'
+                                session.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
+                                    'bg-green-100 text-green-700'
                                 }`}>
                                 {session.difficulty}
                             </span>

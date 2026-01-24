@@ -98,13 +98,20 @@ export const createFlashcards = async (req, res) => {
 
 export const createQuiz = async (req, res) => {
     try {
-        const { documentId, numQuestions } = req.body;
+        const { documentId, numQuestions, questions } = req.body;
         console.log(`Creating Quiz for doc: ${documentId}`);
         const doc = await Document.findById(documentId);
         if (!doc) return res.status(404).json({ message: 'Document not found' });
 
-        const text = await extractTextFromPDF(doc.filepath);
-        const quizData = await generateQuiz(text.substring(0, 10000), numQuestions || 5);
+        let quizData;
+
+        if (questions && Array.isArray(questions) && questions.length > 0) {
+            console.log("Using provided questions for quiz.");
+            quizData = questions;
+        } else {
+            const text = await extractTextFromPDF(doc.filepath);
+            quizData = await generateQuiz(text.substring(0, 10000), numQuestions || 5);
+        }
 
         const newQuiz = new Quiz({
             user: req.user.id,
@@ -122,6 +129,28 @@ export const createQuiz = async (req, res) => {
         if (err.message.includes('429') || err.message.includes('Too Many Requests')) {
             return res.status(429).json({ message: "AI Usage Limit Reached. Please wait a minute." });
         }
+        res.status(500).json({ error: err.message });
+    }
+};
+
+export const updateQuizScore = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { score } = req.body;
+
+        const quiz = await Quiz.findById(id);
+        if (!quiz) return res.status(404).json({ message: 'Quiz not found' });
+
+        if (quiz.user.toString() !== req.user.id) {
+            return res.status(403).json({ message: 'Not authorized' });
+        }
+
+        quiz.score = score;
+        await quiz.save();
+
+        res.json(quiz);
+    } catch (err) {
+        console.error("Update Score Error:", err);
         res.status(500).json({ error: err.message });
     }
 };

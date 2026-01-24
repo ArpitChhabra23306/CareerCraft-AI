@@ -38,78 +38,26 @@ const Quiz = () => {
         if (!selectedDoc) return;
         setLoading(true);
         try {
-            const quizData = await aiService.generateQuiz(selectedDoc, 5);
-            // If local AI returned data directly, we might need to save it? 
-            // Current backend flow saves it. 
-            // Wait, local AI returns raw data, server saves it.
-            // We should potentially save the quiz to the backend if generated locally so it persists?
-            // For now, let's just display it or send it to backend to save?
-            // The current implementation expects 'generateQuiz' to return the quiz list update or similar.
-            // Actually, fetchQuizzes gets the list. The POST creates it.
-            // If local, we create it locally. We should probably POST the result to standard create endpoint if we want endurance.
-            // But let's restart: logic
+            const result = await aiService.generateQuiz(selectedDoc, 5);
+            let quizToStart;
 
-            // If server-side: POST /ai/quiz -> creates and returns quiz.
-            // If client-side: aiService.generateQuiz -> returns QUESTIONS array.
-
-            // We need to SAVE this quiz to the database if we want it to show up in fetchQuizzes().
-            // So if it's local, we need to call a "save quiz" endpoint.
-            // Current /ai/quiz endpoint does GENERATION + SAVE.
-            // We need a /quizzes endpoint to just SAVE.
-            // Or we treat local generation as ephemeral? No, user expects it to be saved.
-
-            // Let's assume aiService handles the fallback. 
-            // BUT aiService.generateQuiz currently returns `res.data` (the saved quiz object) OR `JSON array` (questions).
-            // This is mismatched return types.
-
-            // Let's fix aiService first? Or handle it here.
-            // If array, it's local questions. We should save them.
-
-            // TODO: Post-MVP, save local quiz.
-            // For now, let's just assume we get a quiz object or mock it.
-            // Actually, `generateQuiz` on server returns the `newQuiz` object.
-
-            // If local, we need to construct a similar object.
-
-            /*
-            const newQuiz = {
-               _id: 'local-' + Date.now(),
-               title: 'Local Quiz',
-               questions: quizData,
-               score: 0
-            }
-            */
-
-            // Re-reading aiService: server returns `res.data` (the quiz object).
-            // Local returns `questions` array.
-
-            // I should use api.post to save it if local?
-            // Or modify aiService to save it?
-
-            // Correct approach:
-            // if (Array.isArray(quizData)) {
-            //    // It's local questions. Send to backend to save?
-            //    // We don't have a 'save existing quiz' endpoint?
-            //    // We have createQuiz (generates).
-            //    // We probably need a 'saveQuiz' endpoint.
-            // } 
-
-            // QUICK FIX: For now, if local, just set it as active quiz immediately without saving to DB (Ephemeral).
-            // This satisfies "generating" without rate limits.
-
-            if (Array.isArray(quizData)) {
-                const localQuiz = {
-                    _id: 'local-' + Date.now(),
-                    title: 'Local AI Quiz',
-                    questions: quizData,
-                    totalQuestions: quizData.length,
-                    score: 0
-                };
-                startQuiz(localQuiz); // Start immediately
+            if (Array.isArray(result)) {
+                // If local generation, save it to backend
+                const res = await api.post('/ai/quiz', {
+                    documentId: selectedDoc,
+                    questions: result,
+                    numQuestions: result.length
+                });
+                quizToStart = res.data;
             } else {
-                fetchQuizzes();
+                // Server generated and saved it already
+                quizToStart = result;
             }
 
+            if (quizToStart) {
+                startQuiz(quizToStart);
+                fetchQuizzes(); // Refresh list
+            }
             setSelectedDoc('');
         } catch (err) {
             alert(err.response?.data?.message || err.response?.data?.error || 'Failed to generate quiz');
@@ -130,13 +78,21 @@ const Quiz = () => {
         setAnswers(prev => ({ ...prev, [currentQIndex]: option }));
     };
 
-    const submitQuiz = () => {
+    const submitQuiz = async () => {
         let newScore = 0;
         activeQuiz.questions.forEach((q, idx) => {
             if (answers[idx] === q.correctAnswer) newScore++;
         });
         setScore(newScore);
         setShowResults(true);
+
+        // Update score in backend
+        try {
+            await api.put(`/ai/quiz/${activeQuiz._id}/score`, { score: newScore });
+            fetchQuizzes(); // Refresh list to show new score
+        } catch (err) {
+            console.error("Failed to save score:", err);
+        }
     };
 
     if (activeQuiz) {

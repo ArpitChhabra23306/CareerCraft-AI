@@ -90,7 +90,7 @@ const aiService = {
 
         if (content) {
             const prompt = `Generate ${numQuestions} multiple choice questions based on the following text. 
-            Return ONLY a JSON array of objects with fields: question, options (array of 4 strings), correctAnswer (index 0-3).
+            Return ONLY a JSON array of objects with fields: question, options (array of 4 strings), correctAnswer (exact string matching one of the options).
             Do not use markdown formatting.
             
             Text: ${content.substring(0, 5000)}...`;

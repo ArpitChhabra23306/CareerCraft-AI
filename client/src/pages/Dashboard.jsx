@@ -3,8 +3,8 @@ import api from '../utils/api';
 import { FileText, Layers, BrainCircuit, MessageSquare, Plus } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const StatCard = ({ icon: Icon, label, value, colorClass }) => (
-    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center space-x-4 hover:shadow-md transition">
+const StatCard = ({ icon: Icon, label, value, colorClass, path }) => (
+    <Link to={path} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center space-x-4 hover:shadow-md transition cursor-pointer hover:scale-[1.02] transform duration-200">
         <div className={`p-3 rounded-full ${colorClass} bg-opacity-10`}>
             <Icon size={24} className={colorClass.replace('bg-', 'text-')} />
         </div>
@@ -12,7 +12,7 @@ const StatCard = ({ icon: Icon, label, value, colorClass }) => (
             <p className="text-gray-500 text-sm font-medium">{label}</p>
             <p className="text-2xl font-bold text-gray-800">{value}</p>
         </div>
-    </div>
+    </Link>
 );
 
 const Dashboard = () => {
@@ -43,10 +43,10 @@ const Dashboard = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <StatCard icon={FileText} label="Documents" value={stats.documents || 0} colorClass="text-blue-600 bg-blue-50" />
-                <StatCard icon={Layers} label="Flashcard Decks" value={stats.flashcards || 0} colorClass="text-yellow-600 bg-yellow-50" />
-                <StatCard icon={BrainCircuit} label="Quizzes Taken" value={stats.quizzes || 0} colorClass="text-purple-600 bg-purple-50" />
-                <StatCard icon={MessageSquare} label="Interviews" value={stats.interviews || 0} colorClass="text-green-600 bg-green-50" />
+                <StatCard icon={FileText} label="Documents" value={stats.documents || 0} colorClass="text-blue-600 bg-blue-50" path="/docs" />
+                <StatCard icon={Layers} label="Flashcard Decks" value={stats.flashcards || 0} colorClass="text-yellow-600 bg-yellow-50" path="/flashcards" />
+                <StatCard icon={BrainCircuit} label="Quizzes Taken" value={stats.quizzes || 0} colorClass="text-purple-600 bg-purple-50" path="/quiz" />
+                <StatCard icon={MessageSquare} label="Interviews" value={stats.interviews || 0} colorClass="text-green-600 bg-green-50" path="/interview" />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

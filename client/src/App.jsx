@@ -10,6 +10,7 @@ import DocumentView from './pages/DocumentView';
 import Flashcards from './pages/Flashcards';
 import Quiz from './pages/Quiz';
 import Interview from './pages/Interview';
+import Home from './pages/Home';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
@@ -18,22 +19,23 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
-// Public Route (redirect to home if already logged in)
+// Public Route (redirect to dashboard if already logged in, NOT home)
 const PublicRoute = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
   if (loading) return <div className="flex justify-center items-center h-screen">Loading...</div>;
-  if (user) return <Navigate to="/" />;
+  if (user) return <Navigate to="/dashboard" />;
   return children;
 };
 
 function App() {
   return (
     <Routes>
+      <Route path="/" element={<Home />} />
       <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
       <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
 
-      <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
-        <Route index element={<Dashboard />} />
+      <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
+        <Route path="dashboard" element={<Dashboard />} />
         <Route path="docs" element={<Documents />} />
         <Route path="docs/:id" element={<DocumentView />} />
         <Route path="flashcards" element={<Flashcards />} />
