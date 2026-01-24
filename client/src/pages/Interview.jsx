@@ -1,7 +1,8 @@
 import { useEffect, useState, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import api from '../utils/api';
-import { MessageSquare, Plus, Send, Bot, User, Clock } from 'lucide-react';
+import { MessageSquare, Plus, Send, Bot, User, Clock, Sparkles, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Interview = () => {
     const [sessions, setSessions] = useState([]);
@@ -62,7 +63,6 @@ const Interview = () => {
 
         try {
             const res = await api.post('/interview/message', { sessionId: activeSession._id, message: userMsg.content });
-            // Update session with full history
             setMessages(res.data.messages);
         } catch (err) {
             setMessages(prev => [...prev, { role: 'model', content: 'Error getting response.' }]);
@@ -71,70 +71,115 @@ const Interview = () => {
         }
     };
 
+    const getDifficultyColor = (diff) => {
+        switch (diff) {
+            case 'Hard': return 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400';
+            case 'Medium': return 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400';
+            default: return 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400';
+        }
+    };
+
     if (activeSession) {
         return (
-            <div className="h-[calc(100vh-6rem)] flex flex-col bg-white dark:bg-black rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 overflow-hidden">
-                <div className="p-4 bg-white dark:bg-gray-800 border-b flex justify-between items-center shadow-sm z-10 dark:border-gray-700">
-                    <div>
-                        <h2 className="text-lg font-bold text-gray-800 dark:text-white">{activeSession.role} Interview</h2>
-                        <span className={`text-xs px-2 py-1 rounded-full ${activeSession.difficulty === 'Hard' ? 'bg-red-100 text-red-700' :
-                            activeSession.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
-                                'bg-green-100 text-green-700'
-                            }`}>
-                            {activeSession.difficulty}
-                        </span>
+            <div className="h-[calc(100vh-6rem)] flex flex-col bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-100 dark:border-gray-800 overflow-hidden">
+                {/* Chat Header */}
+                <div className="p-4 bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center">
+                    <div className="flex items-center gap-3">
+                        <div className="p-2 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl">
+                            <Bot className="text-emerald-600 dark:text-emerald-400" size={24} />
+                        </div>
+                        <div>
+                            <h2 className="text-lg font-bold text-gray-800 dark:text-white">{activeSession.role}</h2>
+                            <span className={`text-xs px-2 py-0.5 rounded-full ${getDifficultyColor(activeSession.difficulty)}`}>
+                                {activeSession.difficulty}
+                            </span>
+                        </div>
                     </div>
-                    <button onClick={() => setActiveSession(null)} className="text-gray-500 hover:text-gray-800 font-medium">
-                        Exit Session
+                    <button
+                        onClick={() => setActiveSession(null)}
+                        className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl text-gray-500 dark:text-gray-400 transition-colors"
+                    >
+                        <X size={20} />
                     </button>
                 </div>
 
-                <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-gray-50 dark:bg-gray-900">
-                    {messages.map((msg, idx) => (
-                        <div key={idx} className={`flex gap-4 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-                            <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 shadow-sm ${msg.role === 'user' ? 'bg-indigo-600 text-white' : 'bg-white text-green-600 border border-green-100'}`}>
-                                {msg.role === 'user' ? <User size={20} /> : <Bot size={20} />}
-                            </div>
-                            <div className={`p-4 rounded-2xl max-w-[80%] text-sm leading-relaxed shadow-sm ${msg.role === 'user'
-                                ? 'bg-indigo-600 text-white rounded-tr-none'
-                                : 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 border border-gray-100 dark:border-gray-700 rounded-tl-none'
-                                }`}>
-                                <div className={`prose prose-sm max-w-none ${msg.role === 'user' ? 'prose-invert text-white' : 'text-gray-800'}`}>
-                                    <ReactMarkdown>{msg.content}</ReactMarkdown>
+                {/* Messages */}
+                <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 bg-gray-50 dark:bg-gray-950">
+                    <AnimatePresence>
+                        {messages.map((msg, idx) => (
+                            <motion.div
+                                key={idx}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.2 }}
+                                className={`flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}
+                            >
+                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-sm ${msg.role === 'user'
+                                    ? 'bg-indigo-600 text-white'
+                                    : 'bg-white dark:bg-gray-800 text-emerald-600 dark:text-emerald-400 border border-gray-100 dark:border-gray-700'
+                                    }`}>
+                                    {msg.role === 'user' ? <User size={18} /> : <Bot size={18} />}
                                 </div>
-                            </div>
-                        </div>
-                    ))}
+                                <div className={`p-4 rounded-2xl max-w-[80%] text-sm leading-relaxed shadow-sm ${msg.role === 'user'
+                                    ? 'bg-indigo-600 text-white rounded-tr-sm'
+                                    : 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 border border-gray-100 dark:border-gray-700 rounded-tl-sm'
+                                    }`}>
+                                    <div className={`prose prose-sm max-w-none ${msg.role === 'user' ? 'prose-invert' : 'dark:prose-invert'}`}>
+                                        <ReactMarkdown>{msg.content}</ReactMarkdown>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </AnimatePresence>
+
+                    {/* Typing Indicator */}
                     {chatLoading && (
-                        <div className="flex gap-4">
-                            <div className="w-10 h-10 rounded-full bg-white text-green-600 border border-green-100 flex items-center justify-center shrink-0 shadow-sm animate-pulse">
-                                <Bot size={20} />
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="flex gap-3"
+                        >
+                            <div className="w-10 h-10 rounded-xl bg-white dark:bg-gray-800 text-emerald-600 dark:text-emerald-400 border border-gray-100 dark:border-gray-700 flex items-center justify-center shrink-0 shadow-sm">
+                                <Bot size={18} />
                             </div>
-                            <div className="p-4 bg-white rounded-2xl border border-gray-100 shadow-sm rounded-tl-none">
-                                <div className="flex space-x-2">
-                                    <div className="w-2 h-2 bg-gray-300 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                                    <div className="w-2 h-2 bg-gray-300 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                                    <div className="w-2 h-2 bg-gray-300 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                            <div className="p-4 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm rounded-tl-sm">
+                                <div className="flex space-x-1.5">
+                                    <motion.div
+                                        className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full"
+                                        animate={{ y: [0, -6, 0] }}
+                                        transition={{ duration: 0.6, repeat: Infinity, delay: 0 }}
+                                    />
+                                    <motion.div
+                                        className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full"
+                                        animate={{ y: [0, -6, 0] }}
+                                        transition={{ duration: 0.6, repeat: Infinity, delay: 0.15 }}
+                                    />
+                                    <motion.div
+                                        className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full"
+                                        animate={{ y: [0, -6, 0] }}
+                                        transition={{ duration: 0.6, repeat: Infinity, delay: 0.3 }}
+                                    />
                                 </div>
                             </div>
-                        </div>
+                        </motion.div>
                     )}
                     <div ref={endRef} />
                 </div>
 
-                <form onSubmit={sendMessage} className="p-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 flex gap-4">
+                {/* Input Form */}
+                <form onSubmit={sendMessage} className="p-4 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 flex gap-3">
                     <input
                         type="text"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         placeholder="Type your answer..."
-                        className="flex-1 border border-gray-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none"
+                        className="flex-1 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 transition-all"
                         autoFocus
                     />
                     <button
                         type="submit"
                         disabled={chatLoading || !input.trim()}
-                        className="bg-indigo-600 text-white p-3 rounded-xl hover:bg-indigo-700 disabled:opacity-50 transition shadow-sm"
+                        className="bg-indigo-600 text-white p-3 rounded-xl hover:bg-indigo-700 disabled:opacity-50 transition-all shadow-lg shadow-indigo-500/25"
                     >
                         <Send size={20} />
                     </button>
@@ -144,23 +189,30 @@ const Interview = () => {
     }
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 animate-fade-in">
             <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Interview Preparation</h1>
 
-            <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
-                <h2 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">Start New Session</h2>
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800"
+            >
+                <h2 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white flex items-center gap-2">
+                    <Sparkles className="text-emerald-500" size={20} />
+                    Start New Session
+                </h2>
                 <div className="flex gap-4 flex-wrap">
                     <input
                         type="text"
                         placeholder="Role (e.g., Frontend Developer)"
                         value={role}
                         onChange={(e) => setRole(e.target.value)}
-                        className="flex-1 border p-2 rounded-lg min-w-[200px] dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                        className="flex-1 min-w-[200px] border border-gray-200 dark:border-gray-700 p-3 rounded-xl dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all placeholder-gray-400"
                     />
                     <select
                         value={difficulty}
                         onChange={(e) => setDifficulty(e.target.value)}
-                        className="border p-2 rounded-lg dark:bg-gray-700 dark:text-white dark:border-gray-600"
+                        className="border border-gray-200 dark:border-gray-700 p-3 rounded-xl dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all"
                     >
                         <option>Easy</option>
                         <option>Medium</option>
@@ -169,33 +221,59 @@ const Interview = () => {
                     <button
                         onClick={startSession}
                         disabled={loading || !role}
-                        className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 disabled:opacity-50 flex items-center gap-2 whitespace-nowrap"
+                        className="bg-indigo-600 text-white px-6 py-3 rounded-xl hover:bg-indigo-700 disabled:opacity-50 flex items-center gap-2 font-medium shadow-lg shadow-indigo-500/25 transition-all whitespace-nowrap"
                     >
-                        {loading ? 'Starting...' : <><Plus size={18} /> Start Session</>}
+                        {loading ? (
+                            <>
+                                <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>
+                                Starting...
+                            </>
+                        ) : (
+                            <>
+                                <Plus size={18} />
+                                Start Session
+                            </>
+                        )}
                     </button>
                 </div>
-            </div>
+            </motion.div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {sessions.map(session => (
-                    <div key={session._id} className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 hover:shadow-md transition cursor-pointer" onClick={() => enterSession(session)}>
+                {sessions.map((session, idx) => (
+                    <motion.div
+                        key={session._id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: idx * 0.1 }}
+                        onClick={() => enterSession(session)}
+                        className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-lg transition-all cursor-pointer card-hover group"
+                    >
                         <div className="flex justify-between items-start mb-4">
-                            <div className="p-2 bg-green-50 text-green-600 rounded-lg"><MessageSquare size={24} /></div>
-                            <span className={`text-xs px-2 py-1 rounded-full ${session.difficulty === 'Hard' ? 'bg-red-100 text-red-700' :
-                                session.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
-                                    'bg-green-100 text-green-700'
-                                }`}>
+                            <div className="p-3 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-xl group-hover:scale-110 transition-transform">
+                                <MessageSquare size={24} />
+                            </div>
+                            <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${getDifficultyColor(session.difficulty)}`}>
                                 {session.difficulty}
                             </span>
                         </div>
-                        <h3 className="font-semibold text-lg truncate mb-1 text-gray-800 dark:text-white">{session.role}</h3>
-                        <p className="text-gray-500 text-xs mb-4 flex items-center gap-1">
-                            <Clock size={12} /> {new Date(session.createdAt).toLocaleDateString()}
+                        <h3 className="font-semibold text-lg truncate mb-2 text-gray-800 dark:text-white">{session.role}</h3>
+                        <p className="text-gray-500 dark:text-gray-400 text-sm mb-4 flex items-center gap-1.5">
+                            <Clock size={14} />
+                            {new Date(session.createdAt).toLocaleDateString()}
                         </p>
-                        <button className="w-full bg-indigo-50 text-indigo-700 py-2 rounded-lg font-medium">Continue</button>
-                    </div>
+                        <button className="w-full bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 py-2.5 rounded-xl font-medium hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-colors">
+                            Continue
+                        </button>
+                    </motion.div>
                 ))}
             </div>
+
+            {sessions.length === 0 && !loading && (
+                <div className="text-center py-16 text-gray-400 dark:text-gray-500">
+                    <MessageSquare size={48} className="mx-auto mb-4 opacity-50" />
+                    <p>No interview sessions yet. Start one to practice!</p>
+                </div>
+            )}
         </div>
     );
 };
