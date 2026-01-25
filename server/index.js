@@ -10,6 +10,7 @@ import aiRoutes from './routes/aiRoutes.js';
 import interviewRoutes from './routes/interviewRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import quizRoutes from './routes/quizRoutes.js';
+import gamificationRoutes from './routes/gamificationRoutes.js';
 
 dotenv.config();
 
@@ -32,6 +33,7 @@ app.use('/ai', aiRoutes);
 app.use('/interview', interviewRoutes);
 app.use('/quiz', quizRoutes);
 app.use('/user', userRoutes);
+app.use('/gamification', gamificationRoutes);
 app.use('/uploads', express.static('uploads'));
 
 app.get('/', (req, res) => {

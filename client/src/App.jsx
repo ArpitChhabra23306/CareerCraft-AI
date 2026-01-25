@@ -12,6 +12,7 @@ import Quiz from './pages/Quiz';
 import Interview from './pages/Interview';
 import Profile from './pages/Profile';
 import Home from './pages/Home';
+import Leaderboard from './pages/Leaderboard';
 
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useContext(AuthContext);
@@ -42,6 +43,7 @@ function App() {
         <Route path="flashcards" element={<Flashcards />} />
         <Route path="quiz" element={<Quiz />} />
         <Route path="interview" element={<Interview />} />
+        <Route path="leaderboard" element={<Leaderboard />} />
         <Route path="profile" element={<Profile />} />
       </Route>
     </Routes>

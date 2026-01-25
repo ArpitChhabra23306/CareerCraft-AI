@@ -15,6 +15,7 @@ const InterviewSessionSchema = new mongoose.Schema({
     messages: [MessageSchema],
     feedback: { type: String }, // Overall feedback from AI
     status: { type: String, enum: ['active', 'completed'], default: 'active' },
+    xpAwarded: { type: Boolean, default: false }, // Track if XP was already awarded for this session
     createdAt: { type: Date, default: Date.now }
 });
 

@@ -15,7 +15,8 @@ import {
     User,
     Moon,
     Sun,
-    X
+    X,
+    Trophy
 } from 'lucide-react';
 
 const SidebarItem = ({ icon: Icon, label, path, active, collapsed }) => (
@@ -68,6 +69,7 @@ const Layout = () => {
         { icon: Layers, label: 'Flashcards', path: '/flashcards' },
         { icon: BrainCircuit, label: 'Quiz', path: '/quiz' },
         { icon: MessageSquare, label: 'Interview Prep', path: '/interview' },
+        { icon: Trophy, label: 'Leaderboard', path: '/leaderboard' },
         { icon: User, label: 'Profile', path: '/profile' },
     ];
 

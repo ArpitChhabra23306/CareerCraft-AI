@@ -3,6 +3,7 @@ import FlashcardDeck from '../models/FlashcardDeck.js';
 import Quiz from '../models/Quiz.js';
 import QuizResult from '../models/QuizResult.js';
 import { summarizeText, explainConcept, generateFlashcards, generateQuiz, generateTextGeneric } from '../services/geminiService.js';
+import { awardXP, updateStreak, awardDocumentChatXP, XP_VALUES } from '../services/gamificationService.js';
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const pdf = require('pdf-parse');
@@ -35,7 +36,17 @@ export const chatWithDocument = async (req, res) => {
         const context = text.substring(0, 50000);
 
         const answer = await explainConcept(question, context);
-        res.json({ answer });
+
+        // Award XP for document chat (capped at 25 XP per day)
+        let xpResult = null;
+        try {
+            xpResult = await awardDocumentChatXP(req.user.id);
+            await updateStreak(req.user.id);
+        } catch (xpErr) {
+            console.error('XP Award Error (non-blocking):', xpErr.message);
+        }
+
+        res.json({ answer, xpAwarded: xpResult?.xpAwarded || 0 });
     } catch (err) {
         console.error("Chat Error:", err);
         if (err.message.includes('429') || err.message.includes('Too Many Requests') || err.message.includes('Quota')) {
@@ -86,7 +97,17 @@ export const createFlashcards = async (req, res) => {
         });
 
         await newDeck.save();
-        res.status(201).json(newDeck);
+
+        // Award XP for creating flashcards
+        let xpResult = null;
+        try {
+            xpResult = await awardXP(req.user.id, XP_VALUES.REVIEW_FLASHCARDS, 'flashcard_creation');
+            await updateStreak(req.user.id);
+        } catch (xpErr) {
+            console.error('XP Award Error (non-blocking):', xpErr.message);
+        }
+
+        res.status(201).json({ ...newDeck.toObject(), xpAwarded: xpResult?.xpAwarded || 0 });
     } catch (err) {
         console.error("Create Flashcards Error:", err);
         if (err.message.includes('429') || err.message.includes('Too Many Requests')) {
@@ -157,7 +178,16 @@ export const updateQuizScore = async (req, res) => {
             quizTitle: quiz.title
         });
 
-        res.json(quiz);
+        // Award XP for completing a quiz
+        let xpResult = null;
+        try {
+            xpResult = await awardXP(req.user.id, XP_VALUES.COMPLETE_QUIZ, 'quiz_completion');
+            await updateStreak(req.user.id);
+        } catch (xpErr) {
+            console.error('XP Award Error (non-blocking):', xpErr.message);
+        }
+
+        res.json({ ...quiz.toObject(), xpAwarded: xpResult?.xpAwarded || 0 });
     } catch (err) {
         console.error("Update Score Error:", err);
         res.status(500).json({ error: err.message });

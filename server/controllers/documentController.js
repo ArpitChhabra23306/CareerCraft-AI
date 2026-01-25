@@ -1,5 +1,6 @@
 import Document from '../models/Document.js';
 import cloudinary from '../config/cloudinary.js';
+import { awardXP, updateStreak, XP_VALUES } from '../services/gamificationService.js';
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const pdf = require('pdf-parse');
@@ -22,7 +23,20 @@ export const uploadDocument = async (req, res) => {
         });
 
         const savedDoc = await newDoc.save();
-        res.status(201).json(savedDoc);
+
+        // Award XP for document upload
+        let xpResult = null;
+        try {
+            xpResult = await awardXP(userId, XP_VALUES.UPLOAD_DOCUMENT, 'document_upload');
+            await updateStreak(userId);
+        } catch (xpErr) {
+            console.error('XP Award Error (non-blocking):', xpErr.message);
+        }
+
+        res.status(201).json({
+            ...savedDoc.toObject(),
+            xpAwarded: xpResult?.xpAwarded || 0
+        });
     } catch (err) {
         console.error('Upload Error:', err);
         res.status(500).json({ error: err.message });

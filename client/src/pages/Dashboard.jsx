@@ -3,6 +3,7 @@ import api from '../utils/api';
 import { FileText, Layers, BrainCircuit, MessageSquare, Plus, TrendingUp } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import GamificationCard from '../components/GamificationCard';
 
 const StatCard = ({ icon: Icon, label, value, colorClass, bgClass, path, delay }) => (
     <motion.div
@@ -130,20 +131,28 @@ const Dashboard = () => {
                 </div>
             )}
 
+            {/* Gamification Section */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Chart Section */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
-                    className="lg:col-span-2 bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800"
-                >
-                    <h2 className="text-xl font-bold mb-4 text-gray-800 dark:text-white flex items-center gap-2">
-                        <BrainCircuit size={20} className="text-indigo-600 dark:text-indigo-400" />
-                        Quiz Performance History
-                    </h2>
-                    <QuizHistoryChart history={quizHistory} />
-                </motion.div>
+                <div className="lg:col-span-1">
+                    <GamificationCard />
+                </div>
+                <div className="lg:col-span-2">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.4 }}
+                        className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 h-full"
+                    >
+                        <h2 className="text-xl font-bold mb-4 text-gray-800 dark:text-white flex items-center gap-2">
+                            <BrainCircuit size={20} className="text-indigo-600 dark:text-indigo-400" />
+                            Quiz Performance History
+                        </h2>
+                        <QuizHistoryChart history={quizHistory} />
+                    </motion.div>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
                 {/* Quick Actions */}
                 <div className="space-y-6">

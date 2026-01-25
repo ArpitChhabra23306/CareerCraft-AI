@@ -1,5 +1,6 @@
 import InterviewSession from '../models/InterviewSession.js';
 import { getInterviewResponse } from '../services/geminiService.js';
+import { awardXP, updateStreak, XP_VALUES } from '../services/gamificationService.js';
 
 export const startInterview = async (req, res) => {
     try {
@@ -50,8 +51,23 @@ export const sendInterviewMessage = async (req, res) => {
         // Add AI response to DB
         session.messages.push({ role: 'model', content: aiResponse });
 
+        // Count user messages to determine if interview is substantial
+        const userMessageCount = session.messages.filter(m => m.role === 'user').length;
+
+        // Award XP for completing interview (5+ user messages, only once per session)
+        let xpResult = null;
+        if (userMessageCount >= 5 && !session.xpAwarded) {
+            try {
+                xpResult = await awardXP(req.user.id, XP_VALUES.FINISH_INTERVIEW, 'interview_completion');
+                await updateStreak(req.user.id);
+                session.xpAwarded = true;
+            } catch (xpErr) {
+                console.error('XP Award Error (non-blocking):', xpErr.message);
+            }
+        }
+
         await session.save();
-        res.json(session);
+        res.json({ ...session.toObject(), xpAwarded: xpResult?.xpAwarded || 0 });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
