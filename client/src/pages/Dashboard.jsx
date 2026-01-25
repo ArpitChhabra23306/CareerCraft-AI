@@ -41,9 +41,15 @@ const SkeletonCard = () => (
 
 const QuizHistoryChart = ({ history }) => {
     if (!history || history.length === 0) return (
-        <div className="flex flex-col items-center justify-center h-48 text-gray-400 dark:text-gray-500">
-            <BrainCircuit size={48} className="mb-2 opacity-50" />
-            <p>No quiz history yet. Take a quiz to see your progress!</p>
+        <div className="flex flex-col items-center justify-center h-48 text-center">
+            <div className="bg-purple-100 dark:bg-purple-900/30 p-4 rounded-2xl mb-4">
+                <BrainCircuit size={40} className="text-purple-500 dark:text-purple-400" />
+            </div>
+            <p className="text-gray-600 dark:text-gray-300 font-medium mb-1">No quiz history yet</p>
+            <p className="text-gray-400 dark:text-gray-500 text-sm">Take a quiz to see your progress!</p>
+            <Link to="/quiz" className="mt-4 text-indigo-600 dark:text-indigo-400 text-sm font-medium hover:underline">
+                Take your first quiz →
+            </Link>
         </div>
     );
 
@@ -152,55 +158,75 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Quick Actions & Daily Tip Section */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Quick Actions - spans 2 columns */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 }}
+                    className="lg:col-span-2 bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800"
+                >
+                    <h2 className="text-xl font-bold mb-4 text-gray-800 dark:text-white">Quick Actions</h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <Link to="/docs" className="block p-4 rounded-xl border border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-800 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all flex items-center gap-4 group">
+                            <div className="bg-blue-100 dark:bg-blue-900/50 p-3 rounded-xl text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform">
+                                <Plus size={20} />
+                            </div>
+                            <div>
+                                <span className="font-semibold block text-gray-800 dark:text-gray-200">Upload Document</span>
+                                <span className="text-sm text-gray-500 dark:text-gray-400">Start learning from a PDF</span>
+                            </div>
+                        </Link>
+                        <Link to="/interview" className="block p-4 rounded-xl border border-gray-100 dark:border-gray-700 hover:border-emerald-200 dark:hover:border-emerald-800 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all flex items-center gap-4 group">
+                            <div className="bg-emerald-100 dark:bg-emerald-900/50 p-3 rounded-xl text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform">
+                                <MessageSquare size={20} />
+                            </div>
+                            <div>
+                                <span className="font-semibold block text-gray-800 dark:text-gray-200">Mock Interview</span>
+                                <span className="text-sm text-gray-500 dark:text-gray-400">Practice with AI interviewer</span>
+                            </div>
+                        </Link>
+                        <Link to="/flashcards" className="block p-4 rounded-xl border border-gray-100 dark:border-gray-700 hover:border-amber-200 dark:hover:border-amber-800 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-all flex items-center gap-4 group">
+                            <div className="bg-amber-100 dark:bg-amber-900/50 p-3 rounded-xl text-amber-600 dark:text-amber-400 group-hover:scale-110 transition-transform">
+                                <Layers size={20} />
+                            </div>
+                            <div>
+                                <span className="font-semibold block text-gray-800 dark:text-gray-200">Study Flashcards</span>
+                                <span className="text-sm text-gray-500 dark:text-gray-400">Review your decks</span>
+                            </div>
+                        </Link>
+                        <Link to="/quiz" className="block p-4 rounded-xl border border-gray-100 dark:border-gray-700 hover:border-purple-200 dark:hover:border-purple-800 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all flex items-center gap-4 group">
+                            <div className="bg-purple-100 dark:bg-purple-900/50 p-3 rounded-xl text-purple-600 dark:text-purple-400 group-hover:scale-110 transition-transform">
+                                <BrainCircuit size={20} />
+                            </div>
+                            <div>
+                                <span className="font-semibold block text-gray-800 dark:text-gray-200">Take a Quiz</span>
+                                <span className="text-sm text-gray-500 dark:text-gray-400">Test your knowledge</span>
+                            </div>
+                        </Link>
+                    </div>
+                </motion.div>
 
-                {/* Quick Actions */}
-                <div className="space-y-6">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.5 }}
-                        className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800"
-                    >
-                        <h2 className="text-xl font-bold mb-4 text-gray-800 dark:text-white">Quick Actions</h2>
-                        <div className="space-y-3">
-                            <Link to="/docs" className="block w-full p-4 rounded-xl border border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-800 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all flex items-center gap-4 group">
-                                <div className="bg-blue-100 dark:bg-blue-900/50 p-3 rounded-xl text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform">
-                                    <Plus size={20} />
-                                </div>
-                                <div>
-                                    <span className="font-semibold block text-gray-800 dark:text-gray-200">Upload Document</span>
-                                    <span className="text-sm text-gray-500 dark:text-gray-400">Start learning from a PDF</span>
-                                </div>
-                            </Link>
-                            <Link to="/interview" className="block w-full p-4 rounded-xl border border-gray-100 dark:border-gray-700 hover:border-emerald-200 dark:hover:border-emerald-800 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-all flex items-center gap-4 group">
-                                <div className="bg-emerald-100 dark:bg-emerald-900/50 p-3 rounded-xl text-emerald-600 dark:text-emerald-400 group-hover:scale-110 transition-transform">
-                                    <MessageSquare size={20} />
-                                </div>
-                                <div>
-                                    <span className="font-semibold block text-gray-800 dark:text-gray-200">Mock Interview</span>
-                                    <span className="text-sm text-gray-500 dark:text-gray-400">Practice with AI interviewer</span>
-                                </div>
-                            </Link>
-                        </div>
-                    </motion.div>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.6 }}
-                        className="bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-700 p-6 rounded-2xl shadow-lg text-white relative overflow-hidden"
-                    >
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl"></div>
-                        <h2 className="text-xl font-bold mb-2 relative z-10">Daily Learning Tip</h2>
+                {/* Daily Learning Tip */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.6 }}
+                    className="bg-gradient-to-br from-indigo-600 via-indigo-700 to-purple-700 p-6 rounded-2xl shadow-lg text-white relative overflow-hidden flex flex-col justify-between"
+                >
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl"></div>
+                    <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-xl"></div>
+                    <div>
+                        <h2 className="text-xl font-bold mb-3 relative z-10">💡 Daily Learning Tip</h2>
                         <p className="opacity-90 leading-relaxed text-sm relative z-10">
                             Consistency is key! Creating a quick 5-question quiz after reading helps reinforce memory by 40%.
                         </p>
-                        <Link to="/quiz" className="mt-4 inline-block bg-white text-indigo-600 px-5 py-2.5 rounded-xl font-semibold hover:bg-indigo-50 transition shadow-sm relative z-10">
-                            Generate Quiz
-                        </Link>
-                    </motion.div>
-                </div>
+                    </div>
+                    <Link to="/quiz" className="mt-6 inline-flex items-center justify-center bg-white text-indigo-600 px-5 py-3 rounded-xl font-semibold hover:bg-indigo-50 transition shadow-sm relative z-10 w-full">
+                        Generate Quiz
+                    </Link>
+                </motion.div>
             </div>
         </div>
     );

@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from 'react';
 import { motion } from 'framer-motion';
-import { Trophy, Medal, Flame, Star, Crown, User } from 'lucide-react';
+import { Trophy, Medal, Flame, Star, Crown, User, Sparkles, TrendingUp } from 'lucide-react';
 import api from '../utils/api';
 import { AuthContext } from '../context/AuthContext';
 
@@ -30,28 +30,30 @@ const Leaderboard = () => {
     };
 
     const getRankIcon = (rank) => {
-        if (rank === 1) return <Crown size={24} className="text-yellow-400" />;
-        if (rank === 2) return <Medal size={24} className="text-gray-400" />;
-        if (rank === 3) return <Medal size={24} className="text-amber-600" />;
-        return <span className="text-lg font-bold text-gray-500 w-6 text-center">{rank}</span>;
-    };
-
-    const getRankBgClass = (rank) => {
-        if (rank === 1) return 'bg-gradient-to-r from-yellow-50 to-amber-50 dark:from-yellow-900/20 dark:to-amber-900/20 border-yellow-200 dark:border-yellow-800';
-        if (rank === 2) return 'bg-gradient-to-r from-gray-50 to-slate-50 dark:from-gray-800/50 dark:to-slate-800/50 border-gray-200 dark:border-gray-700';
-        if (rank === 3) return 'bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-amber-200 dark:border-amber-800';
-        return 'bg-white dark:bg-gray-900 border-gray-100 dark:border-gray-800';
+        if (rank === 1) return <Crown size={20} className="text-yellow-400" />;
+        if (rank === 2) return <Medal size={20} className="text-gray-300" />;
+        if (rank === 3) return <Medal size={20} className="text-amber-600" />;
+        return <span className="text-sm font-bold text-gray-500 dark:text-gray-400">{rank}</span>;
     };
 
     // Check if current user is in leaderboard
     const userInLeaderboard = leaderboard.some(u => u._id === user?._id);
 
+    // Get top 3 for podium
+    const top3 = leaderboard.slice(0, 3);
+    const restOfLeaderboard = leaderboard.slice(3);
+
     if (loading) {
         return (
             <div className="space-y-8 animate-fade-in">
                 <div className="h-8 w-48 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                <div className="grid grid-cols-3 gap-4 h-48">
+                    {[1, 2, 3].map(i => (
+                        <div key={i} className="bg-gray-100 dark:bg-gray-800 rounded-xl animate-pulse"></div>
+                    ))}
+                </div>
                 <div className="space-y-3">
-                    {[...Array(10)].map((_, i) => (
+                    {[...Array(7)].map((_, i) => (
                         <div key={i} className="h-16 bg-gray-100 dark:bg-gray-800 rounded-xl animate-pulse"></div>
                     ))}
                 </div>
@@ -62,140 +64,222 @@ const Leaderboard = () => {
     return (
         <div className="space-y-8 animate-fade-in">
             {/* Header */}
-            <div>
-                <motion.h1
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="text-3xl font-bold text-gray-800 dark:text-white flex items-center gap-3"
-                >
-                    <Trophy className="text-yellow-500" />
-                    Global Leaderboard
-                </motion.h1>
-                <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.1 }}
-                    className="text-gray-500 dark:text-gray-400 mt-1"
-                >
-                    Top 100 learners ranked by XP
-                </motion.p>
+            <div className="flex items-center justify-between flex-wrap gap-4">
+                <div>
+                    <motion.h1
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-3xl font-bold text-gray-800 dark:text-white flex items-center gap-3"
+                    >
+                        <div className="bg-yellow-100 dark:bg-yellow-900/30 p-2 rounded-xl">
+                            <Trophy className="text-yellow-500" size={28} />
+                        </div>
+                        Global Leaderboard
+                    </motion.h1>
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.1 }}
+                        className="text-gray-500 dark:text-gray-400 mt-2"
+                    >
+                        Top learners competing for XP glory
+                    </motion.p>
+                </div>
+
+                {/* User's Quick Stats */}
+                {userStats && (
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="flex items-center gap-4 bg-gradient-to-r from-indigo-500 to-purple-600 text-white px-5 py-3 rounded-2xl shadow-lg"
+                    >
+                        <div className="text-center">
+                            <p className="text-2xl font-bold">#{userStats.rank}</p>
+                            <p className="text-xs text-white/70">Your Rank</p>
+                        </div>
+                        <div className="w-px h-10 bg-white/20"></div>
+                        <div className="text-center">
+                            <p className="text-2xl font-bold">{userStats.xp?.toLocaleString()}</p>
+                            <p className="text-xs text-white/70">Total XP</p>
+                        </div>
+                    </motion.div>
+                )}
             </div>
 
-            {/* User's Current Rank Card */}
-            {userStats && (
+            {/* Top 3 Podium */}
+            {top3.length >= 3 && (
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 p-6 rounded-2xl shadow-lg text-white"
+                    className="grid grid-cols-3 gap-4 items-end"
                 >
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-white/70 text-sm">Your Rank</p>
-                            <p className="text-4xl font-bold">#{userStats.rank}</p>
-                            <p className="text-white/80 mt-1">of {userStats.totalUsers?.toLocaleString()} users</p>
-                        </div>
-                        <div className="text-right">
-                            <div className="flex items-center gap-2 justify-end">
-                                <Star className="text-yellow-300" size={20} />
-                                <span className="text-2xl font-bold">{userStats.xp?.toLocaleString()} XP</span>
+                    {/* 2nd Place */}
+                    <div className="flex flex-col items-center">
+                        <div className="relative mb-3">
+                            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-gray-200 to-gray-400 dark:from-gray-600 dark:to-gray-700 flex items-center justify-center shadow-lg border-4 border-gray-300 dark:border-gray-500">
+                                {top3[1]?.avatar ? (
+                                    <img src={top3[1].avatar} alt={top3[1].username} className="w-full h-full rounded-full object-cover" />
+                                ) : (
+                                    <User size={32} className="text-gray-600 dark:text-gray-300" />
+                                )}
                             </div>
-                            <div className="flex items-center gap-2 justify-end mt-2">
-                                <Flame className={userStats.currentStreak > 0 ? 'text-orange-300' : 'text-white/50'} size={16} />
-                                <span className="text-white/80">{userStats.currentStreak} day streak</span>
+                            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-gray-400 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shadow-lg">
+                                2
+                            </div>
+                        </div>
+                        <div className="bg-gradient-to-t from-gray-200 to-gray-100 dark:from-gray-700 dark:to-gray-800 w-full pt-4 pb-6 rounded-t-2xl text-center border border-gray-200 dark:border-gray-600">
+                            <p className="font-bold text-gray-800 dark:text-white truncate px-2">{top3[1]?.username}</p>
+                            <p className="text-gray-600 dark:text-gray-300 font-semibold">{top3[1]?.xp?.toLocaleString()} XP</p>
+                            <div className="flex items-center justify-center gap-1 mt-1">
+                                <Flame size={12} className={top3[1]?.currentStreak > 0 ? 'text-orange-500' : 'text-gray-400'} />
+                                <span className="text-xs text-gray-500">{top3[1]?.currentStreak}d</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 1st Place */}
+                    <div className="flex flex-col items-center">
+                        <div className="relative mb-3">
+                            <div className="absolute -top-6 left-1/2 -translate-x-1/2">
+                                <Crown size={32} className="text-yellow-400 drop-shadow-lg" />
+                            </div>
+                            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-yellow-300 to-amber-500 flex items-center justify-center shadow-xl border-4 border-yellow-400 ring-4 ring-yellow-200/50">
+                                {top3[0]?.avatar ? (
+                                    <img src={top3[0].avatar} alt={top3[0].username} className="w-full h-full rounded-full object-cover" />
+                                ) : (
+                                    <User size={40} className="text-yellow-800" />
+                                )}
+                            </div>
+                            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-yellow-500 text-yellow-900 w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shadow-lg">
+                                1
+                            </div>
+                        </div>
+                        <div className="bg-gradient-to-t from-yellow-100 to-yellow-50 dark:from-yellow-900/40 dark:to-yellow-900/20 w-full pt-4 pb-8 rounded-t-2xl text-center border-2 border-yellow-300 dark:border-yellow-700 shadow-lg relative overflow-hidden">
+                            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-yellow-200/30 to-transparent"></div>
+                            <p className="font-bold text-gray-800 dark:text-white text-lg truncate px-2 relative z-10">{top3[0]?.username}</p>
+                            <p className="text-yellow-700 dark:text-yellow-300 font-bold text-lg relative z-10">{top3[0]?.xp?.toLocaleString()} XP</p>
+                            <div className="flex items-center justify-center gap-1 mt-1 relative z-10">
+                                <Flame size={14} className={top3[0]?.currentStreak > 0 ? 'text-orange-500' : 'text-gray-400'} />
+                                <span className="text-sm text-gray-600 dark:text-gray-300">{top3[0]?.currentStreak} day streak</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* 3rd Place */}
+                    <div className="flex flex-col items-center">
+                        <div className="relative mb-3">
+                            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center shadow-lg border-4 border-amber-500">
+                                {top3[2]?.avatar ? (
+                                    <img src={top3[2].avatar} alt={top3[2].username} className="w-full h-full rounded-full object-cover" />
+                                ) : (
+                                    <User size={32} className="text-amber-900" />
+                                )}
+                            </div>
+                            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-amber-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shadow-lg">
+                                3
+                            </div>
+                        </div>
+                        <div className="bg-gradient-to-t from-amber-100 to-orange-50 dark:from-amber-900/30 dark:to-orange-900/20 w-full pt-4 pb-4 rounded-t-2xl text-center border border-amber-300 dark:border-amber-700">
+                            <p className="font-bold text-gray-800 dark:text-white truncate px-2">{top3[2]?.username}</p>
+                            <p className="text-amber-700 dark:text-amber-300 font-semibold">{top3[2]?.xp?.toLocaleString()} XP</p>
+                            <div className="flex items-center justify-center gap-1 mt-1">
+                                <Flame size={12} className={top3[2]?.currentStreak > 0 ? 'text-orange-500' : 'text-gray-400'} />
+                                <span className="text-xs text-gray-500">{top3[2]?.currentStreak}d</span>
                             </div>
                         </div>
                     </div>
                 </motion.div>
             )}
 
-            {/* Leaderboard Table */}
-            <div className="space-y-3">
-                {leaderboard.map((entry, index) => {
-                    const isCurrentUser = entry._id === user?._id;
+            {/* Rest of Leaderboard */}
+            {restOfLeaderboard.length > 0 && (
+                <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+                    <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
+                        <h3 className="font-semibold text-gray-700 dark:text-gray-300">Rankings</h3>
+                        <span className="text-sm text-gray-500">{leaderboard.length} users</span>
+                    </div>
+                    <div className="divide-y divide-gray-50 dark:divide-gray-800">
+                        {restOfLeaderboard.map((entry, index) => {
+                            const isCurrentUser = entry._id === user?._id;
 
-                    return (
-                        <motion.div
-                            key={entry._id}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: index * 0.03 }}
-                            className={`p-4 rounded-xl border transition-all ${getRankBgClass(entry.rank)} ${isCurrentUser ? 'ring-2 ring-indigo-500 dark:ring-indigo-400' : ''
-                                }`}
-                        >
-                            <div className="flex items-center gap-4">
-                                {/* Rank */}
-                                <div className="w-10 flex justify-center">
-                                    {getRankIcon(entry.rank)}
-                                </div>
-
-                                {/* Avatar */}
-                                <div className={`w-12 h-12 rounded-full flex items-center justify-center ${entry.avatar
-                                    ? ''
-                                    : 'bg-gradient-to-br from-indigo-500 to-purple-600'
-                                    }`}>
-                                    {entry.avatar ? (
-                                        <img
-                                            src={entry.avatar}
-                                            alt={entry.username}
-                                            className="w-full h-full rounded-full object-cover"
-                                        />
-                                    ) : (
-                                        <User size={20} className="text-white" />
-                                    )}
-                                </div>
-
-                                {/* Username */}
-                                <div className="flex-1">
-                                    <p className={`font-semibold ${isCurrentUser
-                                        ? 'text-indigo-600 dark:text-indigo-400'
-                                        : 'text-gray-800 dark:text-white'
-                                        }`}>
-                                        {entry.username}
-                                        {isCurrentUser && (
-                                            <span className="ml-2 text-xs bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300 px-2 py-0.5 rounded-full">
-                                                You
-                                            </span>
-                                        )}
-                                    </p>
-                                    <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-                                        <Flame size={14} className={entry.currentStreak > 0 ? 'text-orange-500' : 'text-gray-400'} />
-                                        {entry.currentStreak} day streak
+                            return (
+                                <motion.div
+                                    key={entry._id}
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: index * 0.02 }}
+                                    className={`px-6 py-4 flex items-center gap-4 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors ${isCurrentUser ? 'bg-indigo-50 dark:bg-indigo-900/20' : ''
+                                        }`}
+                                >
+                                    {/* Rank */}
+                                    <div className="w-8 text-center font-bold text-gray-400 dark:text-gray-500">
+                                        {entry.rank}
                                     </div>
-                                </div>
 
-                                {/* XP */}
-                                <div className="text-right">
-                                    <p className="text-xl font-bold text-gray-800 dark:text-white">
-                                        {entry.xp?.toLocaleString()}
-                                    </p>
-                                    <p className="text-xs text-gray-500 dark:text-gray-400">XP</p>
-                                </div>
-                            </div>
-                        </motion.div>
-                    );
-                })}
-            </div>
+                                    {/* Avatar */}
+                                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-400 to-purple-500 flex items-center justify-center flex-shrink-0">
+                                        {entry.avatar ? (
+                                            <img src={entry.avatar} alt={entry.username} className="w-full h-full rounded-full object-cover" />
+                                        ) : (
+                                            <User size={18} className="text-white" />
+                                        )}
+                                    </div>
+
+                                    {/* Username */}
+                                    <div className="flex-1 min-w-0">
+                                        <p className={`font-medium truncate ${isCurrentUser ? 'text-indigo-600 dark:text-indigo-400' : 'text-gray-800 dark:text-white'
+                                            }`}>
+                                            {entry.username}
+                                            {isCurrentUser && (
+                                                <span className="ml-2 text-xs bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-300 px-2 py-0.5 rounded-full">
+                                                    You
+                                                </span>
+                                            )}
+                                        </p>
+                                        <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                                            <Flame size={12} className={entry.currentStreak > 0 ? 'text-orange-500' : 'text-gray-300'} />
+                                            <span>{entry.currentStreak}d</span>
+                                        </div>
+                                    </div>
+
+                                    {/* XP */}
+                                    <div className="text-right">
+                                        <p className="font-bold text-gray-800 dark:text-white">
+                                            {entry.xp?.toLocaleString()}
+                                        </p>
+                                        <p className="text-xs text-gray-400">XP</p>
+                                    </div>
+                                </motion.div>
+                            );
+                        })}
+                    </div>
+                </div>
+            )}
 
             {/* User not in top 100 notice */}
             {!userInLeaderboard && userStats && userStats.rank > 100 && (
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    className="text-center py-6 text-gray-500 dark:text-gray-400"
+                    className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-2xl p-6 text-center border border-indigo-100 dark:border-indigo-800"
                 >
-                    <p>Keep earning XP to climb into the top 100!</p>
-                    <p className="text-sm mt-1">
-                        You need approximately {Math.max(0, (leaderboard[99]?.xp || 0) - (userStats.xp || 0) + 1).toLocaleString()} more XP to reach rank 100.
+                    <TrendingUp className="mx-auto text-indigo-500 mb-3" size={32} />
+                    <p className="text-gray-700 dark:text-gray-300 font-medium">Keep earning XP to climb into the top 100!</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                        You need approximately <span className="font-semibold text-indigo-600 dark:text-indigo-400">{Math.max(0, (leaderboard[99]?.xp || 0) - (userStats.xp || 0) + 1).toLocaleString()}</span> more XP to reach rank 100.
                     </p>
                 </motion.div>
             )}
 
             {/* Empty state */}
             {leaderboard.length === 0 && (
-                <div className="text-center py-12 text-gray-500 dark:text-gray-400">
-                    <Trophy size={48} className="mx-auto mb-4 opacity-50" />
-                    <p>No users on the leaderboard yet. Be the first!</p>
+                <div className="text-center py-16">
+                    <div className="bg-yellow-100 dark:bg-yellow-900/30 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Trophy size={40} className="text-yellow-500" />
+                    </div>
+                    <p className="text-gray-600 dark:text-gray-300 font-medium">No users on the leaderboard yet</p>
+                    <p className="text-gray-400 dark:text-gray-500 text-sm mt-1">Be the first to earn XP and claim the top spot!</p>
                 </div>
             )}
         </div>
@@ -203,3 +287,4 @@ const Leaderboard = () => {
 };
 
 export default Leaderboard;
+
