@@ -39,9 +39,10 @@ const Leaderboard = () => {
     // Check if current user is in leaderboard
     const userInLeaderboard = leaderboard.some(u => u._id === user?._id);
 
-    // Get top 3 for podium
-    const top3 = leaderboard.slice(0, 3);
-    const restOfLeaderboard = leaderboard.slice(3);
+    // Get top 3 for podium (only if we have at least 3 users)
+    const showPodium = leaderboard.length >= 3;
+    const top3 = showPodium ? leaderboard.slice(0, 3) : [];
+    const restOfLeaderboard = showPodium ? leaderboard.slice(3) : leaderboard;
 
     if (loading) {
         return (
@@ -106,8 +107,8 @@ const Leaderboard = () => {
                 )}
             </div>
 
-            {/* Top 3 Podium */}
-            {top3.length >= 3 && (
+            {/* Top 3 Podium - only show with 3+ users */}
+            {showPodium && (
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -192,7 +193,7 @@ const Leaderboard = () => {
                 </motion.div>
             )}
 
-            {/* Rest of Leaderboard */}
+            {/* Rest of Leaderboard (or all users if < 3 total) */}
             {restOfLeaderboard.length > 0 && (
                 <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
                     <div className="px-6 py-4 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
