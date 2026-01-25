@@ -1,6 +1,5 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import { MongoMemoryServer } from 'mongodb-memory-server';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
@@ -24,40 +23,35 @@ app.use(helmet({
     crossOriginEmbedderPolicy: false,
     xFrameOptions: false
 }));
+
 app.use(morgan('common'));
 
 app.use('/auth', authRoutes);
 app.use('/docs', documentRoutes);
 app.use('/ai', aiRoutes);
 app.use('/interview', interviewRoutes);
-app.use('/quiz', quizRoutes); // Use quiz routes (separate from AI routes which has generic quiz gen)
-app.use('/user', userRoutes); // New User Routes
+app.use('/quiz', quizRoutes);
+app.use('/user', userRoutes);
 app.use('/uploads', express.static('uploads'));
 
 app.get('/', (req, res) => {
     res.send('MERN Learning Platform API is running');
 });
 
-const connectDB = async () => {
+const connectMongoDB = async (connectionURL) => {
     try {
-        await mongoose.connect(process.env.MONGO_URI, { serverSelectionTimeoutMS: 5000 });
-        console.log('MongoDB Connected (Local)');
-    } catch (err) {
-        console.log('Local MongoDB connection failed. Starting Embedded Database...');
-        try {
-            const mongod = await MongoMemoryServer.create();
-            const uri = mongod.getUri();
-            console.log(`Embedded MongoDB started at: ${uri}`);
-            await mongoose.connect(uri);
-            console.log('MongoDB Connected (Embedded)');
-        } catch (memErr) {
-            console.error('Failed to start embedded database:', memErr);
-        }
+        const connection = await mongoose.connect(connectionURL);
+        console.log("✅ MongoDB connected successfully!");
+        return connection;
+    } catch (error) {
+        console.error("❌ Error connecting to MongoDB:", error);
+        throw error;
     }
 };
 
-connectDB();
+connectMongoDB(process.env.MONGO_URI);
 
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`🚀 
+        Server running on port ${PORT}`);
 });

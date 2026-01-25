@@ -2,18 +2,20 @@ import Document from '../models/Document.js';
 import FlashcardDeck from '../models/FlashcardDeck.js';
 import Quiz from '../models/Quiz.js';
 import QuizResult from '../models/QuizResult.js';
-import { summarizeText, explainConcept, generateFlashcards, generateQuiz } from '../services/geminiService.js';
-import fs from 'fs';
+import { summarizeText, explainConcept, generateFlashcards, generateQuiz, generateTextGeneric } from '../services/geminiService.js';
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const pdf = require('pdf-parse');
 
-const extractTextFromPDF = async (filepath) => {
+// Fetch PDF from Cloudinary URL and extract text
+const extractTextFromPDF = async (fileUrl) => {
     try {
-        if (!fs.existsSync(filepath)) {
-            throw new Error(`File not found at path: ${filepath}`);
+        const response = await fetch(fileUrl);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch PDF from cloud: ${response.status}`);
         }
-        const dataBuffer = fs.readFileSync(filepath);
+        const arrayBuffer = await response.arrayBuffer();
+        const dataBuffer = Buffer.from(arrayBuffer);
         const data = await pdf(dataBuffer);
         return data.text;
     } catch (error) {
@@ -29,13 +31,12 @@ export const chatWithDocument = async (req, res) => {
         const doc = await Document.findById(documentId);
         if (!doc) return res.status(404).json({ message: 'Document not found' });
 
-        const text = await extractTextFromPDF(doc.filepath);
+        const text = await extractTextFromPDF(doc.fileUrl);
         const context = text.substring(0, 50000);
 
         const answer = await explainConcept(question, context);
         res.json({ answer });
     } catch (err) {
-        fs.appendFileSync('debug_errors.log', `${new Date().toISOString()} - Chat Error: ${err.stack}\n`);
         console.error("Chat Error:", err);
         if (err.message.includes('429') || err.message.includes('Too Many Requests') || err.message.includes('Quota')) {
             return res.status(429).json({ message: "AI Usage Limit Reached. Please wait a minute and try again." });
@@ -51,7 +52,7 @@ export const generateDocumentSummary = async (req, res) => {
         const doc = await Document.findById(documentId);
         if (!doc) return res.status(404).json({ message: 'Document not found' });
 
-        const text = await extractTextFromPDF(doc.filepath);
+        const text = await extractTextFromPDF(doc.fileUrl);
         const summary = await summarizeText(text.substring(0, 30000));
 
         doc.summary = summary;
@@ -59,7 +60,6 @@ export const generateDocumentSummary = async (req, res) => {
 
         res.json({ summary });
     } catch (err) {
-        fs.appendFileSync('debug_errors.log', `${new Date().toISOString()} - Summary Error: ${err.stack}\n`);
         console.error("Summary Error:", err);
         if (err.message.includes('429') || err.message.includes('Too Many Requests')) {
             return res.status(429).json({ message: "AI Usage Limit Reached. Please wait a minute." });
@@ -75,7 +75,7 @@ export const createFlashcards = async (req, res) => {
         const doc = await Document.findById(documentId);
         if (!doc) return res.status(404).json({ message: 'Document not found' });
 
-        const text = await extractTextFromPDF(doc.filepath);
+        const text = await extractTextFromPDF(doc.fileUrl);
         const cardsData = await generateFlashcards(text.substring(0, 10000));
 
         const newDeck = new FlashcardDeck({
@@ -88,7 +88,6 @@ export const createFlashcards = async (req, res) => {
         await newDeck.save();
         res.status(201).json(newDeck);
     } catch (err) {
-        fs.appendFileSync('debug_errors.log', `${new Date().toISOString()} - Flashcard Error: ${err.stack}\n`);
         console.error("Create Flashcards Error:", err);
         if (err.message.includes('429') || err.message.includes('Too Many Requests')) {
             return res.status(429).json({ message: "AI Usage Limit Reached. Please wait a minute." });
@@ -110,7 +109,7 @@ export const createQuiz = async (req, res) => {
             console.log("Using provided questions for quiz.");
             quizData = questions;
         } else {
-            const text = await extractTextFromPDF(doc.filepath);
+            const text = await extractTextFromPDF(doc.fileUrl);
             quizData = await generateQuiz(text.substring(0, 10000), numQuestions || 5);
         }
 
@@ -125,7 +124,6 @@ export const createQuiz = async (req, res) => {
         await newQuiz.save();
         res.status(201).json(newQuiz);
     } catch (err) {
-        fs.appendFileSync('debug_errors.log', `${new Date().toISOString()} - Quiz Error: ${err.stack}\n`);
         console.error("Create Quiz Error:", err);
         if (err.message.includes('429') || err.message.includes('Too Many Requests')) {
             return res.status(429).json({ message: "AI Usage Limit Reached. Please wait a minute." });
@@ -146,11 +144,9 @@ export const updateQuizScore = async (req, res) => {
             return res.status(403).json({ message: 'Not authorized' });
         }
 
-        // Update main quiz score (latest attempt)
         quiz.score = score;
         await quiz.save();
 
-        // Create a historical QuizResult entry
         const percentage = quiz.totalQuestions > 0 ? (score / quiz.totalQuestions) * 100 : 0;
 
         await QuizResult.create({
@@ -184,6 +180,26 @@ export const getQuizzes = async (req, res) => {
         res.json(quizzes);
     } catch (err) {
         console.error("Get Quizzes Error:", err);
+        res.status(500).json({ error: err.message });
+    }
+};
+
+// NEW: Generic text generation endpoint for secure frontend AI calls
+export const generateText = async (req, res) => {
+    try {
+        const { prompt, systemInstruction } = req.body;
+
+        if (!prompt) {
+            return res.status(400).json({ message: 'Prompt is required' });
+        }
+
+        const result = await generateTextGeneric(prompt, systemInstruction);
+        res.json({ text: result });
+    } catch (err) {
+        console.error("Generate Text Error:", err);
+        if (err.message.includes('429') || err.message.includes('Too Many Requests')) {
+            return res.status(429).json({ message: "AI Usage Limit Reached. Please wait a minute." });
+        }
         res.status(500).json({ error: err.message });
     }
 };

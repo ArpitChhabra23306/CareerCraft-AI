@@ -137,3 +137,16 @@ export const getInterviewResponse = async (history, message, role, difficulty, c
         return result.text;
     }, "I apologize, but I am currently experiencing high traffic (Rate Limit). Please wait a moment and try your answer again.");
 };
+
+// NEW: Generic text generation for secure frontend calls (replaces direct Gemini API calls)
+export const generateTextGeneric = async (prompt, systemInstruction = "") => {
+    return retryWithBackoff(async () => {
+        const fullPrompt = systemInstruction ? `${systemInstruction}\n\n${prompt}` : prompt;
+        const response = await ai.models.generateContent({
+            model: "gemini-2.5-flash",
+            contents: fullPrompt
+        });
+        return response.text;
+    }, "AI service is currently unavailable. Please try again in a moment.");
+};
+
