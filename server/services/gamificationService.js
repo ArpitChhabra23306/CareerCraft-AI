@@ -231,3 +231,4 @@ export const getUserRank = async (userId) => {
         throw error;
     }
 };
+
