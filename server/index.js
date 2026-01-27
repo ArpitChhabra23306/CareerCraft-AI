@@ -37,7 +37,7 @@ app.use('/gamification', gamificationRoutes);
 app.use('/uploads', express.static('uploads'));
 
 app.get('/', (req, res) => {
-    res.send('MERN Learning Platform API is running');
+    res.send('CareerCraft AI API is running');
 });
 
 const connectMongoDB = async (connectionURL) => {

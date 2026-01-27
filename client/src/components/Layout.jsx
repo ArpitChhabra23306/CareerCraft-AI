@@ -80,7 +80,7 @@ const Layout = () => {
                 <div className={`p-6 border-b border-gray-100 dark:border-gray-800 flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
                     <Link to="/dashboard" className={`flex items-center gap-2 ${isCollapsed ? 'hidden' : 'flex'}`}>
                         <BrainCircuit className="text-indigo-600 dark:text-indigo-400" size={28} />
-                        <span className="text-xl font-bold gradient-text">AI Learn</span>
+                        <span className="text-xl font-bold gradient-text">CareerCraft AI</span>
                     </Link>
                     {isCollapsed && <BrainCircuit className="text-indigo-600 dark:text-indigo-400" size={28} />}
                     <button
@@ -159,7 +159,7 @@ const Layout = () => {
                 <header className="md:hidden bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 p-4 flex justify-between items-center z-20">
                     <Link to="/dashboard" className="flex items-center gap-2">
                         <BrainCircuit className="text-indigo-600 dark:text-indigo-400" size={28} />
-                        <span className="text-xl font-bold gradient-text">AI Learn</span>
+                        <span className="text-xl font-bold gradient-text">CareerCraft AI</span>
                     </Link>
                     <div className="flex items-center gap-2">
                         <button

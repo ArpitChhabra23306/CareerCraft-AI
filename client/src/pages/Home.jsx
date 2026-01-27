@@ -42,7 +42,7 @@ const Home = () => {
                         <div className="flex items-center gap-2">
                             <BrainCircuit className="text-indigo-600 dark:text-indigo-400 h-8 w-8" />
                             <span className="text-xl font-bold gradient-text">
-                                AI Learn
+                                CareerCraft AI
                             </span>
                         </div>
                         <div className="flex items-center gap-4">
@@ -182,7 +182,7 @@ const Home = () => {
 
                     <h2 className="text-3xl md:text-5xl font-bold mb-6 relative z-10">Ready to Transform Your Learning?</h2>
                     <p className="text-indigo-100 text-lg mb-8 max-w-2xl mx-auto relative z-10">
-                        Join thousands of students and professionals who are leveling up their skills with AI Learn.
+                        Join thousands of students and professionals who are leveling up their skills with CareerCraft AI.
                     </p>
                     <Link
                         to="/register"
@@ -198,9 +198,9 @@ const Home = () => {
                 <div className="max-w-7xl mx-auto px-4 text-center text-gray-500 dark:text-gray-400">
                     <div className="flex justify-center items-center gap-2 mb-4">
                         <BrainCircuit className="text-indigo-600 dark:text-indigo-400 h-6 w-6" />
-                        <span className="text-lg font-bold text-gray-800 dark:text-white">AI Learn</span>
+                        <span className="text-lg font-bold text-gray-800 dark:text-white">CareerCraft AI</span>
                     </div>
-                    <p>&copy; {new Date().getFullYear()} AI Learn Platform. All rights reserved.</p>
+                    <p>&copy; {new Date().getFullYear()} CareerCraft AI. Made by Arpit Chhabra.</p>
                 </div>
             </footer>
         </div>
