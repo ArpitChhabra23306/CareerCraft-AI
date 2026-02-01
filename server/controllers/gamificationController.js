@@ -36,7 +36,7 @@ export const getGamificationStats = async (req, res) => {
         const userId = req.user.id;
 
         const user = await User.findById(userId)
-            .select('xp currentStreak longestStreak lastActivityDate dailyLoginClaimed');
+            .select('xp currentStreak longestStreak lastActivityDate lastLoginDate dailyLoginClaimed');
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
@@ -48,12 +48,23 @@ export const getGamificationStats = async (req, res) => {
         // Get total user count for context
         const totalUsers = await User.countDocuments({});
 
+        // Check if daily login was claimed TODAY (not just the flag value)
+        const now = new Date();
+        const lastLogin = user.lastLoginDate ? new Date(user.lastLoginDate) : null;
+        const isSameDay = lastLogin &&
+            lastLogin.getFullYear() === now.getFullYear() &&
+            lastLogin.getMonth() === now.getMonth() &&
+            lastLogin.getDate() === now.getDate();
+
+        // Only show as claimed if it was claimed TODAY
+        const dailyLoginClaimedToday = isSameDay && user.dailyLoginClaimed;
+
         res.json({
             xp: user.xp,
             currentStreak: user.currentStreak,
             longestStreak: user.longestStreak,
             lastActivityDate: user.lastActivityDate,
-            dailyLoginClaimed: user.dailyLoginClaimed,
+            dailyLoginClaimed: dailyLoginClaimedToday,
             rank,
             totalUsers,
             xpValues: XP_VALUES // Send XP values so frontend knows rewards

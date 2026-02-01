@@ -178,7 +178,7 @@ export const awardDocumentChatXP = async (userId) => {
 /**
  * Claim daily login bonus
  * @param {string} userId - The user's ID
- * @returns {Object} - { success, xpAwarded, alreadyClaimed }
+ * @returns {Object} - { success, xpAwarded, alreadyClaimed, streakInfo }
  */
 export const claimDailyLogin = async (userId) => {
     try {
@@ -198,15 +198,48 @@ export const claimDailyLogin = async (userId) => {
             user.dailyChatXP = 0; // Also reset daily chat XP
         }
 
+        // Update streak when claiming daily login
+        let streakBonusAwarded = 0;
+
+        // Check if last login was yesterday (streak continues)
+        if (user.lastLoginDate && isYesterday(user.lastLoginDate, now)) {
+            user.currentStreak += 1;
+        } else if (!user.lastLoginDate || !isSameDay(user.lastLoginDate, now)) {
+            // First login ever OR streak broken (missed a day) - reset to 1
+            user.currentStreak = 1;
+        }
+        // If same day, streak stays the same (shouldn't happen due to alreadyClaimed check)
+
+        // Update longest streak if current exceeds it
+        if (user.currentStreak > user.longestStreak) {
+            user.longestStreak = user.currentStreak;
+        }
+
+        // Check for streak bonuses (7-day, 30-day, 100-day)
+        const STREAK_BONUSES = { 7: 50, 30: 200, 100: 500 };
+        if (STREAK_BONUSES[user.currentStreak]) {
+            streakBonusAwarded = STREAK_BONUSES[user.currentStreak];
+            user.xp += streakBonusAwarded;
+            console.log(`[Gamification] User ${userId} earned streak bonus: +${streakBonusAwarded} XP for ${user.currentStreak}-day streak!`);
+        }
+
         // Claim daily login XP
         user.xp += XP_VALUES.DAILY_LOGIN;
         user.dailyLoginClaimed = true;
         user.lastLoginDate = now;
+        user.lastActivityDate = now; // Also update activity date
         await user.save();
 
-        console.log(`[Gamification] User ${userId} claimed daily login: +${XP_VALUES.DAILY_LOGIN} XP`);
+        console.log(`[Gamification] User ${userId} claimed daily login: +${XP_VALUES.DAILY_LOGIN} XP (Streak: ${user.currentStreak} days)`);
 
-        return { success: true, xpAwarded: XP_VALUES.DAILY_LOGIN, alreadyClaimed: false };
+        return {
+            success: true,
+            xpAwarded: XP_VALUES.DAILY_LOGIN + streakBonusAwarded,
+            alreadyClaimed: false,
+            currentStreak: user.currentStreak,
+            longestStreak: user.longestStreak,
+            streakBonusAwarded
+        };
     } catch (error) {
         console.error('[Gamification] Error claiming daily login:', error.message);
         throw error;
