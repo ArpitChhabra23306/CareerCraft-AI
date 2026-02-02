@@ -16,7 +16,30 @@ const UserSchema = new mongoose.Schema({
     lastActivityDate: { type: Date, default: null },
     lastLoginDate: { type: Date, default: null },
     dailyLoginClaimed: { type: Boolean, default: false },
-    dailyChatXP: { type: Number, default: 0 } // Track daily document chat XP (capped at 25)
+    dailyChatXP: { type: Number, default: 0 },
+
+    // Subscription fields
+    subscription: {
+        plan: { type: String, enum: ['free', 'pro', 'enterprise'], default: 'free' },
+        razorpaySubscriptionId: { type: String, default: null },
+        razorpayCustomerId: { type: String, default: null },
+        razorpayOrderId: { type: String, default: null },
+        status: { type: String, enum: ['active', 'cancelled', 'past_due', 'trialing', 'expired'], default: 'active' },
+        currentPeriodStart: { type: Date, default: null },
+        currentPeriodEnd: { type: Date, default: null },
+        cancelAtPeriodEnd: { type: Boolean, default: false }
+    },
+
+    // Usage tracking (reset monthly)
+    usage: {
+        documentsUploaded: { type: Number, default: 0 },
+        aiChatQueries: { type: Number, default: 0 },
+        quizzesToday: { type: Number, default: 0 },
+        lastQuizDate: { type: Date, default: null },
+        flashcardDecks: { type: Number, default: 0 },
+        interviewsThisMonth: { type: Number, default: 0 },
+        usageResetDate: { type: Date, default: Date.now }
+    }
 });
 
 export default mongoose.model('User', UserSchema);

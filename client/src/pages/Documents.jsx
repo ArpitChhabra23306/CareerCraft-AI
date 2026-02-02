@@ -96,8 +96,8 @@ const Documents = () => {
                         onDragOver={handleDrag}
                         onDrop={handleDrop}
                         className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all ${dragActive
-                                ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20'
-                                : 'border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-700'
+                            ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-900/20'
+                            : 'border-gray-200 dark:border-gray-700 hover:border-indigo-300 dark:hover:border-indigo-700'
                             }`}
                     >
                         <input

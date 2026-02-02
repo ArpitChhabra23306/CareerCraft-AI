@@ -1,6 +1,7 @@
 import InterviewSession from '../models/InterviewSession.js';
 import { getInterviewResponse } from '../services/geminiService.js';
 import { awardXP, updateStreak, XP_VALUES } from '../services/gamificationService.js';
+import { incrementUsage } from '../middleware/usageMiddleware.js';
 
 export const startInterview = async (req, res) => {
     try {
@@ -15,11 +16,18 @@ export const startInterview = async (req, res) => {
         });
 
         // Initial greeting from AI
-        // We pass the full session context object now or just expand args
         const initialMessage = await getInterviewResponse([], "Start the interview.", role, difficulty, company, skills);
         newSession.messages.push({ role: 'model', content: initialMessage });
 
         await newSession.save();
+
+        // Track interview usage for subscription limits
+        try {
+            await incrementUsage(req.user.id, 'interviewsThisMonth');
+        } catch (e) {
+            console.error('Usage tracking error:', e.message);
+        }
+
         res.status(201).json(newSession);
     } catch (err) {
         res.status(500).json({ error: err.message });

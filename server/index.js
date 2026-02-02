@@ -11,6 +11,7 @@ import interviewRoutes from './routes/interviewRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import quizRoutes from './routes/quizRoutes.js';
 import gamificationRoutes from './routes/gamificationRoutes.js';
+import subscriptionRoutes from './routes/subscriptionRoutes.js';
 
 dotenv.config();
 
@@ -34,6 +35,7 @@ app.use('/interview', interviewRoutes);
 app.use('/quiz', quizRoutes);
 app.use('/user', userRoutes);
 app.use('/gamification', gamificationRoutes);
+app.use('/subscription', subscriptionRoutes);
 app.use('/uploads', express.static('uploads'));
 
 app.get('/', (req, res) => {

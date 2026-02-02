@@ -2,6 +2,7 @@ import Document from '../models/Document.js';
 import FlashcardDeck from '../models/FlashcardDeck.js';
 import Quiz from '../models/Quiz.js';
 import QuizResult from '../models/QuizResult.js';
+import { incrementUsage } from '../middleware/usageMiddleware.js';
 import { summarizeText, explainConcept, generateFlashcards, generateQuiz, generateTextGeneric } from '../services/geminiService.js';
 import { awardXP, updateStreak, awardDocumentChatXP, XP_VALUES } from '../services/gamificationService.js';
 import { createRequire } from 'module';
@@ -42,6 +43,8 @@ export const chatWithDocument = async (req, res) => {
         try {
             xpResult = await awardDocumentChatXP(req.user.id);
             await updateStreak(req.user.id);
+            // Track AI chat usage for subscription limits
+            await incrementUsage(req.user.id, 'aiChatQueries');
         } catch (xpErr) {
             console.error('XP Award Error (non-blocking):', xpErr.message);
         }
@@ -103,6 +106,8 @@ export const createFlashcards = async (req, res) => {
         try {
             xpResult = await awardXP(req.user.id, XP_VALUES.REVIEW_FLASHCARDS, 'flashcard_creation');
             await updateStreak(req.user.id);
+            // Track flashcard deck usage for subscription limits
+            await incrementUsage(req.user.id, 'flashcardDecks');
         } catch (xpErr) {
             console.error('XP Award Error (non-blocking):', xpErr.message);
         }
@@ -143,6 +148,14 @@ export const createQuiz = async (req, res) => {
         });
 
         await newQuiz.save();
+
+        // Track quiz usage for subscription limits
+        try {
+            await incrementUsage(req.user.id, 'quizzesToday');
+        } catch (e) {
+            console.error('Usage tracking error:', e.message);
+        }
+
         res.status(201).json(newQuiz);
     } catch (err) {
         console.error("Create Quiz Error:", err);

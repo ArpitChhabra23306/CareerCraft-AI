@@ -1,6 +1,7 @@
 import Document from '../models/Document.js';
 import cloudinary from '../config/cloudinary.js';
 import { awardXP, updateStreak, XP_VALUES } from '../services/gamificationService.js';
+import { incrementUsage } from '../middleware/usageMiddleware.js';
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const pdf = require('pdf-parse');
@@ -29,6 +30,8 @@ export const uploadDocument = async (req, res) => {
         try {
             xpResult = await awardXP(userId, XP_VALUES.UPLOAD_DOCUMENT, 'document_upload');
             await updateStreak(userId);
+            // Track usage for subscription limits
+            await incrementUsage(userId, 'documentsUploaded');
         } catch (xpErr) {
             console.error('XP Award Error (non-blocking):', xpErr.message);
         }
