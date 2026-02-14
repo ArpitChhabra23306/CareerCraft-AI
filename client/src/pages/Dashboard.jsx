@@ -59,8 +59,8 @@ const SubscriptionBanner = ({ subscription }) => {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 className={`relative overflow-hidden rounded-2xl p-4 mb-6 ${isEnterprise
-                        ? 'bg-gradient-to-r from-amber-500 via-orange-500 to-red-500'
-                        : 'bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600'
+                    ? 'bg-gradient-to-r from-amber-500 via-orange-500 to-red-500'
+                    : 'bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600'
                     }`}
             >
                 <div className="absolute inset-0 bg-white/10 backdrop-blur-sm" />
@@ -191,9 +191,9 @@ const Dashboard = () => {
 
     const greeting = () => {
         const hour = new Date().getHours();
-        if (hour < 12) return 'Good morning';
-        if (hour < 17) return 'Good afternoon';
-        return 'Good evening';
+        if (hour < 12) return 'Good Morning';
+        if (hour < 17) return 'Good Afternoon';
+        return 'Good Evening';
     };
 
     return (
