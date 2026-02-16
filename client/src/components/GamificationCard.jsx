@@ -34,7 +34,6 @@ const GamificationCard = () => {
             const res = await api.post('/gamification/daily-login');
             if (res.data.success) {
                 setDailyLoginClaimed(true);
-                // Refresh stats to get updated XP
                 fetchStats();
             }
         } catch (err) {
@@ -46,11 +45,11 @@ const GamificationCard = () => {
 
     if (loading) {
         return (
-            <div className="bg-white dark:bg-gray-900 p-6 rounded-2xl border border-gray-100 dark:border-gray-800">
+            <div className="p-6 rounded-[20px] bg-[#111] dark:bg-[#eee]">
                 <div className="animate-pulse space-y-4">
-                    <div className="h-6 w-32 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                    <div className="h-8 w-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                    <div className="h-4 w-full bg-gray-200 dark:bg-gray-700 rounded"></div>
+                    <div className="h-5 w-28 bg-white/10 dark:bg-[#111]/10 rounded"></div>
+                    <div className="h-8 w-20 bg-white/10 dark:bg-[#111]/10 rounded"></div>
+                    <div className="h-3 w-full bg-white/10 dark:bg-[#111]/10 rounded"></div>
                 </div>
             </div>
         );
@@ -62,59 +61,59 @@ const GamificationCard = () => {
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 p-6 rounded-2xl shadow-lg text-white relative overflow-hidden"
+            transition={{ duration: 0.5 }}
+            className="p-6 rounded-[20px] bg-[#111] dark:bg-[#eee] text-white dark:text-[#111] relative overflow-hidden"
         >
-            {/* Background decoration */}
-            <div className="absolute top-0 right-0 w-40 h-40 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
-            <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-2xl"></div>
+            {/* Subtle radial glow */}
+            <div className="absolute inset-0 opacity-20" style={{
+                background: 'radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.08), transparent 60%)',
+            }} />
 
             {/* Header */}
-            <div className="flex items-center justify-between mb-4 relative z-10">
-                <h2 className="text-xl font-bold flex items-center gap-2">
-                    <Award size={24} />
+            <div className="flex items-center justify-between mb-5 relative z-10">
+                <h2 className="text-[15px] font-semibold flex items-center gap-2">
+                    <Award size={18} strokeWidth={1.5} />
                     Your Progress
                 </h2>
                 <Link
                     to="/leaderboard"
-                    className="text-white/80 hover:text-white text-sm flex items-center gap-1 transition-colors"
+                    className="text-white/50 dark:text-[#111]/50 hover:text-white/80 dark:hover:text-[#111]/80 text-[12px] flex items-center gap-1 transition-colors"
                 >
-                    <Trophy size={16} />
+                    <Trophy size={14} strokeWidth={1.5} />
                     Leaderboard
                 </Link>
             </div>
 
             {/* XP Display */}
-            <div className="relative z-10 mb-6">
-                <div className="flex items-baseline gap-2 mb-2">
-                    <Star size={24} className="text-yellow-300" />
-                    <span className="text-4xl font-bold">{stats.xp?.toLocaleString() || 0}</span>
-                    <span className="text-white/80 text-lg">XP</span>
+            <div className="relative z-10 mb-5">
+                <div className="flex items-baseline gap-2 mb-1">
+                    <span className="text-3xl font-bold tracking-tight">{stats.xp?.toLocaleString() || 0}</span>
+                    <span className="text-white/40 dark:text-[#111]/40 text-[13px] font-medium">XP</span>
                 </div>
-                <div className="flex items-center gap-2 text-white/70 text-sm">
-                    <TrendingUp size={14} />
+                <div className="flex items-center gap-1.5 text-white/40 dark:text-[#111]/40 text-[12px]">
+                    <TrendingUp size={12} strokeWidth={1.5} />
                     Rank #{stats.rank} of {stats.totalUsers?.toLocaleString()} users
                 </div>
             </div>
 
             {/* Streak Display */}
-            <div className="relative z-10 flex items-center gap-6 mb-6">
-                <div className="flex items-center gap-2">
-                    <div className={`p-2 rounded-xl ${stats.currentStreak > 0 ? 'bg-orange-500/30' : 'bg-white/10'}`}>
-                        <Flame size={20} className={stats.currentStreak > 0 ? 'text-orange-300' : 'text-white/50'} />
+            <div className="relative z-10 flex items-center gap-6 mb-5">
+                <div className="flex items-center gap-2.5">
+                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${stats.currentStreak > 0 ? 'bg-white/15 dark:bg-[#111]/15' : 'bg-white/5 dark:bg-[#111]/5'}`}>
+                        <Flame size={16} strokeWidth={1.5} className={stats.currentStreak > 0 ? 'text-white/80 dark:text-[#111]/80' : 'text-white/30 dark:text-[#111]/30'} />
                     </div>
                     <div>
-                        <p className="text-2xl font-bold">{stats.currentStreak || 0}</p>
-                        <p className="text-xs text-white/70">Day Streak</p>
+                        <p className="text-xl font-bold leading-none">{stats.currentStreak || 0}</p>
+                        <p className="text-[10px] text-white/40 dark:text-[#111]/40 mt-0.5 uppercase tracking-wider">Day Streak</p>
                     </div>
                 </div>
-                <div className="flex items-center gap-2">
-                    <div className="p-2 rounded-xl bg-yellow-500/30">
-                        <Trophy size={20} className="text-yellow-300" />
+                <div className="flex items-center gap-2.5">
+                    <div className="w-9 h-9 rounded-xl bg-white/10 dark:bg-[#111]/10 flex items-center justify-center">
+                        <Trophy size={16} strokeWidth={1.5} className="text-white/70 dark:text-[#111]/70" />
                     </div>
                     <div>
-                        <p className="text-2xl font-bold">{stats.longestStreak || 0}</p>
-                        <p className="text-xs text-white/70">Best Streak</p>
+                        <p className="text-xl font-bold leading-none">{stats.longestStreak || 0}</p>
+                        <p className="text-[10px] text-white/40 dark:text-[#111]/40 mt-0.5 uppercase tracking-wider">Best Streak</p>
                     </div>
                 </div>
             </div>
@@ -126,27 +125,27 @@ const GamificationCard = () => {
                     whileTap={{ scale: 0.98 }}
                     onClick={claimDailyLogin}
                     disabled={claimingLogin}
-                    className="relative z-10 w-full bg-white text-indigo-600 font-semibold py-3 px-4 rounded-xl hover:bg-indigo-50 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                    className="relative z-10 w-full bg-white dark:bg-[#111] text-[#111] dark:text-[#eee] font-semibold py-2.5 px-4 rounded-xl text-[13px] transition-all duration-300 hover:bg-[#f0f0f0] dark:hover:bg-[#222] flex items-center justify-center gap-2 disabled:opacity-50"
                 >
-                    <Star size={18} />
+                    <Star size={14} strokeWidth={1.5} />
                     {claimingLogin ? 'Claiming...' : 'Claim Daily Login (+10 XP)'}
                 </motion.button>
             )}
 
             {dailyLoginClaimed && (
-                <div className="relative z-10 bg-white/20 text-center py-3 px-4 rounded-xl text-white/90">
+                <div className="relative z-10 bg-white/10 dark:bg-[#111]/10 text-center py-2.5 px-4 rounded-xl text-white/70 dark:text-[#111]/70 text-[13px]">
                     ✓ Daily login claimed! Come back tomorrow.
                 </div>
             )}
 
             {/* XP Guide */}
-            <div className="relative z-10 mt-4 pt-4 border-t border-white/20">
-                <p className="text-xs text-white/60 mb-2">Earn more XP:</p>
-                <div className="flex flex-wrap gap-2 text-xs">
-                    <span className="bg-white/20 px-2 py-1 rounded-full">📄 Upload +25</span>
-                    <span className="bg-white/20 px-2 py-1 rounded-full">📝 Quiz +50</span>
-                    <span className="bg-white/20 px-2 py-1 rounded-full">🃏 Flashcards +30</span>
-                    <span className="bg-white/20 px-2 py-1 rounded-full">🎤 Interview +75</span>
+            <div className="relative z-10 mt-4 pt-4 border-t border-white/10 dark:border-[#111]/10">
+                <p className="text-[10px] text-white/30 dark:text-[#111]/30 mb-2 uppercase tracking-wider">Earn more XP:</p>
+                <div className="flex flex-wrap gap-1.5 text-[10px]">
+                    <span className="bg-white/10 dark:bg-[#111]/10 px-2 py-1 rounded-full text-white/50 dark:text-[#111]/50">📄 Upload +25</span>
+                    <span className="bg-white/10 dark:bg-[#111]/10 px-2 py-1 rounded-full text-white/50 dark:text-[#111]/50">📝 Quiz +50</span>
+                    <span className="bg-white/10 dark:bg-[#111]/10 px-2 py-1 rounded-full text-white/50 dark:text-[#111]/50">🃏 Cards +30</span>
+                    <span className="bg-white/10 dark:bg-[#111]/10 px-2 py-1 rounded-full text-white/50 dark:text-[#111]/50">🎤 Interview +75</span>
                 </div>
             </div>
         </motion.div>

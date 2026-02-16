@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../utils/api';
 import { Check, X, Crown, Sparkles, Zap, Shield, Loader2, AlertCircle } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const PLANS = {
     free: {
@@ -10,7 +11,6 @@ const PLANS = {
         period: 'forever',
         description: 'Perfect for getting started',
         icon: Zap,
-        color: 'gray',
         features: [
             { name: '3 Documents', included: true },
             { name: '50 AI queries/month', included: true },
@@ -28,7 +28,6 @@ const PLANS = {
         period: '/month',
         description: 'For serious learners',
         icon: Crown,
-        color: 'indigo',
         popular: true,
         features: [
             { name: 'Unlimited Documents', included: true },
@@ -47,7 +46,6 @@ const PLANS = {
         period: '/month',
         description: 'For power users & teams',
         icon: Shield,
-        color: 'purple',
         features: [
             { name: 'Unlimited Documents', included: true },
             { name: 'Unlimited AI queries', included: true },
@@ -60,64 +58,65 @@ const PLANS = {
     }
 };
 
-const PlanCard = ({ planKey, plan, currentPlan, onSubscribe, loading }) => {
+const PlanCard = ({ planKey, plan, currentPlan, onSubscribe, loading, index }) => {
     const isCurrentPlan = currentPlan === planKey;
     const Icon = plan.icon;
 
-    const colorStyles = {
-        gray: {
-            bg: 'bg-gray-50 dark:bg-gray-800',
-            border: 'border-gray-200 dark:border-gray-700',
-            button: 'bg-gray-600 hover:bg-gray-700',
-            icon: 'text-gray-500'
-        },
-        indigo: {
-            bg: 'bg-indigo-50 dark:bg-indigo-900/30',
-            border: 'border-indigo-500 ring-2 ring-indigo-500',
-            button: 'bg-indigo-600 hover:bg-indigo-700',
-            icon: 'text-indigo-500'
-        },
-        purple: {
-            bg: 'bg-purple-50 dark:bg-purple-900/30',
-            border: 'border-purple-400 dark:border-purple-600',
-            button: 'bg-purple-600 hover:bg-purple-700',
-            icon: 'text-purple-500'
-        }
-    };
-
-    const styles = colorStyles[plan.color];
-
     return (
-        <div className={`relative rounded-2xl p-6 ${styles.bg} border ${styles.border} transition-all duration-300 hover:shadow-xl`}>
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.08 }}
+            className={`relative rounded-[20px] p-6 transition-all duration-500 group ${plan.popular
+                ? 'bg-[#111] dark:bg-[#eee] text-white dark:text-[#111] border-2 border-[#111] dark:border-[#eee]'
+                : 'bg-[#fafafa] dark:bg-[#111] border border-[#f0f0f0] dark:border-[#1a1a1a] hover:bg-white dark:hover:bg-[#151515] hover:border-[#e8e8e8] dark:hover:border-[#222] hover:shadow-[0_20px_60px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_20px_60px_rgba(0,0,0,0.3)]'
+                }`}
+        >
             {plan.popular && (
                 <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                    <span className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-xs font-bold px-4 py-1 rounded-full flex items-center gap-1">
-                        <Sparkles size={12} /> Most Popular
+                    <span className="bg-white dark:bg-[#111] text-[#111] dark:text-[#eee] text-[10px] font-semibold px-3 py-1 rounded-lg flex items-center gap-1 uppercase tracking-wider shadow-sm">
+                        <Sparkles size={10} strokeWidth={1.5} /> Most Popular
                     </span>
                 </div>
             )}
 
             <div className="text-center mb-6">
-                <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl ${styles.bg} mb-4`}>
-                    <Icon size={24} className={styles.icon} />
+                <div className={`inline-flex items-center justify-center w-11 h-11 rounded-xl mb-4 ${plan.popular
+                    ? 'bg-white/10 dark:bg-[#111]/10'
+                    : 'bg-[#f0f0f0] dark:bg-[#1a1a1a] border border-[#e8e8e8] dark:border-[#222]'
+                    }`}>
+                    <Icon size={20} strokeWidth={1.5} className={plan.popular ? '' : 'text-[#888]'} />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white">{plan.name}</h3>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{plan.description}</p>
+                <h3 className={`text-[16px] font-bold ${plan.popular ? '' : 'text-[#111] dark:text-[#eee]'}`}>{plan.name}</h3>
+                <p className={`text-[12px] mt-1 ${plan.popular ? 'text-white/50 dark:text-[#111]/50' : 'text-[#999]'}`}>{plan.description}</p>
                 <div className="mt-4">
-                    <span className="text-4xl font-bold text-gray-900 dark:text-white">{plan.priceDisplay}</span>
-                    <span className="text-gray-500 dark:text-gray-400">{plan.period}</span>
+                    <span className={`text-3xl font-bold ${plan.popular ? '' : 'text-[#111] dark:text-[#eee]'}`}>{plan.priceDisplay}</span>
+                    <span className={`text-[13px] ${plan.popular ? 'text-white/40 dark:text-[#111]/40' : 'text-[#999]'}`}>{plan.period}</span>
                 </div>
             </div>
 
-            <ul className="space-y-3 mb-6">
-                {plan.features.map((feature, index) => (
-                    <li key={index} className="flex items-center gap-3">
+            <ul className="space-y-2.5 mb-6">
+                {plan.features.map((feature, idx) => (
+                    <li key={idx} className="flex items-center gap-2.5">
                         {feature.included ? (
-                            <Check size={18} className="text-green-500 flex-shrink-0" />
+                            <div className={`w-5 h-5 rounded-md flex items-center justify-center ${plan.popular
+                                ? 'bg-white/10 dark:bg-[#111]/10'
+                                : 'bg-[#f0f0f0] dark:bg-[#1a1a1a]'
+                                }`}>
+                                <Check size={12} strokeWidth={2} className={plan.popular ? '' : 'text-[#111] dark:text-[#eee]'} />
+                            </div>
                         ) : (
-                            <X size={18} className="text-gray-300 dark:text-gray-600 flex-shrink-0" />
+                            <div className={`w-5 h-5 rounded-md flex items-center justify-center ${plan.popular
+                                ? 'bg-white/5 dark:bg-[#111]/5'
+                                : 'bg-[#f0f0f0] dark:bg-[#1a1a1a]'
+                                }`}>
+                                <X size={12} strokeWidth={2} className={plan.popular ? 'text-white/20 dark:text-[#111]/20' : 'text-[#ccc] dark:text-[#444]'} />
+                            </div>
                         )}
-                        <span className={`text-sm ${feature.included ? 'text-gray-700 dark:text-gray-300' : 'text-gray-400 dark:text-gray-500'}`}>
+                        <span className={`text-[12px] ${feature.included
+                            ? plan.popular ? 'text-white/80 dark:text-[#111]/80' : 'text-[#111] dark:text-[#eee]'
+                            : plan.popular ? 'text-white/20 dark:text-[#111]/20' : 'text-[#bbb] dark:text-[#555]'
+                            }`}>
                             {feature.name}
                         </span>
                     </li>
@@ -127,23 +126,24 @@ const PlanCard = ({ planKey, plan, currentPlan, onSubscribe, loading }) => {
             <button
                 onClick={() => onSubscribe(planKey)}
                 disabled={isCurrentPlan || loading || planKey === 'free'}
-                className={`w-full py-3 px-4 rounded-xl font-semibold text-white transition-all duration-200 flex items-center justify-center gap-2
+                className={`w-full py-3 px-4 rounded-xl text-[13px] font-semibold transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-40
                     ${isCurrentPlan
-                        ? 'bg-green-500 cursor-default'
-                        : planKey === 'free'
-                            ? 'bg-gray-400 cursor-not-allowed'
-                            : `${styles.button} cursor-pointer hover:shadow-lg`
-                    }
-                    disabled:opacity-70`}
+                        ? plan.popular
+                            ? 'bg-white/20 dark:bg-[#111]/20 cursor-default'
+                            : 'bg-[#f0f0f0] dark:bg-[#1a1a1a] text-[#111] dark:text-[#eee] cursor-default'
+                        : plan.popular
+                            ? 'bg-white dark:bg-[#111] text-[#111] dark:text-[#eee] hover:bg-white/90 dark:hover:bg-[#111]/90'
+                            : 'bg-[#111] dark:bg-[#eee] text-white dark:text-[#111] hover:bg-[#333] dark:hover:bg-[#ccc]'
+                    }`}
             >
                 {loading === planKey ? (
                     <>
-                        <Loader2 size={18} className="animate-spin" />
+                        <Loader2 size={14} className="animate-spin" strokeWidth={1.5} />
                         Processing...
                     </>
                 ) : isCurrentPlan ? (
                     <>
-                        <Check size={18} />
+                        <Check size={14} strokeWidth={1.5} />
                         Current Plan
                     </>
                 ) : planKey === 'free' ? (
@@ -152,7 +152,7 @@ const PlanCard = ({ planKey, plan, currentPlan, onSubscribe, loading }) => {
                     `Upgrade to ${plan.name}`
                 )}
             </button>
-        </div>
+        </motion.div>
     );
 };
 
@@ -197,17 +197,14 @@ const Pricing = () => {
         setSuccess(null);
 
         try {
-            // Load Razorpay SDK
             const loaded = await loadRazorpayScript();
             if (!loaded) {
                 throw new Error('Failed to load Razorpay SDK');
             }
 
-            // Create order
             const orderRes = await api.post('/subscription/create-order', { plan });
             const orderData = orderRes.data;
 
-            // Open Razorpay checkout
             const options = {
                 key: orderData.keyId,
                 amount: orderData.amount,
@@ -216,7 +213,6 @@ const Pricing = () => {
                 description: `${orderData.planName} Plan Subscription`,
                 order_id: orderData.orderId,
                 handler: async (response) => {
-                    // Verify payment
                     try {
                         const verifyRes = await api.post('/subscription/verify-payment', {
                             razorpay_order_id: response.razorpay_order_id,
@@ -234,7 +230,7 @@ const Pricing = () => {
                 },
                 prefill: {},
                 theme: {
-                    color: '#6366f1'
+                    color: '#111111'
                 },
                 modal: {
                     ondismiss: () => {
@@ -253,37 +249,53 @@ const Pricing = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4">
-            <div className="max-w-6xl mx-auto">
+        <div className="py-8 px-4">
+            <div className="max-w-5xl mx-auto">
                 {/* Header */}
                 <div className="text-center mb-12">
-                    <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                    <motion.h1
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="text-3xl font-bold text-[#111] dark:text-[#eee] tracking-[-0.03em] mb-3"
+                    >
                         Choose Your Plan
-                    </h1>
-                    <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                    </motion.h1>
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.1 }}
+                        className="text-[#999] text-[14px] max-w-lg mx-auto"
+                    >
                         Unlock your full learning potential with our premium plans.
-                        All plans include access to AI-powered learning features.
-                    </p>
+                    </motion.p>
                 </div>
 
                 {/* Alerts */}
                 {error && (
-                    <div className="max-w-md mx-auto mb-6 p-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-xl flex items-center gap-3">
-                        <AlertCircle className="text-red-500 flex-shrink-0" size={20} />
-                        <p className="text-red-700 dark:text-red-300 text-sm">{error}</p>
-                    </div>
+                    <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="max-w-md mx-auto mb-6 p-4 rounded-[14px] bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800 flex items-center gap-3"
+                    >
+                        <AlertCircle className="text-red-500 flex-shrink-0" size={16} strokeWidth={1.5} />
+                        <p className="text-red-600 dark:text-red-400 text-[13px]">{error}</p>
+                    </motion.div>
                 )}
 
                 {success && (
-                    <div className="max-w-md mx-auto mb-6 p-4 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-xl flex items-center gap-3">
-                        <Check className="text-green-500 flex-shrink-0" size={20} />
-                        <p className="text-green-700 dark:text-green-300 text-sm">{success}</p>
-                    </div>
+                    <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="max-w-md mx-auto mb-6 p-4 rounded-[14px] bg-[#f0f0f0] dark:bg-[#1a1a1a] border border-[#e8e8e8] dark:border-[#222] flex items-center gap-3"
+                    >
+                        <Check className="text-[#111] dark:text-[#eee] flex-shrink-0" size={16} strokeWidth={1.5} />
+                        <p className="text-[#111] dark:text-[#eee] text-[13px] font-medium">{success}</p>
+                    </motion.div>
                 )}
 
                 {/* Plan Cards */}
-                <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                    {Object.entries(PLANS).map(([key, plan]) => (
+                <div className="grid md:grid-cols-3 gap-5">
+                    {Object.entries(PLANS).map(([key, plan], index) => (
                         <PlanCard
                             key={key}
                             planKey={key}
@@ -291,15 +303,15 @@ const Pricing = () => {
                             currentPlan={currentPlan}
                             onSubscribe={handleSubscribe}
                             loading={loading}
+                            index={index}
                         />
                     ))}
                 </div>
 
-                {/* FAQ / Info */}
-                <div className="mt-16 text-center">
-                    <p className="text-gray-500 dark:text-gray-400 text-sm">
-                        All payments are processed securely via Razorpay.
-                        Cancel anytime. Questions? Contact support.
+                {/* Footer */}
+                <div className="mt-12 text-center">
+                    <p className="text-[#bbb] dark:text-[#555] text-[12px]">
+                        All payments are processed securely via Razorpay. Cancel anytime.
                     </p>
                 </div>
             </div>

@@ -9,7 +9,6 @@ const Flashcards = () => {
     const [docs, setDocs] = useState([]);
     const [loading, setLoading] = useState(false);
     const [selectedDoc, setSelectedDoc] = useState('');
-    // Study Mode State
     const [activeDeck, setActiveDeck] = useState(null);
     const [currentCardIndex, setCurrentCardIndex] = useState(0);
     const [isFlipped, setIsFlipped] = useState(false);
@@ -82,7 +81,7 @@ const Flashcards = () => {
         setIsFlipped(false);
     };
 
-    // Render Study Mode
+    // Study Mode
     if (activeDeck) {
         const card = activeDeck.cards[currentCardIndex];
         const progress = ((currentCardIndex + 1) / activeDeck.cards.length) * 100;
@@ -93,33 +92,33 @@ const Flashcards = () => {
                 <div className="w-full flex justify-between items-center mb-6">
                     <button
                         onClick={() => setActiveDeck(null)}
-                        className="flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white transition-colors"
+                        className="flex items-center gap-2 text-[#999] hover:text-[#111] dark:hover:text-[#eee] transition-colors"
                     >
-                        <ChevronLeft size={20} />
-                        <span className="font-medium">Back</span>
+                        <ChevronLeft size={18} strokeWidth={1.5} />
+                        <span className="text-[13px] font-medium">Back</span>
                     </button>
-                    <h2 className="text-xl font-bold text-gray-800 dark:text-white truncate px-4">{activeDeck.title}</h2>
+                    <h2 className="text-[15px] font-semibold text-[#111] dark:text-[#eee] truncate px-4">{activeDeck.title}</h2>
                     <button
                         onClick={resetDeck}
-                        className="flex items-center gap-2 text-gray-500 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                        className="text-[#999] hover:text-[#111] dark:hover:text-[#eee] transition-colors"
                         title="Restart deck"
                     >
-                        <RotateCcw size={18} />
+                        <RotateCcw size={16} strokeWidth={1.5} />
                     </button>
                 </div>
 
                 {/* Progress Bar */}
-                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-8">
+                <div className="w-full bg-[#f0f0f0] dark:bg-[#1a1a1a] rounded-full h-1 mb-8">
                     <motion.div
-                        className="bg-gradient-to-r from-indigo-600 to-purple-500 h-2 rounded-full"
+                        className="bg-[#111] dark:bg-[#eee] h-1 rounded-full"
                         initial={{ width: 0 }}
                         animate={{ width: `${progress}%` }}
-                        transition={{ duration: 0.3 }}
+                        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                     />
                 </div>
 
                 {/* Card Counter */}
-                <div className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-4">
+                <div className="text-[12px] font-medium text-[#999] mb-4 tracking-wide">
                     Card {currentCardIndex + 1} of {activeDeck.cards.length}
                 </div>
 
@@ -131,28 +130,28 @@ const Flashcards = () => {
                     <motion.div
                         className={`flip-card-inner w-full h-full ${isFlipped ? 'flipped' : ''}`}
                     >
-                        {/* Front of card */}
-                        <div className="flip-card-front absolute inset-0 w-full h-full bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 flex flex-col items-center justify-center p-8 text-center">
-                            <div className="absolute top-4 left-4 px-2 py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 text-xs font-semibold rounded-lg">
+                        {/* Front */}
+                        <div className="flip-card-front absolute inset-0 w-full h-full bg-[#fafafa] dark:bg-[#111] rounded-[20px] border border-[#f0f0f0] dark:border-[#1a1a1a] flex flex-col items-center justify-center p-8 text-center">
+                            <div className="absolute top-4 left-4 px-2.5 py-1 bg-[#f0f0f0] dark:bg-[#1a1a1a] text-[#999] text-[10px] font-semibold rounded-lg uppercase tracking-wider">
                                 Question
                             </div>
-                            <p className="text-xl md:text-2xl font-medium text-gray-800 dark:text-white leading-relaxed">
+                            <p className="text-lg md:text-xl font-medium text-[#111] dark:text-[#eee] leading-relaxed">
                                 {card.front}
                             </p>
-                            <p className="absolute bottom-4 text-xs text-gray-400 dark:text-gray-500">
+                            <p className="absolute bottom-4 text-[10px] text-[#bbb] dark:text-[#666]">
                                 Tap to reveal answer
                             </p>
                         </div>
 
-                        {/* Back of card */}
-                        <div className="flip-card-back absolute inset-0 w-full h-full bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl shadow-xl flex flex-col items-center justify-center p-8 text-center">
-                            <div className="absolute top-4 left-4 px-2 py-1 bg-white/20 text-white text-xs font-semibold rounded-lg">
+                        {/* Back */}
+                        <div className="flip-card-back absolute inset-0 w-full h-full bg-[#111] dark:bg-[#eee] rounded-[20px] flex flex-col items-center justify-center p-8 text-center">
+                            <div className="absolute top-4 left-4 px-2.5 py-1 bg-white/10 dark:bg-[#111]/10 text-white/50 dark:text-[#111]/50 text-[10px] font-semibold rounded-lg uppercase tracking-wider">
                                 Answer
                             </div>
-                            <p className="text-xl md:text-2xl font-medium text-white leading-relaxed">
+                            <p className="text-lg md:text-xl font-medium text-white dark:text-[#111] leading-relaxed">
                                 {card.back}
                             </p>
-                            <p className="absolute bottom-4 text-xs text-white/60">
+                            <p className="absolute bottom-4 text-[10px] text-white/30 dark:text-[#111]/30">
                                 Tap to see question
                             </p>
                         </div>
@@ -160,104 +159,114 @@ const Flashcards = () => {
                 </div>
 
                 {/* Navigation */}
-                <div className="flex gap-4 mt-8">
-                    <button
+                <div className="flex gap-3 mt-8">
+                    <motion.button
                         onClick={prevCard}
                         disabled={currentCardIndex === 0}
-                        className="px-6 py-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-xl disabled:opacity-30 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all flex items-center gap-2 font-medium"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        className="px-6 py-3 bg-[#fafafa] dark:bg-[#111] border border-[#f0f0f0] dark:border-[#1a1a1a] text-[#111] dark:text-[#eee] rounded-xl disabled:opacity-30 hover:border-[#e8e8e8] dark:hover:border-[#222] transition-all duration-300 flex items-center gap-2 text-[13px] font-medium"
                     >
-                        <ChevronLeft size={18} />
+                        <ChevronLeft size={16} strokeWidth={1.5} />
                         Previous
-                    </button>
-                    <button
+                    </motion.button>
+                    <motion.button
                         onClick={nextCard}
                         disabled={currentCardIndex === activeDeck.cards.length - 1}
-                        className="px-6 py-3 bg-indigo-600 text-white rounded-xl disabled:opacity-30 hover:bg-indigo-700 transition-all flex items-center gap-2 font-medium shadow-lg shadow-indigo-500/25"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        className="px-6 py-3 bg-[#111] dark:bg-[#eee] text-white dark:text-[#111] rounded-xl disabled:opacity-30 transition-all duration-300 flex items-center gap-2 text-[13px] font-semibold"
                     >
                         Next
-                        <ChevronRight size={18} />
-                    </button>
+                        <ChevronRight size={16} strokeWidth={1.5} />
+                    </motion.button>
                 </div>
 
-                {/* Completion Message */}
+                {/* Completion */}
                 {currentCardIndex === activeDeck.cards.length - 1 && (
                     <motion.p
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="mt-6 text-center text-gray-500 dark:text-gray-400"
+                        className="mt-6 text-center text-[#999] text-[13px]"
                     >
-                        🎉 You've reached the end! <button onClick={resetDeck} className="text-indigo-600 dark:text-indigo-400 font-medium hover:underline">Start over?</button>
+                        🎉 You've reached the end! <button onClick={resetDeck} className="text-[#111] dark:text-[#eee] font-medium hover:opacity-70 transition-opacity underline underline-offset-2">Start over?</button>
                     </motion.p>
                 )}
             </div>
         );
     }
 
-    // Render List Mode
+    // List Mode
     return (
-        <div className="space-y-6 animate-fade-in">
-            <div className="flex justify-between items-center">
-                <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Flashcard Decks</h1>
-            </div>
+        <div className="space-y-6">
+            <motion.h1
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="text-2xl font-bold text-[#111] dark:text-[#eee] tracking-[-0.03em]"
+            >
+                Flashcard Decks
+            </motion.h1>
 
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800"
+                className="p-6 rounded-[20px] bg-[#fafafa] dark:bg-[#111] border border-[#f0f0f0] dark:border-[#1a1a1a]"
             >
-                <h2 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white flex items-center gap-2">
-                    <Sparkles className="text-amber-500" size={20} />
+                <h2 className="text-[15px] font-semibold mb-4 text-[#111] dark:text-[#eee] flex items-center gap-2">
+                    <Sparkles size={16} strokeWidth={1.5} className="text-[#888]" />
                     Generate New Deck
                 </h2>
-                <div className="flex gap-4 flex-wrap">
+                <div className="flex gap-3 flex-wrap">
                     <select
                         value={selectedDoc}
                         onChange={(e) => setSelectedDoc(e.target.value)}
-                        className="flex-1 min-w-[200px] border border-gray-200 dark:border-gray-700 p-3 rounded-xl dark:bg-gray-800 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all"
+                        className="flex-1 min-w-[200px] border border-[#f0f0f0] dark:border-[#1a1a1a] p-3 rounded-xl bg-white dark:bg-[#0a0a0a] text-[#111] dark:text-[#eee] text-[13px] focus:border-[#111] dark:focus:border-[#eee] outline-none transition-colors duration-300"
                     >
                         <option value="">Select a Document</option>
                         {docs.map(d => <option key={d._id} value={d._id}>{d.filename}</option>)}
                     </select>
-                    <button
+                    <motion.button
                         onClick={handleCreate}
                         disabled={loading || !selectedDoc}
-                        className="bg-indigo-600 text-white px-6 py-3 rounded-xl hover:bg-indigo-700 disabled:opacity-50 flex items-center gap-2 font-medium shadow-lg shadow-indigo-500/25 transition-all"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        className="bg-[#111] dark:bg-[#eee] text-white dark:text-[#111] px-6 py-3 rounded-xl disabled:opacity-40 flex items-center gap-2 text-[13px] font-semibold transition-all duration-300"
                     >
                         {loading ? (
                             <>
-                                <span className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full"></span>
+                                <span className="animate-spin h-3.5 w-3.5 border-2 border-white dark:border-[#111] border-t-transparent rounded-full"></span>
                                 Generating...
                             </>
                         ) : (
                             <>
-                                <Plus size={18} />
+                                <Plus size={16} strokeWidth={1.5} />
                                 Generate with AI
                             </>
                         )}
-                    </button>
+                    </motion.button>
                 </div>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {decks.map((deck, idx) => (
                     <motion.div
                         key={deck._id}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: idx * 0.1 }}
+                        transition={{ delay: idx * 0.06 }}
                         onClick={() => startStudy(deck)}
-                        className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 hover:shadow-lg transition-all cursor-pointer card-hover group"
+                        className="p-6 rounded-[20px] bg-[#fafafa] dark:bg-[#111] border border-[#f0f0f0] dark:border-[#1a1a1a] hover:bg-white dark:hover:bg-[#151515] hover:shadow-[0_20px_60px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_20px_60px_rgba(0,0,0,0.3)] hover:border-[#e8e8e8] dark:hover:border-[#222] transition-all duration-500 cursor-pointer group"
                     >
                         <div className="flex items-center gap-3 mb-4">
-                            <div className="p-3 bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-xl group-hover:scale-110 transition-transform">
-                                <Layers size={24} />
+                            <div className="w-10 h-10 rounded-xl bg-[#f0f0f0] dark:bg-[#1a1a1a] border border-[#e8e8e8] dark:border-[#222] flex items-center justify-center group-hover:bg-[#111] dark:group-hover:bg-[#eee] group-hover:border-[#111] dark:group-hover:border-[#eee] transition-all duration-500">
+                                <Layers size={18} strokeWidth={1.5} className="text-[#888] group-hover:text-white dark:group-hover:text-[#111] transition-colors duration-500" />
                             </div>
                             <div className="flex-1 min-w-0">
-                                <h3 className="font-semibold text-lg truncate text-gray-800 dark:text-white">{deck.title}</h3>
-                                <p className="text-gray-500 dark:text-gray-400 text-sm">{deck.cards.length} Cards</p>
+                                <h3 className="font-semibold text-[14px] truncate text-[#111] dark:text-[#eee]">{deck.title}</h3>
+                                <p className="text-[#999] text-[12px]">{deck.cards.length} Cards</p>
                             </div>
                         </div>
-                        <button className="w-full bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 py-2.5 rounded-xl font-medium hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-colors">
+                        <button className="w-full bg-[#f0f0f0] dark:bg-[#1a1a1a] text-[#111] dark:text-[#eee] py-2.5 rounded-xl text-[13px] font-medium hover:bg-[#111] dark:hover:bg-[#eee] hover:text-white dark:hover:text-[#111] transition-all duration-500">
                             Study Now
                         </button>
                     </motion.div>
@@ -265,9 +274,11 @@ const Flashcards = () => {
             </div>
 
             {decks.length === 0 && !loading && (
-                <div className="text-center py-16 text-gray-400 dark:text-gray-500">
-                    <Layers size={48} className="mx-auto mb-4 opacity-50" />
-                    <p>No flashcard decks yet. Generate one from your documents!</p>
+                <div className="text-center py-20">
+                    <div className="w-14 h-14 mx-auto rounded-2xl bg-[#f0f0f0] dark:bg-[#1a1a1a] border border-[#e8e8e8] dark:border-[#222] flex items-center justify-center mb-4">
+                        <Layers size={24} className="text-[#888]" strokeWidth={1.5} />
+                    </div>
+                    <p className="text-[#999] text-[14px]">No flashcard decks yet. Generate one from your documents!</p>
                 </div>
             )}
         </div>

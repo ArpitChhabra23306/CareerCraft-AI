@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import api from '../utils/api';
-import { User, Mail, Moon, Sun, Save, Camera, Palette } from 'lucide-react';
+import { User, Mail, Moon, Sun, Save, Camera } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const Profile = () => {
@@ -9,7 +9,6 @@ const Profile = () => {
     const [loading, setLoading] = useState(false);
     const [msg, setMsg] = useState('');
 
-    // Form State
     const [formData, setFormData] = useState({
         bio: '',
         avatar: '',
@@ -69,80 +68,68 @@ const Profile = () => {
     };
 
     return (
-        <div className="max-w-4xl mx-auto p-4 md:p-6 space-y-8 animate-fade-in">
+        <div className="max-w-4xl mx-auto space-y-6">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-6 md:p-8 border border-gray-100 dark:border-gray-800"
+                className="rounded-[20px] bg-[#fafafa] dark:bg-[#111] border border-[#f0f0f0] dark:border-[#1a1a1a] p-6 md:p-8"
             >
                 <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-                    <h1 className="text-3xl font-bold text-gray-800 dark:text-white flex items-center gap-3">
-                        <User className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
+                    <h1 className="text-2xl font-bold text-[#111] dark:text-[#eee] tracking-[-0.03em]">
                         Profile Settings
                     </h1>
                     <button
                         onClick={toggleTheme}
-                        className="self-start md:self-auto p-3 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all shadow-sm"
+                        className="self-start md:self-auto w-10 h-10 rounded-xl bg-[#f0f0f0] dark:bg-[#1a1a1a] border border-[#e8e8e8] dark:border-[#222] hover:bg-[#e8e8e8] dark:hover:bg-[#222] transition-all duration-300 flex items-center justify-center"
                         title="Toggle Dark Mode"
                     >
                         {formData.theme === 'dark' ? (
-                            <Sun className="h-6 w-6 text-yellow-500" />
+                            <Sun size={16} className="text-[#888]" strokeWidth={1.5} />
                         ) : (
-                            <Moon className="h-6 w-6 text-indigo-600" />
+                            <Moon size={16} className="text-[#888]" strokeWidth={1.5} />
                         )}
                     </button>
                 </div>
 
-                {/* Theme Preview Cards */}
+                {/* Theme Picker */}
                 <div className="mb-8">
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
-                        <Palette size={16} />
+                    <label className="block text-[12px] font-medium text-[#999] mb-3 uppercase tracking-wider">
                         Appearance
                     </label>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-3">
                         <button
                             onClick={() => formData.theme !== 'light' && toggleTheme()}
-                            className={`p-4 rounded-xl border-2 transition-all ${formData.theme === 'light'
-                                    ? 'border-indigo-500 ring-2 ring-indigo-500/20'
-                                    : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                            className={`p-4 rounded-[14px] border-2 transition-all duration-300 ${formData.theme === 'light'
+                                ? 'border-[#111] dark:border-[#eee]'
+                                : 'border-[#f0f0f0] dark:border-[#1a1a1a] hover:border-[#e8e8e8] dark:hover:border-[#222]'
                                 }`}
                         >
-                            <div className="bg-white border border-gray-200 rounded-lg p-3 mb-2 shadow-sm">
-                                <div className="flex items-center gap-2 mb-2">
-                                    <div className="w-3 h-3 rounded-full bg-red-400"></div>
-                                    <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
-                                    <div className="w-3 h-3 rounded-full bg-green-400"></div>
-                                </div>
-                                <div className="space-y-1">
-                                    <div className="h-2 bg-gray-200 rounded w-3/4"></div>
-                                    <div className="h-2 bg-gray-100 rounded w-1/2"></div>
+                            <div className="bg-white border border-[#f0f0f0] rounded-xl p-3 mb-2">
+                                <div className="space-y-1.5">
+                                    <div className="h-1.5 bg-[#f0f0f0] rounded w-3/4"></div>
+                                    <div className="h-1.5 bg-[#f5f5f5] rounded w-1/2"></div>
                                 </div>
                             </div>
-                            <div className="flex items-center justify-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-                                <Sun size={16} />
+                            <div className="flex items-center justify-center gap-2 text-[12px] font-medium text-[#111] dark:text-[#eee]">
+                                <Sun size={14} strokeWidth={1.5} />
                                 Light
                             </div>
                         </button>
                         <button
                             onClick={() => formData.theme !== 'dark' && toggleTheme()}
-                            className={`p-4 rounded-xl border-2 transition-all ${formData.theme === 'dark'
-                                    ? 'border-indigo-500 ring-2 ring-indigo-500/20'
-                                    : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
+                            className={`p-4 rounded-[14px] border-2 transition-all duration-300 ${formData.theme === 'dark'
+                                ? 'border-[#111] dark:border-[#eee]'
+                                : 'border-[#f0f0f0] dark:border-[#1a1a1a] hover:border-[#e8e8e8] dark:hover:border-[#222]'
                                 }`}
                         >
-                            <div className="bg-gray-900 border border-gray-700 rounded-lg p-3 mb-2 shadow-sm">
-                                <div className="flex items-center gap-2 mb-2">
-                                    <div className="w-3 h-3 rounded-full bg-red-400"></div>
-                                    <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
-                                    <div className="w-3 h-3 rounded-full bg-green-400"></div>
-                                </div>
-                                <div className="space-y-1">
-                                    <div className="h-2 bg-gray-700 rounded w-3/4"></div>
-                                    <div className="h-2 bg-gray-800 rounded w-1/2"></div>
+                            <div className="bg-[#0a0a0a] border border-[#1a1a1a] rounded-xl p-3 mb-2">
+                                <div className="space-y-1.5">
+                                    <div className="h-1.5 bg-[#1a1a1a] rounded w-3/4"></div>
+                                    <div className="h-1.5 bg-[#111] rounded w-1/2"></div>
                                 </div>
                             </div>
-                            <div className="flex items-center justify-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-                                <Moon size={16} />
+                            <div className="flex items-center justify-center gap-2 text-[12px] font-medium text-[#111] dark:text-[#eee]">
+                                <Moon size={14} strokeWidth={1.5} />
                                 Dark
                             </div>
                         </button>
@@ -153,9 +140,9 @@ const Profile = () => {
                     <motion.div
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className={`p-4 rounded-xl mb-6 ${msg.includes('success')
-                                ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 border border-emerald-100 dark:border-emerald-800'
-                                : 'bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-400 border border-red-100 dark:border-red-800'
+                        className={`p-4 rounded-[14px] mb-6 text-[13px] font-medium ${msg.includes('success')
+                            ? 'bg-[#f0f0f0] dark:bg-[#1a1a1a] text-[#111] dark:text-[#eee] border border-[#e8e8e8] dark:border-[#222]'
+                            : 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-100 dark:border-red-800'
                             }`}
                     >
                         {msg}
@@ -165,27 +152,27 @@ const Profile = () => {
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {/* Avatar Section */}
-                        <div className="flex flex-col items-center space-y-4 p-6 bg-gray-50 dark:bg-gray-800/50 rounded-2xl border border-gray-100 dark:border-gray-700">
-                            <div className="h-28 w-28 rounded-full overflow-hidden bg-white dark:bg-gray-700 shadow-lg border-4 border-indigo-100 dark:border-indigo-900/50 relative group">
+                        <div className="flex flex-col items-center space-y-4 p-6 bg-white dark:bg-[#0a0a0a] rounded-[16px] border border-[#f0f0f0] dark:border-[#1a1a1a]">
+                            <div className="h-24 w-24 rounded-2xl overflow-hidden bg-[#f0f0f0] dark:bg-[#1a1a1a] border-2 border-[#e8e8e8] dark:border-[#222] relative">
                                 {formData.avatar ? (
                                     <img src={formData.avatar} alt="Profile" className="h-full w-full object-cover" />
                                 ) : (
-                                    <div className="h-full w-full flex items-center justify-center bg-indigo-50 dark:bg-gray-800 text-indigo-300 dark:text-gray-500">
-                                        <User size={40} />
+                                    <div className="h-full w-full flex items-center justify-center text-[#bbb] dark:text-[#555]">
+                                        <User size={36} strokeWidth={1.5} />
                                     </div>
                                 )}
                             </div>
                             <div className="w-full">
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Avatar URL</label>
+                                <label className="block text-[11px] font-medium text-[#999] mb-2 uppercase tracking-wider">Avatar URL</label>
                                 <div className="relative">
-                                    <Camera className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                                    <Camera className="absolute left-3 top-1/2 -translate-y-1/2 text-[#bbb] dark:text-[#555]" size={14} strokeWidth={1.5} />
                                     <input
                                         type="text"
                                         name="avatar"
                                         value={formData.avatar}
                                         onChange={handleChange}
                                         placeholder="https://example.com/avatar.jpg"
-                                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                                        className="w-full pl-9 pr-4 py-3 rounded-xl border border-[#f0f0f0] dark:border-[#1a1a1a] bg-[#fafafa] dark:bg-[#111] text-[#111] dark:text-[#eee] text-[13px] focus:border-[#111] dark:focus:border-[#eee] outline-none transition-colors duration-300 placeholder-[#bbb] dark:placeholder-[#555]"
                                     />
                                 </div>
                             </div>
@@ -194,26 +181,26 @@ const Profile = () => {
                         {/* Basic Info */}
                         <div className="space-y-5">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Username</label>
+                                <label className="block text-[11px] font-medium text-[#999] mb-2 uppercase tracking-wider">Username</label>
                                 <div className="relative">
-                                    <User className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                                    <User className="absolute left-3 top-1/2 -translate-y-1/2 text-[#bbb] dark:text-[#555]" size={14} strokeWidth={1.5} />
                                     <input
                                         type="text"
                                         value={user?.username || ''}
                                         disabled
-                                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-500 cursor-not-allowed"
+                                        className="w-full pl-9 pr-4 py-3 rounded-xl border border-[#f0f0f0] dark:border-[#1a1a1a] bg-[#f5f5f5] dark:bg-[#0a0a0a] text-[#999] text-[13px] cursor-not-allowed"
                                     />
                                 </div>
                             </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email Address</label>
+                                <label className="block text-[11px] font-medium text-[#999] mb-2 uppercase tracking-wider">Email Address</label>
                                 <div className="relative">
-                                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-5 w-5" />
+                                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-[#bbb] dark:text-[#555]" size={14} strokeWidth={1.5} />
                                     <input
                                         type="email"
                                         value={user?.email || ''}
                                         disabled
-                                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-500 cursor-not-allowed"
+                                        className="w-full pl-9 pr-4 py-3 rounded-xl border border-[#f0f0f0] dark:border-[#1a1a1a] bg-[#f5f5f5] dark:bg-[#0a0a0a] text-[#999] text-[13px] cursor-not-allowed"
                                     />
                                 </div>
                             </div>
@@ -222,30 +209,32 @@ const Profile = () => {
 
                     {/* Bio */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Bio</label>
+                        <label className="block text-[11px] font-medium text-[#999] mb-2 uppercase tracking-wider">Bio</label>
                         <textarea
                             name="bio"
                             value={formData.bio}
                             onChange={handleChange}
                             rows="4"
                             placeholder="Tell us a bit about yourself..."
-                            className="w-full p-4 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all resize-none"
+                            className="w-full p-4 rounded-xl border border-[#f0f0f0] dark:border-[#1a1a1a] bg-white dark:bg-[#0a0a0a] text-[#111] dark:text-[#eee] text-[13px] focus:border-[#111] dark:focus:border-[#eee] outline-none transition-colors duration-300 resize-none placeholder-[#bbb] dark:placeholder-[#555]"
                         ></textarea>
                     </div>
 
-                    <div className="flex justify-end pt-4">
-                        <button
+                    <div className="flex justify-end pt-2">
+                        <motion.button
                             type="submit"
                             disabled={loading}
-                            className="bg-indigo-600 text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            className="bg-[#111] dark:bg-[#eee] text-white dark:text-[#111] px-8 py-3 rounded-xl text-[13px] font-semibold flex items-center gap-2 disabled:opacity-40 transition-all duration-300"
                         >
                             {loading ? (
-                                <span className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></span>
+                                <span className="animate-spin h-4 w-4 border-2 border-white dark:border-[#111] border-t-transparent rounded-full"></span>
                             ) : (
-                                <Save className="h-5 w-5" />
+                                <Save size={16} strokeWidth={1.5} />
                             )}
                             Save Changes
-                        </button>
+                        </motion.button>
                     </div>
                 </form>
             </motion.div>
