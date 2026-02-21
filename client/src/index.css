@@ -361,10 +361,10 @@ body {
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
-/* Premium scrollbar styling */
+/* Minimal scrollbar */
 ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+    width: 6px;
+    height: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -372,41 +372,41 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, #d1d5db 0%, #9ca3af 100%);
-    border-radius: 5px;
-    border: 2px solid transparent;
-    background-clip: content-box;
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
 }
 
 .dark ::-webkit-scrollbar-thumb {
-    background: linear-gradient(180deg, #4b5563 0%, #374151 100%);
-    background-clip: content-box;
+    background: rgba(255, 255, 255, 0.12);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, #9ca3af 0%, #6b7280 100%);
-    background-clip: content-box;
+    background: rgba(0, 0, 0, 0.25);
 }
 
 .dark ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(180deg, #6b7280 0%, #4b5563 100%);
-    background-clip: content-box;
+    background: rgba(255, 255, 255, 0.2);
 }
 
 /* Selection styling */
 ::selection {
-    background: rgba(99, 102, 241, 0.2);
-    color: #6366f1;
+    background: rgba(17, 17, 17, 0.1);
+    color: #111;
 }
 
 .dark ::selection {
-    background: rgba(99, 102, 241, 0.3);
-    color: #a5b4fc;
+    background: rgba(238, 238, 238, 0.15);
+    color: #eee;
 }
 
 /* Focus ring styling */
 *:focus-visible {
-    outline: 2px solid #6366f1;
+    outline: 1.5px solid rgba(17, 17, 17, 0.4);
+    outline-offset: 2px;
+}
+
+.dark *:focus-visible {
+    outline: 1.5px solid rgba(238, 238, 238, 0.3);
     outline-offset: 2px;
 }
 
@@ -425,5 +425,5 @@ select {
 input:focus,
 textarea:focus,
 select:focus {
-    @apply ring-2 ring-indigo-500/50;
+    @apply ring-1 ring-[#111]/20 dark:ring-[#eee]/15;
 }

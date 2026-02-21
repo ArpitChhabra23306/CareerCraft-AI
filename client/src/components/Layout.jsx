@@ -25,13 +25,16 @@ const SidebarItem = ({ icon: Icon, label, path, active, collapsed }) => (
         to={path}
         className={`flex items-center gap-3 px-4 py-2.5 rounded-xl transition-all duration-300 group relative
             ${active
-                ? 'bg-[#111] dark:bg-[#eee] text-white dark:text-[#111]'
+                ? 'bg-[#f5f5f5] dark:bg-[#151515] text-[#111] dark:text-[#eee]'
                 : 'text-[#999] hover:text-[#111] dark:hover:text-[#eee] hover:bg-[#fafafa] dark:hover:bg-[#111]'
             } ${collapsed ? 'justify-center px-3' : ''}`}
         title={collapsed ? label : ''}
     >
-        <Icon size={18} strokeWidth={1.5} className={active ? '' : 'group-hover:scale-105 transition-transform duration-300'} />
-        {!collapsed && <span className="text-[13px] font-medium">{label}</span>}
+        {active && (
+            <span className={`absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-4 bg-[#111] dark:bg-[#eee] rounded-r-full transition-all duration-300`} />
+        )}
+        <Icon size={18} strokeWidth={active ? 1.8 : 1.5} className={active ? '' : 'group-hover:scale-105 transition-transform duration-300'} />
+        {!collapsed && <span className={`text-[13px] ${active ? 'font-semibold' : 'font-medium'}`}>{label}</span>}
     </Link>
 );
 
@@ -197,7 +200,7 @@ const Layout = () => {
                                     to={item.path}
                                     onClick={() => setIsMobileMenuOpen(false)}
                                     className={`flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-300 ${location.pathname === item.path
-                                        ? 'bg-[#111] dark:bg-[#eee] text-white dark:text-[#111]'
+                                        ? 'bg-[#f5f5f5] dark:bg-[#151515] text-[#111] dark:text-[#eee] font-semibold'
                                         : 'text-[#999] hover:text-[#111] dark:hover:text-[#eee] hover:bg-[#fafafa] dark:hover:bg-[#111]'
                                         }`}
                                 >

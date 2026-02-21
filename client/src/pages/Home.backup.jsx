@@ -8,241 +8,6 @@ import {
 import { useContext, useState, useEffect, useRef, useCallback } from 'react';
 import { AuthContext } from '../context/AuthContext';
 
-/* ─── Subtle Anti-Gravity Dot Field ─── */
-const ParticleGrid = () => {
-    const canvasRef = useRef(null);
-    const mouseRef = useRef({ x: -1000, y: -1000 });
-    const particlesRef = useRef([]);
-    const animRef = useRef(null);
-
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-
-        const resize = () => {
-            canvas.width = canvas.offsetWidth * window.devicePixelRatio;
-            canvas.height = canvas.offsetHeight * window.devicePixelRatio;
-            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-            initParticles();
-        };
-
-        const spacing = 60;
-        const initParticles = () => {
-            const cw = canvas.offsetWidth;
-            const ch = canvas.offsetHeight;
-            particlesRef.current = [];
-            for (let x = spacing / 2; x < cw; x += spacing) {
-                for (let y = spacing / 2; y < ch; y += spacing) {
-                    particlesRef.current.push({
-                        ox: x, oy: y, x, y,
-                        vx: 0, vy: 0,
-                    });
-                }
-            }
-        };
-
-        const handleMouse = (e) => {
-            const rect = canvas.getBoundingClientRect();
-            mouseRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
-        };
-        const handleLeave = () => { mouseRef.current = { x: -1000, y: -1000 }; };
-
-        const draw = () => {
-            const cw = canvas.offsetWidth;
-            const ch = canvas.offsetHeight;
-            ctx.clearRect(0, 0, cw, ch);
-            const mx = mouseRef.current.x;
-            const my = mouseRef.current.y;
-            const isDark = document.documentElement.classList.contains('dark');
-            const baseColor = isDark ? '238,238,238' : '17,17,17';
-            const pushRadius = 200;
-            const particles = particlesRef.current;
-
-            for (const p of particles) {
-                const dx = mx - p.x;
-                const dy = my - p.y;
-                const dist = Math.sqrt(dx * dx + dy * dy);
-                // Anti-gravity: push dots away from cursor
-                if (dist < pushRadius && dist > 0) {
-                    const force = (pushRadius - dist) / pushRadius;
-                    p.vx -= (dx / dist) * force * 2;
-                    p.vy -= (dy / dist) * force * 2;
-                }
-                // Spring back to origin
-                p.vx += (p.ox - p.x) * 0.03;
-                p.vy += (p.oy - p.y) * 0.03;
-                p.vx *= 0.9;
-                p.vy *= 0.9;
-                p.x += p.vx;
-                p.y += p.vy;
-
-                // Draw just the dot — no lines
-                const proximity = dist < pushRadius ? (1 - dist / pushRadius) : 0;
-                const alpha = 0.06 + proximity * 0.18;
-                const size = 1.2 + proximity * 1.8;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(${baseColor},${alpha})`;
-                ctx.fill();
-            }
-
-            animRef.current = requestAnimationFrame(draw);
-        };
-
-        resize();
-        canvas.addEventListener('mousemove', handleMouse);
-        canvas.addEventListener('mouseleave', handleLeave);
-        window.addEventListener('resize', resize);
-        draw();
-
-        return () => {
-            cancelAnimationFrame(animRef.current);
-            canvas.removeEventListener('mousemove', handleMouse);
-            canvas.removeEventListener('mouseleave', handleLeave);
-            window.removeEventListener('resize', resize);
-        };
-    }, []);
-
-    return (
-        <canvas
-            ref={canvasRef}
-            className="absolute inset-0 w-full h-full z-[1] pointer-events-auto"
-        />
-    );
-};
-
-/* ─── Interactive 3D Device Mockup ─── */
-const MockupDevice = () => {
-    const mockRef = useRef(null);
-    const [tilt, setTilt] = useState({ x: 0, y: 0 });
-
-    const handleMouseMove = useCallback((e) => {
-        if (!mockRef.current) return;
-        const rect = mockRef.current.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
-        const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
-        setTilt({ x: y * -8, y: x * 12 });
-    }, []);
-
-    const handleMouseLeave = useCallback(() => {
-        setTilt({ x: 0, y: 0 });
-    }, []);
-
-    return (
-        <motion.div
-            ref={mockRef}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-            initial={{ opacity: 0, y: 60, rotateX: 25 }}
-            animate={{ opacity: 1, y: 0, rotateX: 8 }}
-            transition={{ duration: 1.2, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="max-w-4xl mx-auto mt-20 cursor-default"
-            style={{ perspective: '1200px' }}
-        >
-            <div
-                className="relative transition-transform duration-200 ease-out"
-                style={{
-                    transform: `perspective(1200px) rotateX(${8 + tilt.x}deg) rotateY(${tilt.y}deg)`,
-                    transformStyle: 'preserve-3d',
-                }}
-            >
-                {/* Laptop body */}
-                <div className="rounded-xl overflow-hidden border border-[#e0e0e0] dark:border-[#222] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.15)] dark:shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)] bg-[#f8f8f8] dark:bg-[#111]">
-                    {/* Browser chrome */}
-                    <div className="flex items-center gap-2 px-4 py-2.5 bg-[#f0f0f0] dark:bg-[#0d0d0d] border-b border-[#e0e0e0] dark:border-[#1a1a1a]">
-                        <div className="flex gap-1.5">
-                            <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
-                            <div className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
-                            <div className="w-2.5 h-2.5 rounded-full bg-[#27ca3f]" />
-                        </div>
-                        <div className="flex-1 mx-8">
-                            <div className="bg-white dark:bg-[#1a1a1a] rounded-md h-6 flex items-center px-3 text-[10px] text-[#aaa] dark:text-[#555] font-mono">
-                                careercraft.ai/dashboard
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Dashboard preview content */}
-                    <div className="p-6 space-y-4 bg-white dark:bg-[#0a0a0a]">
-                        {/* Top bar */}
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-lg bg-[#111] dark:bg-[#eee] flex items-center justify-center">
-                                    <BrainCircuit className="w-4 h-4 text-white dark:text-[#111]" strokeWidth={1.5} />
-                                </div>
-                                <div className="h-3 w-24 bg-[#f0f0f0] dark:bg-[#1a1a1a] rounded-full" />
-                            </div>
-                            <div className="flex gap-2">
-                                <div className="h-7 w-7 rounded-lg bg-[#f5f5f5] dark:bg-[#151515]" />
-                                <div className="h-7 w-7 rounded-lg bg-[#f5f5f5] dark:bg-[#151515]" />
-                                <div className="h-7 w-20 rounded-lg bg-[#111] dark:bg-[#eee]" />
-                            </div>
-                        </div>
-
-                        {/* Stats row */}
-                        <div className="grid grid-cols-4 gap-3">
-                            {[{ l: 'Documents', v: '24' }, { l: 'Quizzes', v: '12' }, { l: 'XP', v: '2,840' }, { l: 'Streak', v: '7d' }].map((s, i) => (
-                                <div key={i} className="p-3 rounded-xl bg-[#fafafa] dark:bg-[#111] border border-[#f0f0f0] dark:border-[#1a1a1a]">
-                                    <p className="text-[9px] text-[#aaa] dark:text-[#666] uppercase tracking-wider">{s.l}</p>
-                                    <p className="text-[16px] font-bold text-[#111] dark:text-[#eee] mt-0.5">{s.v}</p>
-                                </div>
-                            ))}
-                        </div>
-
-                        {/* Content area */}
-                        <div className="grid grid-cols-3 gap-3">
-                            <div className="col-span-2 p-4 rounded-xl bg-[#fafafa] dark:bg-[#111] border border-[#f0f0f0] dark:border-[#1a1a1a]">
-                                <div className="flex items-center gap-2 mb-3">
-                                    <MessageSquare size={12} className="text-[#888]" />
-                                    <span className="text-[10px] font-medium text-[#888]">AI Chat</span>
-                                </div>
-                                <div className="space-y-2">
-                                    <div className="flex gap-2">
-                                        <div className="h-6 w-6 rounded-full bg-[#e8e8e8] dark:bg-[#222] flex-shrink-0" />
-                                        <div className="h-6 flex-1 bg-[#f0f0f0] dark:bg-[#1a1a1a] rounded-lg" />
-                                    </div>
-                                    <div className="flex gap-2 justify-end">
-                                        <div className="h-6 w-2/3 bg-[#111] dark:bg-[#eee] rounded-lg opacity-80" />
-                                        <div className="h-6 w-6 rounded-full bg-[#111] dark:bg-[#eee] flex-shrink-0" />
-                                    </div>
-                                    <div className="flex gap-2">
-                                        <div className="h-6 w-6 rounded-full bg-[#e8e8e8] dark:bg-[#222] flex-shrink-0" />
-                                        <div className="h-6 w-3/4 bg-[#f0f0f0] dark:bg-[#1a1a1a] rounded-lg" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="space-y-3">
-                                <div className="p-3 rounded-xl bg-[#fafafa] dark:bg-[#111] border border-[#f0f0f0] dark:border-[#1a1a1a]">
-                                    <div className="flex items-center gap-2 mb-2">
-                                        <Zap size={10} className="text-[#888]" />
-                                        <span className="text-[9px] font-medium text-[#888]">Quiz</span>
-                                    </div>
-                                    <div className="w-full h-2 bg-[#f0f0f0] dark:bg-[#1a1a1a] rounded-full overflow-hidden">
-                                        <div className="h-full w-3/4 bg-[#111] dark:bg-[#eee] rounded-full" />
-                                    </div>
-                                    <p className="text-[9px] text-[#aaa] mt-1">75% complete</p>
-                                </div>
-                                <div className="p-3 rounded-xl bg-[#fafafa] dark:bg-[#111] border border-[#f0f0f0] dark:border-[#1a1a1a]">
-                                    <div className="flex items-center gap-2 mb-2">
-                                        <Trophy size={10} className="text-[#888]" />
-                                        <span className="text-[9px] font-medium text-[#888]">Level</span>
-                                    </div>
-                                    <p className="text-[14px] font-bold text-[#111] dark:text-[#eee]">12</p>
-                                    <p className="text-[9px] text-[#aaa]">840 / 1000 XP</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Reflection/glow underneath */}
-                <div className="absolute -bottom-8 left-[10%] right-[10%] h-16 bg-gradient-to-b from-black/[0.04] dark:from-white/[0.03] to-transparent rounded-full blur-2xl" />
-            </div>
-        </motion.div>
-    );
-};
-
 /* ─── #8 Smooth Animated Counter with easeOut ─── */
 const AnimatedCounter = ({ target, suffix = '' }) => {
     const ref = useRef(null);
@@ -522,26 +287,21 @@ const Home = () => {
                 </div>
             </nav>
 
-            {/* ══ HERO with Particle Grid + 3D Mockup ══ */}
-            <section className="pt-40 pb-12 px-4 relative z-10 overflow-hidden">
-                {/* Particle Dot Grid Background */}
-                <div className="absolute inset-0">
-                    <ParticleGrid />
-                </div>
-
-                <div className="max-w-4xl mx-auto text-center relative z-10">
+            {/* ══ HERO ══ */}
+            <section className="pt-40 pb-24 px-4 relative z-10">
+                <div className="max-w-4xl mx-auto text-center">
                     {/* Badge */}
                     <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
-                        className="inline-flex items-center gap-2 border border-[#eee] dark:border-[#1a1a1a] px-4 py-1.5 rounded-full mb-10 bg-white/60 dark:bg-[#0a0a0a]/60 backdrop-blur-sm"
+                        className="inline-flex items-center gap-2 border border-[#eee] dark:border-[#1a1a1a] px-4 py-1.5 rounded-full mb-10"
                     >
                         <div className="w-1.5 h-1.5 rounded-full bg-[#111] dark:bg-[#eee] animate-pulse" />
                         <span className="text-[#888] dark:text-[#888] text-[12px] font-medium tracking-wide uppercase">AI-Powered Learning</span>
                     </motion.div>
 
-                    {/* Heading with Shimmer Animation */}
+                    {/* #4 Heading with Shimmer Animation */}
                     <motion.h1
                         initial={{ opacity: 0, y: 24 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -564,7 +324,7 @@ const Home = () => {
                         Practice with AI and reach your full potential.
                     </motion.p>
 
-                    {/* CTA Buttons */}
+                    {/* #7 CTA Buttons with micro-interactions */}
                     <motion.div
                         initial={{ opacity: 0, y: 16 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -575,7 +335,7 @@ const Home = () => {
                             <motion.div
                                 whileHover={{ scale: 1.03, boxShadow: '0 20px 50px rgba(0,0,0,0.12)' }}
                                 whileTap={{ scale: 0.98 }}
-                                className="group bg-[#111] dark:bg-[#eee] text-white dark:text-[#111] px-8 py-3.5 rounded-xl text-[14px] font-semibold transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer relative z-20"
+                                className="group bg-[#111] dark:bg-[#eee] text-white dark:text-[#111] px-8 py-3.5 rounded-xl text-[14px] font-semibold transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer"
                             >
                                 Start Learning Free
                                 <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" strokeWidth={2} />
@@ -585,7 +345,7 @@ const Home = () => {
                             <motion.div
                                 whileHover={{ scale: 1.03 }}
                                 whileTap={{ scale: 0.98 }}
-                                className="border border-[#eee] dark:border-[#222] text-[#666] dark:text-[#888] px-8 py-3.5 rounded-xl text-[14px] font-semibold hover:border-[#ccc] dark:hover:border-[#444] hover:text-[#111] dark:hover:text-[#eee] transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer bg-white/60 dark:bg-[#0a0a0a]/60 backdrop-blur-sm relative z-20"
+                                className="border border-[#eee] dark:border-[#222] text-[#666] dark:text-[#888] px-8 py-3.5 rounded-xl text-[14px] font-semibold hover:border-[#ccc] dark:hover:border-[#444] hover:text-[#111] dark:hover:text-[#eee] transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer"
                             >
                                 <Play size={15} strokeWidth={2} />
                                 See How It Works
@@ -594,15 +354,12 @@ const Home = () => {
                     </motion.div>
                 </div>
 
-                {/* ── Interactive 3D Device Mockup ── */}
-                <MockupDevice />
-
                 {/* ── Stats ── */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, delay: 0.5 }}
-                    className="max-w-3xl mx-auto mt-20 relative z-10"
+                    className="max-w-3xl mx-auto mt-24"
                 >
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-[#f0f0f0] dark:bg-[#1a1a1a] rounded-2xl overflow-hidden border border-[#f0f0f0] dark:border-[#1a1a1a]">
                         {[
@@ -617,6 +374,37 @@ const Home = () => {
                                 </div>
                                 <p className="text-[#ccc] dark:text-[#777] text-[11px] mt-1 font-medium uppercase tracking-[0.1em]">{label}</p>
                             </div>
+                        ))}
+                    </div>
+                </motion.div>
+
+                {/* ── Preview Cards ── */}
+                <motion.div
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.9, delay: 0.7 }}
+                    className="max-w-4xl mx-auto mt-16"
+                >
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {[
+                            { title: 'AI Chat', desc: 'Ask questions about your documents', icon: MessageSquare },
+                            { title: 'Quick Quiz', desc: 'Test your knowledge instantly', icon: Zap },
+                            { title: 'Flashcards', desc: 'Smart spaced repetition', icon: Layers },
+                        ].map((item, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 16 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.9 + i * 0.12, duration: 0.5 }}
+                                whileHover={{ y: -4, transition: { duration: 0.3 } }}
+                                className="group p-6 rounded-[20px] bg-[#fafafa] dark:bg-[#111] border border-[#f0f0f0] dark:border-[#1a1a1a] hover:bg-white dark:hover:bg-[#151515] hover:shadow-[0_12px_40px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_12px_40px_rgba(0,0,0,0.3)] hover:border-[#e8e8e8] dark:hover:border-[#222] transition-all duration-500 cursor-default"
+                            >
+                                <div className="w-10 h-10 rounded-xl bg-[#f0f0f0] dark:bg-[#1a1a1a] border border-[#e8e8e8] dark:border-[#222] flex items-center justify-center mb-4 group-hover:bg-[#111] dark:group-hover:bg-[#eee] group-hover:border-[#111] dark:group-hover:border-[#eee] transition-all duration-500">
+                                    <item.icon size={18} className="text-[#888] dark:text-[#888] group-hover:text-white dark:group-hover:text-[#111] transition-colors duration-500" strokeWidth={1.5} />
+                                </div>
+                                <h4 className="font-semibold text-[#111] dark:text-[#eee] text-[14px] mb-1">{item.title}</h4>
+                                <p className="text-[#999] dark:text-[#999] text-[12px]">{item.desc}</p>
+                            </motion.div>
                         ))}
                     </div>
                 </motion.div>

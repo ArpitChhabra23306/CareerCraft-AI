@@ -202,7 +202,7 @@ const Dashboard = () => {
                         animate={{ opacity: 1, y: 0 }}
                         className="text-2xl md:text-3xl font-bold text-[#111] dark:text-[#eee] tracking-[-0.03em]"
                     >
-                        {greeting()}, {user?.name?.split(' ')[0] || 'there'}! 👋
+                        {greeting()}, {user?.username || 'there'}! 👋
                     </motion.h1>
                     <motion.p
                         initial={{ opacity: 0 }}
