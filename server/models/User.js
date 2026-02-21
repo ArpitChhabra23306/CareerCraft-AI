@@ -9,6 +9,15 @@ const UserSchema = new mongoose.Schema({
     theme: { type: String, default: 'light' },
     createdAt: { type: Date, default: Date.now },
 
+    // Email verification
+    isVerified: { type: Boolean, default: false },
+    verificationOTP: { type: String, default: null },
+    verificationOTPExpires: { type: Date, default: null },
+
+    // Password reset
+    resetPasswordToken: { type: String, default: null },
+    resetPasswordExpires: { type: Date, default: null },
+
     // Gamification fields
     xp: { type: Number, default: 0 },
     currentStreak: { type: Number, default: 0 },

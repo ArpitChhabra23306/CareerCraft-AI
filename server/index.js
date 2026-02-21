@@ -12,6 +12,7 @@ import userRoutes from './routes/userRoutes.js';
 import quizRoutes from './routes/quizRoutes.js';
 import gamificationRoutes from './routes/gamificationRoutes.js';
 import subscriptionRoutes from './routes/subscriptionRoutes.js';
+import User from './models/User.js';
 
 dotenv.config();
 
@@ -46,6 +47,16 @@ const connectMongoDB = async (connectionURL) => {
     try {
         const connection = await mongoose.connect(connectionURL);
         console.log("✅ MongoDB connected successfully!");
+
+        // One-time migration: mark existing users as verified
+        const result = await User.updateMany(
+            { isVerified: { $exists: false } },
+            { $set: { isVerified: true } }
+        );
+        if (result.modifiedCount > 0) {
+            console.log(`✅ Migration: Marked ${result.modifiedCount} existing user(s) as verified`);
+        }
+
         return connection;
     } catch (error) {
         console.error("❌ Error connecting to MongoDB:", error);
@@ -56,6 +67,6 @@ const connectMongoDB = async (connectionURL) => {
 connectMongoDB(process.env.MONGO_URI);
 
 app.listen(PORT, () => {
-    console.log(`🚀 
-        Server running on port ${PORT}`);
+    console.log(`🚀 Server running on port ${PORT}`);
 });
+

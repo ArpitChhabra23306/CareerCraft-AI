@@ -20,6 +20,11 @@ const Login = () => {
             await login(email, password);
             navigate('/dashboard');
         } catch (err) {
+            // If user hasn't verified their email, redirect to verify page
+            if (err.response?.data?.requiresVerification) {
+                navigate('/verify-email', { state: { email: err.response.data.email || email } });
+                return;
+            }
             setError(err.response?.data?.message || 'Invalid email or password');
         } finally {
             setLoading(false);
@@ -139,6 +144,14 @@ const Login = () => {
                                     placeholder="••••••••"
                                     required
                                 />
+                            </div>
+                            <div className="flex justify-end mt-1.5">
+                                <Link
+                                    to="/forgot-password"
+                                    className="text-[12px] text-[#999] hover:text-[#111] dark:hover:text-[#eee] transition-colors"
+                                >
+                                    Forgot password?
+                                </Link>
                             </div>
                         </div>
 
