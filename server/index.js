@@ -43,6 +43,11 @@ app.get('/', (req, res) => {
     res.send('CareerCraft AI API is running');
 });
 
+// Health check endpoint for keep-alive pings
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'ok', uptime: process.uptime() });
+});
+
 const connectMongoDB = async (connectionURL) => {
     try {
         const connection = await mongoose.connect(connectionURL);

@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { AuthContext } from './context/AuthContext';
@@ -68,6 +68,13 @@ const PageTransition = ({ children }) => (
 
 function App() {
   const location = useLocation();
+
+  // Wake up the backend on first visit (Render free tier cold start)
+  useEffect(() => {
+    const API = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    fetch(`${API}/health`).catch(() => { });
+  }, []);
+
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
