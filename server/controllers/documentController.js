@@ -92,7 +92,12 @@ export const getDocumentContent = async (req, res) => {
             return res.status(403).json({ message: 'Not authorized' });
         }
 
-        // Fetch PDF from Cloudinary URL
+        // Use cached text if available
+        if (doc.parsedText) {
+            return res.status(200).json({ content: doc.parsedText });
+        }
+
+        // First time: fetch from Cloudinary, parse, and cache
         const response = await fetch(doc.fileUrl);
         if (!response.ok) {
             return res.status(404).json({ message: 'File not found on cloud storage' });
@@ -101,6 +106,10 @@ export const getDocumentContent = async (req, res) => {
         const arrayBuffer = await response.arrayBuffer();
         const dataBuffer = Buffer.from(arrayBuffer);
         const data = await pdf(dataBuffer);
+
+        // Cache for future requests
+        doc.parsedText = data.text;
+        await doc.save();
 
         res.status(200).json({ content: data.text });
     } catch (err) {

@@ -9,17 +9,30 @@ import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const pdf = require('pdf-parse');
 
-// Fetch PDF from Cloudinary URL and extract text
-const extractTextFromPDF = async (fileUrl) => {
+// Get document text — uses cached parsedText if available, otherwise fetches + parses + caches
+const getDocumentText = async (doc) => {
+    // Return cached text if available
+    if (doc.parsedText) {
+        return doc.parsedText;
+    }
+
+    // First time: download from Cloudinary, parse, and cache
     try {
-        const response = await fetch(fileUrl);
+        const response = await fetch(doc.fileUrl);
         if (!response.ok) {
             throw new Error(`Failed to fetch PDF from cloud: ${response.status}`);
         }
         const arrayBuffer = await response.arrayBuffer();
         const dataBuffer = Buffer.from(arrayBuffer);
         const data = await pdf(dataBuffer);
-        return data.text;
+        const text = data.text;
+
+        // Cache the parsed text for future use
+        doc.parsedText = text;
+        await doc.save();
+        console.log(`✅ Cached parsed text for doc: ${doc._id}`);
+
+        return text;
     } catch (error) {
         console.error("PDF Extraction Error:", error);
         throw error;
@@ -33,7 +46,7 @@ export const chatWithDocument = async (req, res) => {
         const doc = await Document.findById(documentId);
         if (!doc) return res.status(404).json({ message: 'Document not found' });
 
-        const text = await extractTextFromPDF(doc.fileUrl);
+        const text = await getDocumentText(doc);
         const context = text.substring(0, 50000);
 
         const answer = await explainConcept(question, context);
@@ -66,7 +79,7 @@ export const generateDocumentSummary = async (req, res) => {
         const doc = await Document.findById(documentId);
         if (!doc) return res.status(404).json({ message: 'Document not found' });
 
-        const text = await extractTextFromPDF(doc.fileUrl);
+        const text = await getDocumentText(doc);
         const summary = await summarizeText(text.substring(0, 30000));
 
         doc.summary = summary;
@@ -89,7 +102,7 @@ export const createFlashcards = async (req, res) => {
         const doc = await Document.findById(documentId);
         if (!doc) return res.status(404).json({ message: 'Document not found' });
 
-        const text = await extractTextFromPDF(doc.fileUrl);
+        const text = await getDocumentText(doc);
         const cardsData = await generateFlashcards(text.substring(0, 10000));
 
         const newDeck = new FlashcardDeck({
@@ -135,7 +148,7 @@ export const createQuiz = async (req, res) => {
             console.log("Using provided questions for quiz.");
             quizData = questions;
         } else {
-            const text = await extractTextFromPDF(doc.fileUrl);
+            const text = await getDocumentText(doc);
             quizData = await generateQuiz(text.substring(0, 10000), numQuestions || 5);
         }
 

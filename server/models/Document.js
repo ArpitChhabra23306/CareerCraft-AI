@@ -7,6 +7,7 @@ const DocumentSchema = new mongoose.Schema({
     publicId: { type: String }, // Cloudinary public_id for deletion
     fileSize: { type: Number },
     summary: { type: String },
+    parsedText: { type: String }, // Cached extracted text from PDF
     uploadDate: { type: Date, default: Date.now }
 });
 
