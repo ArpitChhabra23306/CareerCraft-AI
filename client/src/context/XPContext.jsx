@@ -44,7 +44,7 @@ const XPNotification = ({ notification, onComplete }) => {
             className="fixed bottom-6 right-6 z-50"
         >
             <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-4">
-                <div className="bg-white/20 p-2 rounded-xl">
+                <div className="bg-[#F5F2EA]/20 p-2 rounded-xl">
                     {getIcon()}
                 </div>
                 <div>

@@ -45,11 +45,11 @@ const GamificationCard = () => {
 
     if (loading) {
         return (
-            <div className="p-6 rounded-[20px] bg-[#111] dark:bg-[#eee]">
+            <div className="p-6 rounded-[20px] bg-[#0F1115] dark:bg-[#F5F2EA]">
                 <div className="animate-pulse space-y-4">
-                    <div className="h-5 w-28 bg-white/10 dark:bg-[#111]/10 rounded"></div>
-                    <div className="h-8 w-20 bg-white/10 dark:bg-[#111]/10 rounded"></div>
-                    <div className="h-3 w-full bg-white/10 dark:bg-[#111]/10 rounded"></div>
+                    <div className="h-5 w-28 bg-[#F5F2EA]/10 dark:bg-[#0F1115]/10 rounded"></div>
+                    <div className="h-8 w-20 bg-[#F5F2EA]/10 dark:bg-[#0F1115]/10 rounded"></div>
+                    <div className="h-3 w-full bg-[#F5F2EA]/10 dark:bg-[#0F1115]/10 rounded"></div>
                 </div>
             </div>
         );
@@ -62,7 +62,7 @@ const GamificationCard = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="p-6 rounded-[20px] bg-[#111] dark:bg-[#eee] text-white dark:text-[#111] relative overflow-hidden"
+            className="p-6 rounded-[20px] bg-[#0F1115] dark:bg-[#F5F2EA] text-white dark:text-[#0F1115] relative overflow-hidden"
         >
             {/* Subtle radial glow */}
             <div className="absolute inset-0 opacity-20" style={{
@@ -77,7 +77,7 @@ const GamificationCard = () => {
                 </h2>
                 <Link
                     to="/leaderboard"
-                    className="text-white/50 dark:text-[#111]/50 hover:text-white/80 dark:hover:text-[#111]/80 text-[12px] flex items-center gap-1 transition-colors"
+                    className="text-white/50 dark:text-[#0F1115]/50 hover:text-white/80 dark:hover:text-[#0F1115]/80 text-[12px] flex items-center gap-1 transition-colors"
                 >
                     <Trophy size={14} strokeWidth={1.5} />
                     Leaderboard
@@ -88,9 +88,9 @@ const GamificationCard = () => {
             <div className="relative z-10 mb-5">
                 <div className="flex items-baseline gap-2 mb-1">
                     <span className="text-3xl font-bold tracking-tight">{stats.xp?.toLocaleString() || 0}</span>
-                    <span className="text-white/40 dark:text-[#111]/40 text-[13px] font-medium">XP</span>
+                    <span className="text-white/40 dark:text-[#0F1115]/40 text-[13px] font-medium">XP</span>
                 </div>
-                <div className="flex items-center gap-1.5 text-white/40 dark:text-[#111]/40 text-[12px]">
+                <div className="flex items-center gap-1.5 text-white/40 dark:text-[#0F1115]/40 text-[12px]">
                     <TrendingUp size={12} strokeWidth={1.5} />
                     Rank #{stats.rank} of {stats.totalUsers?.toLocaleString()} users
                 </div>
@@ -99,21 +99,21 @@ const GamificationCard = () => {
             {/* Streak Display */}
             <div className="relative z-10 flex items-center gap-6 mb-5">
                 <div className="flex items-center gap-2.5">
-                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${stats.currentStreak > 0 ? 'bg-white/15 dark:bg-[#111]/15' : 'bg-white/5 dark:bg-[#111]/5'}`}>
-                        <Flame size={16} strokeWidth={1.5} className={stats.currentStreak > 0 ? 'text-white/80 dark:text-[#111]/80' : 'text-white/30 dark:text-[#111]/30'} />
+                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${stats.currentStreak > 0 ? 'bg-[#F5F2EA]/15 dark:bg-[#0F1115]/15' : 'bg-[#F5F2EA]/5 dark:bg-[#0F1115]/5'}`}>
+                        <Flame size={16} strokeWidth={1.5} className={stats.currentStreak > 0 ? 'text-white/80 dark:text-[#0F1115]/80' : 'text-white/30 dark:text-[#0F1115]/30'} />
                     </div>
                     <div>
                         <p className="text-xl font-bold leading-none">{stats.currentStreak || 0}</p>
-                        <p className="text-[10px] text-white/40 dark:text-[#111]/40 mt-0.5 uppercase tracking-wider">Day Streak</p>
+                        <p className="text-[10px] text-white/40 dark:text-[#0F1115]/40 mt-0.5 uppercase tracking-wider">Day Streak</p>
                     </div>
                 </div>
                 <div className="flex items-center gap-2.5">
-                    <div className="w-9 h-9 rounded-xl bg-white/10 dark:bg-[#111]/10 flex items-center justify-center">
-                        <Trophy size={16} strokeWidth={1.5} className="text-white/70 dark:text-[#111]/70" />
+                    <div className="w-9 h-9 rounded-xl bg-[#F5F2EA]/10 dark:bg-[#0F1115]/10 flex items-center justify-center">
+                        <Trophy size={16} strokeWidth={1.5} className="text-white/70 dark:text-[#0F1115]/70" />
                     </div>
                     <div>
                         <p className="text-xl font-bold leading-none">{stats.longestStreak || 0}</p>
-                        <p className="text-[10px] text-white/40 dark:text-[#111]/40 mt-0.5 uppercase tracking-wider">Best Streak</p>
+                        <p className="text-[10px] text-white/40 dark:text-[#0F1115]/40 mt-0.5 uppercase tracking-wider">Best Streak</p>
                     </div>
                 </div>
             </div>
@@ -125,7 +125,7 @@ const GamificationCard = () => {
                     whileTap={{ scale: 0.98 }}
                     onClick={claimDailyLogin}
                     disabled={claimingLogin}
-                    className="relative z-10 w-full bg-white dark:bg-[#111] text-[#111] dark:text-[#eee] font-semibold py-2.5 px-4 rounded-xl text-[13px] transition-all duration-300 hover:bg-[#f0f0f0] dark:hover:bg-[#222] flex items-center justify-center gap-2 disabled:opacity-50"
+                    className="relative z-10 w-full bg-[#F5F2EA] dark:bg-[#0F1115] text-[#0F1115] dark:text-[#F5F2EA] font-semibold py-2.5 px-4 rounded-xl text-[13px] transition-all duration-300 hover:bg-[#E3DAC6] dark:hover:bg-[#2A2F3A] flex items-center justify-center gap-2 disabled:opacity-50"
                 >
                     <Star size={14} strokeWidth={1.5} />
                     {claimingLogin ? 'Claiming...' : 'Claim Daily Login (+10 XP)'}
@@ -133,19 +133,19 @@ const GamificationCard = () => {
             )}
 
             {dailyLoginClaimed && (
-                <div className="relative z-10 bg-white/10 dark:bg-[#111]/10 text-center py-2.5 px-4 rounded-xl text-white/70 dark:text-[#111]/70 text-[13px]">
+                <div className="relative z-10 bg-[#F5F2EA]/10 dark:bg-[#0F1115]/10 text-center py-2.5 px-4 rounded-xl text-white/70 dark:text-[#0F1115]/70 text-[13px]">
                     ✓ Daily login claimed! Come back tomorrow.
                 </div>
             )}
 
             {/* XP Guide */}
-            <div className="relative z-10 mt-4 pt-4 border-t border-white/10 dark:border-[#111]/10">
-                <p className="text-[10px] text-white/30 dark:text-[#111]/30 mb-2 uppercase tracking-wider">Earn more XP:</p>
+            <div className="relative z-10 mt-4 pt-4 border-t border-white/10 dark:border-[#0F1115]/10">
+                <p className="text-[10px] text-white/30 dark:text-[#0F1115]/30 mb-2 uppercase tracking-wider">Earn more XP:</p>
                 <div className="flex flex-wrap gap-1.5 text-[10px]">
-                    <span className="bg-white/10 dark:bg-[#111]/10 px-2 py-1 rounded-full text-white/50 dark:text-[#111]/50">📄 Upload +25</span>
-                    <span className="bg-white/10 dark:bg-[#111]/10 px-2 py-1 rounded-full text-white/50 dark:text-[#111]/50">📝 Quiz +50</span>
-                    <span className="bg-white/10 dark:bg-[#111]/10 px-2 py-1 rounded-full text-white/50 dark:text-[#111]/50">🃏 Cards +30</span>
-                    <span className="bg-white/10 dark:bg-[#111]/10 px-2 py-1 rounded-full text-white/50 dark:text-[#111]/50">🎤 Interview +75</span>
+                    <span className="bg-[#F5F2EA]/10 dark:bg-[#0F1115]/10 px-2 py-1 rounded-full text-white/50 dark:text-[#0F1115]/50">📄 Upload +25</span>
+                    <span className="bg-[#F5F2EA]/10 dark:bg-[#0F1115]/10 px-2 py-1 rounded-full text-white/50 dark:text-[#0F1115]/50">📝 Quiz +50</span>
+                    <span className="bg-[#F5F2EA]/10 dark:bg-[#0F1115]/10 px-2 py-1 rounded-full text-white/50 dark:text-[#0F1115]/50">🃏 Cards +30</span>
+                    <span className="bg-[#F5F2EA]/10 dark:bg-[#0F1115]/10 px-2 py-1 rounded-full text-white/50 dark:text-[#0F1115]/50">🎤 Interview +75</span>
                 </div>
             </div>
         </motion.div>
