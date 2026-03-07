@@ -64,7 +64,7 @@ const AmbientLighting = () => {
 };
 
 /* ─── Interactive 3D Device Mockup ─── */
-const MockupDevice = () => {
+const MockupDevice = ({ className = "" }) => {
     const mockRef = useRef(null);
     const [tilt, setTilt] = useState({ x: 0, y: 0 });
 
@@ -88,7 +88,7 @@ const MockupDevice = () => {
             initial={{ opacity: 0, y: 60, rotateX: 25 }}
             animate={{ opacity: 1, y: 0, rotateX: 8 }}
             transition={{ duration: 1.2, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="max-w-4xl mx-auto mt-20 cursor-default"
+            className={`max-w-4xl w-full cursor-default ${className}`}
             style={{ perspective: '1200px' }}
         >
             <div
@@ -473,104 +473,100 @@ const Home = () => {
                 </div>
             </nav>
 
-            {/* ══ HERO with Ambient Lighting + 3D Mockup ══ */}
-            <section className="pt-40 pb-12 px-4 relative z-10 overflow-hidden">
+            {/* ══ HERO with Ambient Lighting + SaaS Composition ══ */}
+            <section className="pt-34 md:pt-40 pb-16 px-4 relative z-10 overflow-hidden">
                 {/* Branded Ambient Background */}
                 <div className="absolute inset-0">
                     <AmbientLighting />
                 </div>
 
-                <div className="max-w-4xl mx-auto text-center relative z-10">
-                    {/* Badge */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
-                        className="inline-flex items-center gap-2 border border-[#F5F2EA] dark:border-[#2A2F3A] px-4 py-1.5 rounded-full mb-10 bg-[#F5F2EA]/60 dark:bg-[#0F1115]/60 backdrop-blur-sm"
-                    >
-                        <div className="w-1.5 h-1.5 rounded-full bg-[#0F1115] dark:bg-[#F5F2EA] animate-pulse" />
-                        <span className="text-[#7C7365] dark:text-[#7C7365] text-[12px] font-medium tracking-wide uppercase">AI-Powered Learning</span>
-                    </motion.div>
+                <div className="max-w-6xl mx-auto relative z-10 grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+                    {/* Left: Message + CTAs */}
+                    <div className="text-center lg:text-left">
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6 }}
+                            className="inline-flex items-center gap-2 border border-[#F5F2EA] dark:border-[#2A2F3A] px-4 py-1.5 rounded-full mb-8 bg-[#F5F2EA]/60 dark:bg-[#0F1115]/60 backdrop-blur-sm"
+                        >
+                            <div className="w-1.5 h-1.5 rounded-full bg-[#0F1115] dark:bg-[#F5F2EA] animate-pulse" />
+                            <span className="text-[#7C7365] dark:text-[#7C7365] text-[12px] font-medium tracking-wide uppercase">AI-Powered Learning</span>
+                        </motion.div>
 
-                    {/* Heading with Shimmer Animation */}
-                    <motion.h1
-                        initial={{ opacity: 0, y: 24 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 0.1 }}
-                        className="text-[clamp(2.5rem,7vw,5.5rem)] font-bold tracking-[-0.04em] leading-[0.95] mb-8"
-                    >
-                        Learn Smarter.
-                        <br />
-                        <span className="shimmer-text">Ace Every Interview.</span>
-                    </motion.h1>
+                        <motion.h1
+                            initial={{ opacity: 0, y: 24 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.1 }}
+                            className="text-[clamp(2.5rem,5.4vw,4.8rem)] font-bold tracking-[-0.045em] leading-[0.95] mb-6"
+                        >
+                            Learn Smarter.
+                            <br />
+                            <span className="shimmer-text">Ace Every Interview.</span>
+                        </motion.h1>
 
-                    {/* Subtitle */}
-                    <motion.p
-                        initial={{ opacity: 0, y: 16 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.7, delay: 0.2 }}
-                        className="max-w-md mx-auto text-[15px] text-[#8D8474] dark:text-[#8D8474] mb-12 leading-relaxed"
-                    >
-                        Transform your documents into interactive study materials.
-                        Practice with AI and reach your full potential.
-                    </motion.p>
+                        <motion.p
+                            initial={{ opacity: 0, y: 16 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.7, delay: 0.2 }}
+                            className="max-w-xl mx-auto lg:mx-0 text-[16px] text-[#8D8474] dark:text-[#8D8474] mb-10 leading-relaxed"
+                        >
+                            Upload your study material, get AI-powered explanations, and train for real interviews — all in one focused workflow.
+                        </motion.p>
 
-                    {/* CTA Buttons */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 16 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.7, delay: 0.3 }}
-                        className="flex flex-col sm:flex-row justify-center gap-3"
-                    >
-                        <Link to={user ? '/dashboard' : '/register'}>
-                            <motion.div
-                                whileHover={{ scale: 1.03, boxShadow: '0 20px 50px rgba(0,0,0,0.12)' }}
-                                whileTap={{ scale: 0.98 }}
-                                className="group bg-[#0F1115] dark:bg-[#F5F2EA] text-white dark:text-[#0F1115] px-8 py-3.5 rounded-xl text-[14px] font-semibold transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer relative z-20"
-                            >
-                                Start Learning Free
-                                <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" strokeWidth={2} />
-                            </motion.div>
-                        </Link>
-                        <a href="#features">
-                            <motion.div
-                                whileHover={{ scale: 1.03 }}
-                                whileTap={{ scale: 0.98 }}
-                                className="border border-[#F5F2EA] dark:border-[#2A2F3A] text-[#A79F90] dark:text-[#7C7365] px-8 py-3.5 rounded-xl text-[14px] font-semibold hover:border-[#B8B1A3] dark:hover:border-[#444] hover:text-[#0F1115] dark:hover:text-[#F5F2EA] transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer bg-[#F5F2EA]/60 dark:bg-[#0F1115]/60 backdrop-blur-sm relative z-20"
-                            >
-                                <Play size={15} strokeWidth={2} />
-                                See How It Works
-                            </motion.div>
-                        </a>
-                    </motion.div>
-                </div>
+                        <motion.div
+                            initial={{ opacity: 0, y: 16 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.7, delay: 0.3 }}
+                            className="flex flex-col sm:flex-row justify-center lg:justify-start gap-3"
+                        >
+                            <Link to={user ? '/dashboard' : '/register'}>
+                                <motion.div
+                                    whileHover={{ scale: 1.03, boxShadow: '0 20px 50px rgba(0,0,0,0.12)' }}
+                                    whileTap={{ scale: 0.98 }}
+                                    className="group bg-[#0F1115] dark:bg-[#F5F2EA] text-white dark:text-[#0F1115] px-8 py-3.5 rounded-xl text-[14px] font-semibold transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer"
+                                >
+                                    Start Learning Free
+                                    <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" strokeWidth={2} />
+                                </motion.div>
+                            </Link>
+                            <a href="#features">
+                                <motion.div
+                                    whileHover={{ scale: 1.03 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    className="border border-[#F5F2EA] dark:border-[#2A2F3A] text-[#A79F90] dark:text-[#7C7365] px-8 py-3.5 rounded-xl text-[14px] font-semibold hover:border-[#B8B1A3] dark:hover:border-[#444] hover:text-[#0F1115] dark:hover:text-[#F5F2EA] transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer bg-[#F5F2EA]/60 dark:bg-[#0F1115]/60 backdrop-blur-sm"
+                                >
+                                    <Play size={15} strokeWidth={2} />
+                                    See How It Works
+                                </motion.div>
+                            </a>
+                        </motion.div>
 
-                {/* ── Interactive 3D Device Mockup ── */}
-                <MockupDevice />
-
-                {/* ── Stats ── */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.5 }}
-                    className="max-w-3xl mx-auto mt-20 relative z-10"
-                >
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-[#E3DAC6] dark:bg-[#2A2F3A] rounded-2xl overflow-hidden border border-[#E3DAC6] dark:border-[#2A2F3A]">
-                        {[
-                            { target: 10000, suffix: '+', label: 'Active Learners' },
-                            { target: 50000, suffix: '+', label: 'Quizzes Created' },
-                            { target: 95, suffix: '%', label: 'Success Rate' },
-                            { target: 4.9, suffix: '', label: 'User Rating' },
-                        ].map(({ target, suffix, label }, i) => (
-                            <div key={i} className="bg-[#F5F2EA] dark:bg-[#0F1115] p-6 text-center">
-                                <div className="text-2xl md:text-3xl font-bold text-[#0F1115] dark:text-[#F5F2EA] tracking-tight">
-                                    <AnimatedCounter target={target} suffix={suffix} />
-                                </div>
-                                <p className="text-[#B8B1A3] dark:text-[#B8B1A3] text-[11px] mt-1 font-medium uppercase tracking-[0.1em]">{label}</p>
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.7, delay: 0.45 }}
+                            className="mt-9"
+                        >
+                            <p className="text-[11px] uppercase tracking-[0.16em] text-[#A79F90] dark:text-[#8D8474] mb-3">Trusted by learners from</p>
+                            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2.5">
+                                {['IIT', 'NIT', 'Scaler', 'Masai', 'Apna College'].map((brand) => (
+                                    <span
+                                        key={brand}
+                                        className="px-3.5 py-1.5 rounded-lg bg-[#EEE7D8]/80 dark:bg-[#1F2430]/70 border border-[#E3DAC6] dark:border-[#2A2F3A] text-[#7C7365] dark:text-[#B8B1A3] text-[11px] font-semibold tracking-wide"
+                                    >
+                                        {brand}
+                                    </span>
+                                ))}
                             </div>
-                        ))}
+                        </motion.div>
                     </div>
-                </motion.div>
+
+                    {/* Right: Single visual anchor */}
+                    <div className="relative">
+                        <div className="absolute -inset-6 bg-gradient-to-br from-[#D4AF37]/22 via-transparent to-[#1F2430]/25 rounded-[32px] blur-3xl" />
+                        <MockupDevice className="mt-0 mx-auto" />
+                    </div>
+                </div>
             </section>
 
             {/* ── #6 Marquee Strip ── */}
