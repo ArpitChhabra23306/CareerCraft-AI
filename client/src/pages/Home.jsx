@@ -8,107 +8,58 @@ import {
 import { useContext, useState, useEffect, useRef, useCallback } from 'react';
 import { AuthContext } from '../context/AuthContext';
 
-/* ─── Subtle Anti-Gravity Dot Field ─── */
-const ParticleGrid = () => {
-    const canvasRef = useRef(null);
-    const mouseRef = useRef({ x: -1000, y: -1000 });
-    const particlesRef = useRef([]);
-    const animRef = useRef(null);
+/* ─── Branded Ambient Aurora + Grain ─── */
+const AmbientLighting = () => {
+    const planeRef = useRef(null);
+    const pointerX = useMotionValue(0);
+    const pointerY = useMotionValue(0);
 
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
+    const farX = useTransform(pointerX, [-0.5, 0.5], [-16, 16]);
+    const farY = useTransform(pointerY, [-0.5, 0.5], [-12, 12]);
+    const midX = useTransform(pointerX, [-0.5, 0.5], [-28, 28]);
+    const midY = useTransform(pointerY, [-0.5, 0.5], [-20, 20]);
+    const nearX = useTransform(pointerX, [-0.5, 0.5], [-40, 40]);
+    const nearY = useTransform(pointerY, [-0.5, 0.5], [-28, 28]);
 
-        const resize = () => {
-            canvas.width = canvas.offsetWidth * window.devicePixelRatio;
-            canvas.height = canvas.offsetHeight * window.devicePixelRatio;
-            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-            initParticles();
-        };
+    const handleMove = (e) => {
+        const rect = planeRef.current?.getBoundingClientRect();
+        if (!rect) return;
 
-        const spacing = 60;
-        const initParticles = () => {
-            const cw = canvas.offsetWidth;
-            const ch = canvas.offsetHeight;
-            particlesRef.current = [];
-            for (let x = spacing / 2; x < cw; x += spacing) {
-                for (let y = spacing / 2; y < ch; y += spacing) {
-                    particlesRef.current.push({
-                        ox: x, oy: y, x, y,
-                        vx: 0, vy: 0,
-                    });
-                }
-            }
-        };
+        const normalizedX = (e.clientX - rect.left) / rect.width - 0.5;
+        const normalizedY = (e.clientY - rect.top) / rect.height - 0.5;
+        pointerX.set(normalizedX);
+        pointerY.set(normalizedY);
+    };
 
-        const handleMouse = (e) => {
-            const rect = canvas.getBoundingClientRect();
-            mouseRef.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
-        };
-        const handleLeave = () => { mouseRef.current = { x: -1000, y: -1000 }; };
-
-        const draw = () => {
-            const cw = canvas.offsetWidth;
-            const ch = canvas.offsetHeight;
-            ctx.clearRect(0, 0, cw, ch);
-            const mx = mouseRef.current.x;
-            const my = mouseRef.current.y;
-            const isDark = document.documentElement.classList.contains('dark');
-            const baseColor = isDark ? '238,238,238' : '17,17,17';
-            const pushRadius = 200;
-            const particles = particlesRef.current;
-
-            for (const p of particles) {
-                const dx = mx - p.x;
-                const dy = my - p.y;
-                const dist = Math.sqrt(dx * dx + dy * dy);
-                // Anti-gravity: push dots away from cursor
-                if (dist < pushRadius && dist > 0) {
-                    const force = (pushRadius - dist) / pushRadius;
-                    p.vx -= (dx / dist) * force * 2;
-                    p.vy -= (dy / dist) * force * 2;
-                }
-                // Spring back to origin
-                p.vx += (p.ox - p.x) * 0.03;
-                p.vy += (p.oy - p.y) * 0.03;
-                p.vx *= 0.9;
-                p.vy *= 0.9;
-                p.x += p.vx;
-                p.y += p.vy;
-
-                // Draw just the dot — no lines
-                const proximity = dist < pushRadius ? (1 - dist / pushRadius) : 0;
-                const alpha = 0.06 + proximity * 0.18;
-                const size = 1.2 + proximity * 1.8;
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(${baseColor},${alpha})`;
-                ctx.fill();
-            }
-
-            animRef.current = requestAnimationFrame(draw);
-        };
-
-        resize();
-        canvas.addEventListener('mousemove', handleMouse);
-        canvas.addEventListener('mouseleave', handleLeave);
-        window.addEventListener('resize', resize);
-        draw();
-
-        return () => {
-            cancelAnimationFrame(animRef.current);
-            canvas.removeEventListener('mousemove', handleMouse);
-            canvas.removeEventListener('mouseleave', handleLeave);
-            window.removeEventListener('resize', resize);
-        };
-    }, []);
+    const handleLeave = () => {
+        pointerX.set(0);
+        pointerY.set(0);
+    };
 
     return (
-        <canvas
-            ref={canvasRef}
-            className="absolute inset-0 w-full h-full z-[1] pointer-events-auto"
-        />
+        <div
+            ref={planeRef}
+            onMouseMove={handleMove}
+            onMouseLeave={handleLeave}
+            className="absolute inset-0 z-[1] overflow-hidden pointer-events-none"
+        >
+            <motion.div
+                style={{ x: farX, y: farY }}
+                className="ambient-blob absolute -top-24 -left-24 w-[36rem] h-[36rem] rounded-full"
+            />
+
+            <motion.div
+                style={{ x: midX, y: midY }}
+                className="ambient-blob ambient-blob-gold absolute top-[12%] right-[-12rem] w-[34rem] h-[34rem] rounded-full"
+            />
+
+            <motion.div
+                style={{ x: nearX, y: nearY }}
+                className="ambient-blob ambient-blob-charcoal absolute bottom-[-14rem] left-[20%] w-[40rem] h-[40rem] rounded-full"
+            />
+
+            <div className="ambient-grain absolute inset-0" />
+        </div>
     );
 };
 
@@ -522,11 +473,11 @@ const Home = () => {
                 </div>
             </nav>
 
-            {/* ══ HERO with Particle Grid + 3D Mockup ══ */}
+            {/* ══ HERO with Ambient Lighting + 3D Mockup ══ */}
             <section className="pt-40 pb-12 px-4 relative z-10 overflow-hidden">
-                {/* Particle Dot Grid Background */}
+                {/* Branded Ambient Background */}
                 <div className="absolute inset-0">
-                    <ParticleGrid />
+                    <AmbientLighting />
                 </div>
 
                 <div className="max-w-4xl mx-auto text-center relative z-10">
@@ -889,6 +840,61 @@ const Home = () => {
                 }
                 .animate-marquee {
                     animation: marquee 25s linear infinite;
+                }
+
+                .ambient-blob {
+                    background: radial-gradient(circle, rgba(212, 175, 55, 0.18) 0%, rgba(212, 175, 55, 0.07) 34%, rgba(15, 17, 21, 0) 72%);
+                    filter: blur(42px);
+                    animation: auroraFloat 18s ease-in-out infinite alternate;
+                }
+                .ambient-blob-gold {
+                    background: radial-gradient(circle, rgba(230, 197, 90, 0.16) 0%, rgba(230, 197, 90, 0.06) 35%, rgba(15, 17, 21, 0) 70%);
+                    animation-duration: 24s;
+                }
+                .ambient-blob-charcoal {
+                    background: radial-gradient(circle, rgba(31, 36, 48, 0.2) 0%, rgba(31, 36, 48, 0.08) 38%, rgba(15, 17, 21, 0) 72%);
+                    animation-duration: 30s;
+                }
+                .dark .ambient-blob {
+                    background: radial-gradient(circle, rgba(212, 175, 55, 0.22) 0%, rgba(212, 175, 55, 0.09) 34%, rgba(15, 17, 21, 0) 72%);
+                }
+                .dark .ambient-blob-gold {
+                    background: radial-gradient(circle, rgba(230, 197, 90, 0.22) 0%, rgba(230, 197, 90, 0.08) 35%, rgba(15, 17, 21, 0) 70%);
+                }
+                .dark .ambient-blob-charcoal {
+                    background: radial-gradient(circle, rgba(42, 47, 58, 0.45) 0%, rgba(42, 47, 58, 0.14) 40%, rgba(15, 17, 21, 0) 72%);
+                }
+
+                .ambient-grain {
+                    opacity: 0.16;
+                    mix-blend-mode: multiply;
+                    background-image:
+                        radial-gradient(rgba(15, 17, 21, 0.2) 0.6px, transparent 0.6px),
+                        radial-gradient(rgba(230, 197, 90, 0.06) 0.6px, transparent 0.6px);
+                    background-size: 3px 3px, 4px 4px;
+                    background-position: 0 0, 1px 1px;
+                    animation: grainShift 12s steps(8) infinite;
+                }
+
+                .dark .ambient-grain {
+                    opacity: 0.22;
+                    mix-blend-mode: screen;
+                    background-image:
+                        radial-gradient(rgba(245, 242, 234, 0.09) 0.6px, transparent 0.6px),
+                        radial-gradient(rgba(212, 175, 55, 0.08) 0.6px, transparent 0.6px);
+                }
+
+                @keyframes auroraFloat {
+                    0% { transform: translate3d(0, 0, 0) scale(1); }
+                    100% { transform: translate3d(0, -18px, 0) scale(1.08); }
+                }
+
+                @keyframes grainShift {
+                    0% { transform: translate(0, 0); }
+                    25% { transform: translate(-2%, 1%); }
+                    50% { transform: translate(1%, -2%); }
+                    75% { transform: translate(2%, 1%); }
+                    100% { transform: translate(0, 0); }
                 }
 
                 /* Dark mode adjustments for gradient dividers */
