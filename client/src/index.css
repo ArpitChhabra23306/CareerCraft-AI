@@ -357,7 +357,7 @@
 body {
     @apply transition-colors duration-300 ease-in-out;
     @apply text-gray-900 dark:text-gray-100;
-    @apply bg-white dark:bg-gray-950;
+    @apply bg-[#F5F2EA] dark:bg-gray-950;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
@@ -391,12 +391,12 @@ body {
 /* Selection styling */
 ::selection {
     background: rgba(17, 17, 17, 0.1);
-    color: #111;
+    color: #0F1115;
 }
 
 .dark ::selection {
     background: rgba(238, 238, 238, 0.15);
-    color: #eee;
+    color: #F5F2EA;
 }
 
 /* Focus ring styling */
@@ -425,5 +425,5 @@ select {
 input:focus,
 textarea:focus,
 select:focus {
-    @apply ring-1 ring-[#111]/20 dark:ring-[#eee]/15;
+    @apply ring-1 ring-[#0F1115]/20 dark:ring-[#F5F2EA]/15;
 }
