@@ -72,45 +72,45 @@ const Profile = () => {
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="rounded-[20px] bg-[#fafafa] dark:bg-[#111] border border-[#f0f0f0] dark:border-[#1a1a1a] p-6 md:p-8"
+                className="rounded-[20px] bg-[#F2EEE4] dark:bg-[#0F1115] border border-[#E3DAC6] dark:border-[#2A2F3A] p-6 md:p-8"
             >
                 <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-                    <h1 className="text-2xl font-bold text-[#111] dark:text-[#eee] tracking-[-0.03em]">
+                    <h1 className="text-2xl font-bold text-[#0F1115] dark:text-[#F5F2EA] tracking-[-0.03em]">
                         Profile Settings
                     </h1>
                     <button
                         onClick={toggleTheme}
-                        className="self-start md:self-auto w-10 h-10 rounded-xl bg-[#f0f0f0] dark:bg-[#1a1a1a] border border-[#e8e8e8] dark:border-[#222] hover:bg-[#e8e8e8] dark:hover:bg-[#222] transition-all duration-300 flex items-center justify-center"
+                        className="self-start md:self-auto w-10 h-10 rounded-xl bg-[#E3DAC6] dark:bg-[#2A2F3A] border border-[#D6CCB5] dark:border-[#2A2F3A] hover:bg-[#D6CCB5] dark:hover:bg-[#2A2F3A] transition-all duration-300 flex items-center justify-center"
                         title="Toggle Dark Mode"
                     >
                         {formData.theme === 'dark' ? (
-                            <Sun size={16} className="text-[#888]" strokeWidth={1.5} />
+                            <Sun size={16} className="text-[#7C7365]" strokeWidth={1.5} />
                         ) : (
-                            <Moon size={16} className="text-[#888]" strokeWidth={1.5} />
+                            <Moon size={16} className="text-[#7C7365]" strokeWidth={1.5} />
                         )}
                     </button>
                 </div>
 
                 {/* Theme Picker */}
                 <div className="mb-8">
-                    <label className="block text-[12px] font-medium text-[#999] mb-3 uppercase tracking-wider">
+                    <label className="block text-[12px] font-medium text-[#8D8474] mb-3 uppercase tracking-wider">
                         Appearance
                     </label>
                     <div className="grid grid-cols-2 gap-3">
                         <button
                             onClick={() => formData.theme !== 'light' && toggleTheme()}
                             className={`p-4 rounded-[14px] border-2 transition-all duration-300 ${formData.theme === 'light'
-                                ? 'border-[#111] dark:border-[#eee]'
-                                : 'border-[#f0f0f0] dark:border-[#1a1a1a] hover:border-[#e8e8e8] dark:hover:border-[#222]'
+                                ? 'border-[#0F1115] dark:border-[#F5F2EA]'
+                                : 'border-[#E3DAC6] dark:border-[#2A2F3A] hover:border-[#D6CCB5] dark:hover:border-[#2A2F3A]'
                                 }`}
                         >
-                            <div className="bg-white border border-[#f0f0f0] rounded-xl p-3 mb-2">
+                            <div className="bg-[#F5F2EA] border border-[#E3DAC6] rounded-xl p-3 mb-2">
                                 <div className="space-y-1.5">
-                                    <div className="h-1.5 bg-[#f0f0f0] rounded w-3/4"></div>
-                                    <div className="h-1.5 bg-[#f5f5f5] rounded w-1/2"></div>
+                                    <div className="h-1.5 bg-[#E3DAC6] rounded w-3/4"></div>
+                                    <div className="h-1.5 bg-[#EEE7D8] rounded w-1/2"></div>
                                 </div>
                             </div>
-                            <div className="flex items-center justify-center gap-2 text-[12px] font-medium text-[#111] dark:text-[#eee]">
+                            <div className="flex items-center justify-center gap-2 text-[12px] font-medium text-[#0F1115] dark:text-[#F5F2EA]">
                                 <Sun size={14} strokeWidth={1.5} />
                                 Light
                             </div>
@@ -118,17 +118,17 @@ const Profile = () => {
                         <button
                             onClick={() => formData.theme !== 'dark' && toggleTheme()}
                             className={`p-4 rounded-[14px] border-2 transition-all duration-300 ${formData.theme === 'dark'
-                                ? 'border-[#111] dark:border-[#eee]'
-                                : 'border-[#f0f0f0] dark:border-[#1a1a1a] hover:border-[#e8e8e8] dark:hover:border-[#222]'
+                                ? 'border-[#0F1115] dark:border-[#F5F2EA]'
+                                : 'border-[#E3DAC6] dark:border-[#2A2F3A] hover:border-[#D6CCB5] dark:hover:border-[#2A2F3A]'
                                 }`}
                         >
-                            <div className="bg-[#0a0a0a] border border-[#1a1a1a] rounded-xl p-3 mb-2">
+                            <div className="bg-[#0F1115] border border-[#2A2F3A] rounded-xl p-3 mb-2">
                                 <div className="space-y-1.5">
-                                    <div className="h-1.5 bg-[#1a1a1a] rounded w-3/4"></div>
-                                    <div className="h-1.5 bg-[#111] rounded w-1/2"></div>
+                                    <div className="h-1.5 bg-[#2A2F3A] rounded w-3/4"></div>
+                                    <div className="h-1.5 bg-[#0F1115] rounded w-1/2"></div>
                                 </div>
                             </div>
-                            <div className="flex items-center justify-center gap-2 text-[12px] font-medium text-[#111] dark:text-[#eee]">
+                            <div className="flex items-center justify-center gap-2 text-[12px] font-medium text-[#0F1115] dark:text-[#F5F2EA]">
                                 <Moon size={14} strokeWidth={1.5} />
                                 Dark
                             </div>
@@ -141,7 +141,7 @@ const Profile = () => {
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         className={`p-4 rounded-[14px] mb-6 text-[13px] font-medium ${msg.includes('success')
-                            ? 'bg-[#f0f0f0] dark:bg-[#1a1a1a] text-[#111] dark:text-[#eee] border border-[#e8e8e8] dark:border-[#222]'
+                            ? 'bg-[#E3DAC6] dark:bg-[#2A2F3A] text-[#0F1115] dark:text-[#F5F2EA] border border-[#D6CCB5] dark:border-[#2A2F3A]'
                             : 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-100 dark:border-red-800'
                             }`}
                     >
@@ -152,27 +152,27 @@ const Profile = () => {
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                         {/* Avatar Section */}
-                        <div className="flex flex-col items-center space-y-4 p-6 bg-white dark:bg-[#0a0a0a] rounded-[16px] border border-[#f0f0f0] dark:border-[#1a1a1a]">
-                            <div className="h-24 w-24 rounded-2xl overflow-hidden bg-[#f0f0f0] dark:bg-[#1a1a1a] border-2 border-[#e8e8e8] dark:border-[#222] relative">
+                        <div className="flex flex-col items-center space-y-4 p-6 bg-[#F5F2EA] dark:bg-[#0F1115] rounded-[16px] border border-[#E3DAC6] dark:border-[#2A2F3A]">
+                            <div className="h-24 w-24 rounded-2xl overflow-hidden bg-[#E3DAC6] dark:bg-[#2A2F3A] border-2 border-[#D6CCB5] dark:border-[#2A2F3A] relative">
                                 {formData.avatar ? (
                                     <img src={formData.avatar} alt="Profile" className="h-full w-full object-cover" />
                                 ) : (
-                                    <div className="h-full w-full flex items-center justify-center text-[#bbb] dark:text-[#555]">
+                                    <div className="h-full w-full flex items-center justify-center text-[#A79F90] dark:text-[#8D8474]">
                                         <User size={36} strokeWidth={1.5} />
                                     </div>
                                 )}
                             </div>
                             <div className="w-full">
-                                <label className="block text-[11px] font-medium text-[#999] mb-2 uppercase tracking-wider">Avatar URL</label>
+                                <label className="block text-[11px] font-medium text-[#8D8474] mb-2 uppercase tracking-wider">Avatar URL</label>
                                 <div className="relative">
-                                    <Camera className="absolute left-3 top-1/2 -translate-y-1/2 text-[#bbb] dark:text-[#555]" size={14} strokeWidth={1.5} />
+                                    <Camera className="absolute left-3 top-1/2 -translate-y-1/2 text-[#A79F90] dark:text-[#8D8474]" size={14} strokeWidth={1.5} />
                                     <input
                                         type="text"
                                         name="avatar"
                                         value={formData.avatar}
                                         onChange={handleChange}
                                         placeholder="https://example.com/avatar.jpg"
-                                        className="w-full pl-9 pr-4 py-3 rounded-xl border border-[#f0f0f0] dark:border-[#1a1a1a] bg-[#fafafa] dark:bg-[#111] text-[#111] dark:text-[#eee] text-[13px] focus:border-[#111] dark:focus:border-[#eee] outline-none transition-colors duration-300 placeholder-[#bbb] dark:placeholder-[#555]"
+                                        className="w-full pl-9 pr-4 py-3 rounded-xl border border-[#E3DAC6] dark:border-[#2A2F3A] bg-[#F2EEE4] dark:bg-[#0F1115] text-[#0F1115] dark:text-[#F5F2EA] text-[13px] focus:border-[#0F1115] dark:focus:border-[#F5F2EA] outline-none transition-colors duration-300 placeholder-[#A79F90] dark:placeholder-[#8D8474]"
                                     />
                                 </div>
                             </div>
@@ -181,26 +181,26 @@ const Profile = () => {
                         {/* Basic Info */}
                         <div className="space-y-5">
                             <div>
-                                <label className="block text-[11px] font-medium text-[#999] mb-2 uppercase tracking-wider">Username</label>
+                                <label className="block text-[11px] font-medium text-[#8D8474] mb-2 uppercase tracking-wider">Username</label>
                                 <div className="relative">
-                                    <User className="absolute left-3 top-1/2 -translate-y-1/2 text-[#bbb] dark:text-[#555]" size={14} strokeWidth={1.5} />
+                                    <User className="absolute left-3 top-1/2 -translate-y-1/2 text-[#A79F90] dark:text-[#8D8474]" size={14} strokeWidth={1.5} />
                                     <input
                                         type="text"
                                         value={user?.username || ''}
                                         disabled
-                                        className="w-full pl-9 pr-4 py-3 rounded-xl border border-[#f0f0f0] dark:border-[#1a1a1a] bg-[#f5f5f5] dark:bg-[#0a0a0a] text-[#999] text-[13px] cursor-not-allowed"
+                                        className="w-full pl-9 pr-4 py-3 rounded-xl border border-[#E3DAC6] dark:border-[#2A2F3A] bg-[#EEE7D8] dark:bg-[#0F1115] text-[#8D8474] text-[13px] cursor-not-allowed"
                                     />
                                 </div>
                             </div>
                             <div>
-                                <label className="block text-[11px] font-medium text-[#999] mb-2 uppercase tracking-wider">Email Address</label>
+                                <label className="block text-[11px] font-medium text-[#8D8474] mb-2 uppercase tracking-wider">Email Address</label>
                                 <div className="relative">
-                                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-[#bbb] dark:text-[#555]" size={14} strokeWidth={1.5} />
+                                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 text-[#A79F90] dark:text-[#8D8474]" size={14} strokeWidth={1.5} />
                                     <input
                                         type="email"
                                         value={user?.email || ''}
                                         disabled
-                                        className="w-full pl-9 pr-4 py-3 rounded-xl border border-[#f0f0f0] dark:border-[#1a1a1a] bg-[#f5f5f5] dark:bg-[#0a0a0a] text-[#999] text-[13px] cursor-not-allowed"
+                                        className="w-full pl-9 pr-4 py-3 rounded-xl border border-[#E3DAC6] dark:border-[#2A2F3A] bg-[#EEE7D8] dark:bg-[#0F1115] text-[#8D8474] text-[13px] cursor-not-allowed"
                                     />
                                 </div>
                             </div>
@@ -209,14 +209,14 @@ const Profile = () => {
 
                     {/* Bio */}
                     <div>
-                        <label className="block text-[11px] font-medium text-[#999] mb-2 uppercase tracking-wider">Bio</label>
+                        <label className="block text-[11px] font-medium text-[#8D8474] mb-2 uppercase tracking-wider">Bio</label>
                         <textarea
                             name="bio"
                             value={formData.bio}
                             onChange={handleChange}
                             rows="4"
                             placeholder="Tell us a bit about yourself..."
-                            className="w-full p-4 rounded-xl border border-[#f0f0f0] dark:border-[#1a1a1a] bg-white dark:bg-[#0a0a0a] text-[#111] dark:text-[#eee] text-[13px] focus:border-[#111] dark:focus:border-[#eee] outline-none transition-colors duration-300 resize-none placeholder-[#bbb] dark:placeholder-[#555]"
+                            className="w-full p-4 rounded-xl border border-[#E3DAC6] dark:border-[#2A2F3A] bg-[#F5F2EA] dark:bg-[#0F1115] text-[#0F1115] dark:text-[#F5F2EA] text-[13px] focus:border-[#0F1115] dark:focus:border-[#F5F2EA] outline-none transition-colors duration-300 resize-none placeholder-[#A79F90] dark:placeholder-[#8D8474]"
                         ></textarea>
                     </div>
 
@@ -226,10 +226,10 @@ const Profile = () => {
                             disabled={loading}
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
-                            className="bg-[#111] dark:bg-[#eee] text-white dark:text-[#111] px-8 py-3 rounded-xl text-[13px] font-semibold flex items-center gap-2 disabled:opacity-40 transition-all duration-300"
+                            className="bg-[#0F1115] dark:bg-[#F5F2EA] text-white dark:text-[#0F1115] px-8 py-3 rounded-xl text-[13px] font-semibold flex items-center gap-2 disabled:opacity-40 transition-all duration-300"
                         >
                             {loading ? (
-                                <span className="animate-spin h-4 w-4 border-2 border-white dark:border-[#111] border-t-transparent rounded-full"></span>
+                                <span className="animate-spin h-4 w-4 border-2 border-white dark:border-[#0F1115] border-t-transparent rounded-full"></span>
                             ) : (
                                 <Save size={16} strokeWidth={1.5} />
                             )}
