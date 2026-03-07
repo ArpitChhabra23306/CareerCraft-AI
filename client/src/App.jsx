@@ -21,9 +21,9 @@ import Pricing from './pages/Pricing';
 
 /* Branded loading screen */
 const LoadingScreen = () => (
-  <div className="flex flex-col items-center justify-center h-screen bg-white dark:bg-[#0a0a0a] transition-colors" style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>
-    <div className="w-10 h-10 bg-[#111] dark:bg-[#eee] rounded-xl flex items-center justify-center mb-4 animate-pulse">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-white dark:text-[#111]">
+  <div className="flex flex-col items-center justify-center h-screen bg-[#F5F2EA] dark:bg-[#0F1115] transition-colors" style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>
+    <div className="w-10 h-10 bg-[#0F1115] dark:bg-[#F5F2EA] rounded-xl flex items-center justify-center mb-4 animate-pulse">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-white dark:text-[#0F1115]">
         <path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z" />
         <path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z" />
         <path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4" />
@@ -35,7 +35,7 @@ const LoadingScreen = () => (
         <path d="M19.967 17.484A4 4 0 0 1 18 18" />
       </svg>
     </div>
-    <p className="text-[13px] text-[#999] font-medium tracking-wide">Loading...</p>
+    <p className="text-[13px] text-[#8D8474] font-medium tracking-wide">Loading...</p>
   </div>
 );
 

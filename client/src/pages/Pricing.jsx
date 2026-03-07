@@ -68,13 +68,13 @@ const PlanCard = ({ planKey, plan, currentPlan, onSubscribe, loading, index }) =
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.08 }}
             className={`relative rounded-[20px] p-6 transition-all duration-500 group ${plan.popular
-                ? 'bg-[#111] dark:bg-[#eee] text-white dark:text-[#111] border-2 border-[#111] dark:border-[#eee]'
-                : 'bg-[#fafafa] dark:bg-[#111] border border-[#f0f0f0] dark:border-[#1a1a1a] hover:bg-white dark:hover:bg-[#151515] hover:border-[#e8e8e8] dark:hover:border-[#222] hover:shadow-[0_20px_60px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_20px_60px_rgba(0,0,0,0.3)]'
+                ? 'bg-[#0F1115] dark:bg-[#F5F2EA] text-white dark:text-[#0F1115] border-2 border-[#0F1115] dark:border-[#F5F2EA]'
+                : 'bg-[#F2EEE4] dark:bg-[#0F1115] border border-[#E3DAC6] dark:border-[#2A2F3A] hover:bg-[#F5F2EA] dark:hover:bg-[#1F2430] hover:border-[#D6CCB5] dark:hover:border-[#2A2F3A] hover:shadow-[0_20px_60px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_20px_60px_rgba(0,0,0,0.3)]'
                 }`}
         >
             {plan.popular && (
                 <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                    <span className="bg-white dark:bg-[#111] text-[#111] dark:text-[#eee] text-[10px] font-semibold px-3 py-1 rounded-lg flex items-center gap-1 uppercase tracking-wider shadow-sm">
+                    <span className="bg-[#F5F2EA] dark:bg-[#0F1115] text-[#0F1115] dark:text-[#F5F2EA] text-[10px] font-semibold px-3 py-1 rounded-lg flex items-center gap-1 uppercase tracking-wider shadow-sm">
                         <Sparkles size={10} strokeWidth={1.5} /> Most Popular
                     </span>
                 </div>
@@ -82,16 +82,16 @@ const PlanCard = ({ planKey, plan, currentPlan, onSubscribe, loading, index }) =
 
             <div className="text-center mb-6">
                 <div className={`inline-flex items-center justify-center w-11 h-11 rounded-xl mb-4 ${plan.popular
-                    ? 'bg-white/10 dark:bg-[#111]/10'
-                    : 'bg-[#f0f0f0] dark:bg-[#1a1a1a] border border-[#e8e8e8] dark:border-[#222]'
+                    ? 'bg-[#F5F2EA]/10 dark:bg-[#0F1115]/10'
+                    : 'bg-[#E3DAC6] dark:bg-[#2A2F3A] border border-[#D6CCB5] dark:border-[#2A2F3A]'
                     }`}>
-                    <Icon size={20} strokeWidth={1.5} className={plan.popular ? '' : 'text-[#888]'} />
+                    <Icon size={20} strokeWidth={1.5} className={plan.popular ? '' : 'text-[#7C7365]'} />
                 </div>
-                <h3 className={`text-[16px] font-bold ${plan.popular ? '' : 'text-[#111] dark:text-[#eee]'}`}>{plan.name}</h3>
-                <p className={`text-[12px] mt-1 ${plan.popular ? 'text-white/50 dark:text-[#111]/50' : 'text-[#999]'}`}>{plan.description}</p>
+                <h3 className={`text-[16px] font-bold ${plan.popular ? '' : 'text-[#0F1115] dark:text-[#F5F2EA]'}`}>{plan.name}</h3>
+                <p className={`text-[12px] mt-1 ${plan.popular ? 'text-white/50 dark:text-[#0F1115]/50' : 'text-[#8D8474]'}`}>{plan.description}</p>
                 <div className="mt-4">
-                    <span className={`text-3xl font-bold ${plan.popular ? '' : 'text-[#111] dark:text-[#eee]'}`}>{plan.priceDisplay}</span>
-                    <span className={`text-[13px] ${plan.popular ? 'text-white/40 dark:text-[#111]/40' : 'text-[#999]'}`}>{plan.period}</span>
+                    <span className={`text-3xl font-bold ${plan.popular ? '' : 'text-[#0F1115] dark:text-[#F5F2EA]'}`}>{plan.priceDisplay}</span>
+                    <span className={`text-[13px] ${plan.popular ? 'text-white/40 dark:text-[#0F1115]/40' : 'text-[#8D8474]'}`}>{plan.period}</span>
                 </div>
             </div>
 
@@ -100,22 +100,22 @@ const PlanCard = ({ planKey, plan, currentPlan, onSubscribe, loading, index }) =
                     <li key={idx} className="flex items-center gap-2.5">
                         {feature.included ? (
                             <div className={`w-5 h-5 rounded-md flex items-center justify-center ${plan.popular
-                                ? 'bg-white/10 dark:bg-[#111]/10'
-                                : 'bg-[#f0f0f0] dark:bg-[#1a1a1a]'
+                                ? 'bg-[#F5F2EA]/10 dark:bg-[#0F1115]/10'
+                                : 'bg-[#E3DAC6] dark:bg-[#2A2F3A]'
                                 }`}>
-                                <Check size={12} strokeWidth={2} className={plan.popular ? '' : 'text-[#111] dark:text-[#eee]'} />
+                                <Check size={12} strokeWidth={2} className={plan.popular ? '' : 'text-[#0F1115] dark:text-[#F5F2EA]'} />
                             </div>
                         ) : (
                             <div className={`w-5 h-5 rounded-md flex items-center justify-center ${plan.popular
-                                ? 'bg-white/5 dark:bg-[#111]/5'
-                                : 'bg-[#f0f0f0] dark:bg-[#1a1a1a]'
+                                ? 'bg-[#F5F2EA]/5 dark:bg-[#0F1115]/5'
+                                : 'bg-[#E3DAC6] dark:bg-[#2A2F3A]'
                                 }`}>
-                                <X size={12} strokeWidth={2} className={plan.popular ? 'text-white/20 dark:text-[#111]/20' : 'text-[#ccc] dark:text-[#444]'} />
+                                <X size={12} strokeWidth={2} className={plan.popular ? 'text-white/20 dark:text-[#0F1115]/20' : 'text-[#B8B1A3] dark:text-[#444]'} />
                             </div>
                         )}
                         <span className={`text-[12px] ${feature.included
-                            ? plan.popular ? 'text-white/80 dark:text-[#111]/80' : 'text-[#111] dark:text-[#eee]'
-                            : plan.popular ? 'text-white/20 dark:text-[#111]/20' : 'text-[#bbb] dark:text-[#555]'
+                            ? plan.popular ? 'text-white/80 dark:text-[#0F1115]/80' : 'text-[#0F1115] dark:text-[#F5F2EA]'
+                            : plan.popular ? 'text-white/20 dark:text-[#0F1115]/20' : 'text-[#A79F90] dark:text-[#8D8474]'
                             }`}>
                             {feature.name}
                         </span>
@@ -129,11 +129,11 @@ const PlanCard = ({ planKey, plan, currentPlan, onSubscribe, loading, index }) =
                 className={`w-full py-3 px-4 rounded-xl text-[13px] font-semibold transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-40
                     ${isCurrentPlan
                         ? plan.popular
-                            ? 'bg-white/20 dark:bg-[#111]/20 cursor-default'
-                            : 'bg-[#f0f0f0] dark:bg-[#1a1a1a] text-[#111] dark:text-[#eee] cursor-default'
+                            ? 'bg-[#F5F2EA]/20 dark:bg-[#0F1115]/20 cursor-default'
+                            : 'bg-[#E3DAC6] dark:bg-[#2A2F3A] text-[#0F1115] dark:text-[#F5F2EA] cursor-default'
                         : plan.popular
-                            ? 'bg-white dark:bg-[#111] text-[#111] dark:text-[#eee] hover:bg-white/90 dark:hover:bg-[#111]/90'
-                            : 'bg-[#111] dark:bg-[#eee] text-white dark:text-[#111] hover:bg-[#333] dark:hover:bg-[#ccc]'
+                            ? 'bg-[#F5F2EA] dark:bg-[#0F1115] text-[#0F1115] dark:text-[#F5F2EA] hover:bg-[#F5F2EA]/90 dark:hover:bg-[#0F1115]/90'
+                            : 'bg-[#0F1115] dark:bg-[#F5F2EA] text-white dark:text-[#0F1115] hover:bg-[#E6C55A] dark:hover:bg-[#B8B1A3]'
                     }`}
             >
                 {loading === planKey ? (
@@ -230,7 +230,7 @@ const Pricing = () => {
                 },
                 prefill: {},
                 theme: {
-                    color: '#111111'
+                    color: '#0F1115111'
                 },
                 modal: {
                     ondismiss: () => {
@@ -256,7 +256,7 @@ const Pricing = () => {
                     <motion.h1
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="text-3xl font-bold text-[#111] dark:text-[#eee] tracking-[-0.03em] mb-3"
+                        className="text-3xl font-bold text-[#0F1115] dark:text-[#F5F2EA] tracking-[-0.03em] mb-3"
                     >
                         Choose Your Plan
                     </motion.h1>
@@ -264,7 +264,7 @@ const Pricing = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.1 }}
-                        className="text-[#999] text-[14px] max-w-lg mx-auto"
+                        className="text-[#8D8474] text-[14px] max-w-lg mx-auto"
                     >
                         Unlock your full learning potential with our premium plans.
                     </motion.p>
@@ -286,10 +286,10 @@ const Pricing = () => {
                     <motion.div
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="max-w-md mx-auto mb-6 p-4 rounded-[14px] bg-[#f0f0f0] dark:bg-[#1a1a1a] border border-[#e8e8e8] dark:border-[#222] flex items-center gap-3"
+                        className="max-w-md mx-auto mb-6 p-4 rounded-[14px] bg-[#E3DAC6] dark:bg-[#2A2F3A] border border-[#D6CCB5] dark:border-[#2A2F3A] flex items-center gap-3"
                     >
-                        <Check className="text-[#111] dark:text-[#eee] flex-shrink-0" size={16} strokeWidth={1.5} />
-                        <p className="text-[#111] dark:text-[#eee] text-[13px] font-medium">{success}</p>
+                        <Check className="text-[#0F1115] dark:text-[#F5F2EA] flex-shrink-0" size={16} strokeWidth={1.5} />
+                        <p className="text-[#0F1115] dark:text-[#F5F2EA] text-[13px] font-medium">{success}</p>
                     </motion.div>
                 )}
 
@@ -310,7 +310,7 @@ const Pricing = () => {
 
                 {/* Footer */}
                 <div className="mt-12 text-center">
-                    <p className="text-[#bbb] dark:text-[#555] text-[12px]">
+                    <p className="text-[#A79F90] dark:text-[#8D8474] text-[12px]">
                         All payments are processed securely via Razorpay. Cancel anytime.
                     </p>
                 </div>

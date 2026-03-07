@@ -117,9 +117,9 @@ const VerifyEmail = () => {
     };
 
     return (
-        <div className="min-h-screen flex bg-white dark:bg-[#0a0a0a] transition-colors duration-500">
+        <div className="min-h-screen flex bg-[#F5F2EA] dark:bg-[#0F1115] transition-colors duration-500">
             {/* Left Panel */}
-            <div className="hidden lg:flex lg:w-1/2 bg-[#111] dark:bg-[#eee] relative overflow-hidden">
+            <div className="hidden lg:flex lg:w-1/2 bg-[#0F1115] dark:bg-[#F5F2EA] relative overflow-hidden">
                 <div className="relative z-10 flex flex-col justify-center items-center p-16 w-full">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -128,16 +128,16 @@ const VerifyEmail = () => {
                         className="max-w-sm"
                     >
                         <div className="flex items-center gap-3 mb-16">
-                            <div className="w-10 h-10 bg-white/10 dark:bg-[#111]/10 rounded-xl flex items-center justify-center">
-                                <BrainCircuit className="h-5 w-5 text-white dark:text-[#111]" strokeWidth={1.5} />
+                            <div className="w-10 h-10 bg-[#F5F2EA]/10 dark:bg-[#0F1115]/10 rounded-xl flex items-center justify-center">
+                                <BrainCircuit className="h-5 w-5 text-white dark:text-[#0F1115]" strokeWidth={1.5} />
                             </div>
-                            <span className="text-[15px] font-semibold text-white dark:text-[#111] tracking-[-0.02em]">CareerCraft AI</span>
+                            <span className="text-[15px] font-semibold text-white dark:text-[#0F1115] tracking-[-0.02em]">CareerCraft AI</span>
                         </div>
 
-                        <h1 className="text-4xl font-bold text-white dark:text-[#111] tracking-[-0.03em] leading-[1.1] mb-4">
+                        <h1 className="text-4xl font-bold text-white dark:text-[#0F1115] tracking-[-0.03em] leading-[1.1] mb-4">
                             Almost there.
                         </h1>
-                        <p className="text-white/40 dark:text-[#111]/40 text-[14px] leading-relaxed mb-16">
+                        <p className="text-white/40 dark:text-[#0F1115]/40 text-[14px] leading-relaxed mb-16">
                             We sent a verification code to your email. Just enter it to activate your account.
                         </p>
 
@@ -153,10 +153,10 @@ const VerifyEmail = () => {
                                     transition={{ delay: 0.3 + i * 0.1, duration: 0.5 }}
                                     className="flex items-center gap-4"
                                 >
-                                    <div className="w-9 h-9 rounded-xl bg-white/5 dark:bg-[#111]/5 border border-white/10 dark:border-[#111]/10 flex items-center justify-center flex-shrink-0">
-                                        <item.icon size={16} className="text-white/50 dark:text-[#111]/50" strokeWidth={1.5} />
+                                    <div className="w-9 h-9 rounded-xl bg-[#F5F2EA]/5 dark:bg-[#0F1115]/5 border border-white/10 dark:border-[#0F1115]/10 flex items-center justify-center flex-shrink-0">
+                                        <item.icon size={16} className="text-white/50 dark:text-[#0F1115]/50" strokeWidth={1.5} />
                                     </div>
-                                    <span className="text-[13px] text-white/60 dark:text-[#111]/60">{item.text}</span>
+                                    <span className="text-[13px] text-white/60 dark:text-[#0F1115]/60">{item.text}</span>
                                 </motion.div>
                             ))}
                         </div>
@@ -174,16 +174,16 @@ const VerifyEmail = () => {
                 >
                     {/* Mobile logo */}
                     <div className="lg:hidden flex items-center gap-2.5 mb-12">
-                        <div className="w-8 h-8 bg-[#111] dark:bg-[#eee] rounded-lg flex items-center justify-center">
-                            <BrainCircuit className="h-4 w-4 text-white dark:text-[#111]" strokeWidth={1.5} />
+                        <div className="w-8 h-8 bg-[#0F1115] dark:bg-[#F5F2EA] rounded-lg flex items-center justify-center">
+                            <BrainCircuit className="h-4 w-4 text-white dark:text-[#0F1115]" strokeWidth={1.5} />
                         </div>
-                        <span className="text-[15px] font-semibold text-[#111] dark:text-[#eee] tracking-[-0.02em]">CareerCraft AI</span>
+                        <span className="text-[15px] font-semibold text-[#0F1115] dark:text-[#F5F2EA] tracking-[-0.02em]">CareerCraft AI</span>
                     </div>
 
                     <div className="mb-8">
-                        <h2 className="text-2xl font-bold text-[#111] dark:text-[#eee] tracking-[-0.03em]">Verify your email</h2>
-                        <p className="text-[#999] text-[13px] mt-2">
-                            We sent a code to <span className="text-[#111] dark:text-[#eee] font-medium">{email}</span>
+                        <h2 className="text-2xl font-bold text-[#0F1115] dark:text-[#F5F2EA] tracking-[-0.03em]">Verify your email</h2>
+                        <p className="text-[#8D8474] text-[13px] mt-2">
+                            We sent a code to <span className="text-[#0F1115] dark:text-[#F5F2EA] font-medium">{email}</span>
                         </p>
                     </div>
 
@@ -221,7 +221,7 @@ const VerifyEmail = () => {
                                     onChange={(e) => handleChange(index, e.target.value)}
                                     onKeyDown={(e) => handleKeyDown(index, e)}
                                     onPaste={index === 0 ? handlePaste : undefined}
-                                    className="w-12 h-14 text-center text-xl font-bold border border-[#f0f0f0] dark:border-[#1a1a1a] rounded-xl bg-[#fafafa] dark:bg-[#111] text-[#111] dark:text-[#eee] outline-none transition-all focus:border-[#111] dark:focus:border-[#eee] focus:bg-white dark:focus:bg-[#151515]"
+                                    className="w-12 h-14 text-center text-xl font-bold border border-[#E3DAC6] dark:border-[#2A2F3A] rounded-xl bg-[#F2EEE4] dark:bg-[#0F1115] text-[#0F1115] dark:text-[#F5F2EA] outline-none transition-all focus:border-[#0F1115] dark:focus:border-[#F5F2EA] focus:bg-[#F5F2EA] dark:focus:bg-[#1F2430]"
                                 />
                             ))}
                         </div>
@@ -229,10 +229,10 @@ const VerifyEmail = () => {
                         <button
                             type="submit"
                             disabled={loading || otp.join('').length !== 6}
-                            className="w-full bg-[#111] dark:bg-[#eee] text-white dark:text-[#111] py-3 rounded-xl text-[14px] font-semibold hover:bg-[#333] dark:hover:bg-[#ccc] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                            className="w-full bg-[#0F1115] dark:bg-[#F5F2EA] text-white dark:text-[#0F1115] py-3 rounded-xl text-[14px] font-semibold hover:bg-[#E6C55A] dark:hover:bg-[#B8B1A3] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                         >
                             {loading ? (
-                                <span className="animate-spin h-4 w-4 border-2 border-white dark:border-[#111] border-t-transparent rounded-full"></span>
+                                <span className="animate-spin h-4 w-4 border-2 border-white dark:border-[#0F1115] border-t-transparent rounded-full"></span>
                             ) : (
                                 <>
                                     <ShieldCheck size={16} strokeWidth={1.5} />
@@ -244,15 +244,15 @@ const VerifyEmail = () => {
 
                     {/* Resend */}
                     <div className="mt-6 text-center">
-                        <p className="text-[13px] text-[#999]">
+                        <p className="text-[13px] text-[#8D8474]">
                             Didn't receive the code?{' '}
                             <button
                                 onClick={handleResend}
                                 disabled={resendCooldown > 0 || resendLoading}
-                                className="text-[#111] dark:text-[#eee] font-semibold hover:underline disabled:text-[#ccc] dark:disabled:text-[#555] disabled:no-underline transition-colors inline-flex items-center gap-1"
+                                className="text-[#0F1115] dark:text-[#F5F2EA] font-semibold hover:underline disabled:text-[#B8B1A3] dark:disabled:text-[#8D8474] disabled:no-underline transition-colors inline-flex items-center gap-1"
                             >
                                 {resendLoading ? (
-                                    <span className="animate-spin h-3 w-3 border-2 border-[#111] dark:border-[#eee] border-t-transparent rounded-full"></span>
+                                    <span className="animate-spin h-3 w-3 border-2 border-[#0F1115] dark:border-[#F5F2EA] border-t-transparent rounded-full"></span>
                                 ) : resendCooldown > 0 ? (
                                     `Resend in ${resendCooldown}s`
                                 ) : (
@@ -268,15 +268,15 @@ const VerifyEmail = () => {
                     <div className="mt-8">
                         <div className="relative">
                             <div className="absolute inset-0 flex items-center">
-                                <div className="w-full border-t border-[#f0f0f0] dark:border-[#1a1a1a]"></div>
+                                <div className="w-full border-t border-[#E3DAC6] dark:border-[#2A2F3A]"></div>
                             </div>
                             <div className="relative flex justify-center text-[12px]">
-                                <span className="px-4 bg-white dark:bg-[#0a0a0a] text-[#ccc] dark:text-[#555]">Wrong email?</span>
+                                <span className="px-4 bg-[#F5F2EA] dark:bg-[#0F1115] text-[#B8B1A3] dark:text-[#8D8474]">Wrong email?</span>
                             </div>
                         </div>
                         <Link
                             to="/register"
-                            className="mt-4 w-full flex items-center justify-center gap-2 py-3 border border-[#f0f0f0] dark:border-[#1a1a1a] rounded-xl text-[#111] dark:text-[#eee] text-[13px] font-semibold hover:bg-[#fafafa] dark:hover:bg-[#111] transition-colors"
+                            className="mt-4 w-full flex items-center justify-center gap-2 py-3 border border-[#E3DAC6] dark:border-[#2A2F3A] rounded-xl text-[#0F1115] dark:text-[#F5F2EA] text-[13px] font-semibold hover:bg-[#F2EEE4] dark:hover:bg-[#0F1115] transition-colors"
                         >
                             Go back to Register
                         </Link>
