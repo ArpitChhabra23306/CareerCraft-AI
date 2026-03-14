@@ -1,31 +1,23 @@
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
-let transporter = null;
+let resend = null;
 
-const getTransporter = () => {
-    if (!transporter) {
-        transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS,
-            },
-        });
-        transporter.verify().then(() => {
-            console.log('✉️  Email service ready');
-        }).catch((err) => {
-            console.error('❌ Email service error:', err.message);
-        });
+const getResend = () => {
+    if (!resend) {
+        resend = new Resend(process.env.RESEND_API_KEY);
     }
-    return transporter;
+    return resend;
 };
+
+// Use your verified domain, or 'onboarding@resend.dev' for testing
+const FROM_EMAIL = process.env.FROM_EMAIL || 'CareerCraft AI <onboarding@resend.dev>';
 
 /**
  * Send 6-digit OTP verification email
  */
 export const sendVerificationEmail = async (email, otp) => {
-    const mailOptions = {
-        from: `"CareerCraft AI" <${process.env.EMAIL_USER}>`,
+    await getResend().emails.send({
+        from: FROM_EMAIL,
         to: email,
         subject: 'Verify your CareerCraft AI account',
         html: `
@@ -46,17 +38,15 @@ export const sendVerificationEmail = async (email, otp) => {
             </p>
         </div>
         `,
-    };
-
-    await getTransporter().sendMail(mailOptions);
+    });
 };
 
 /**
  * Send welcome email after successful verification
  */
 export const sendWelcomeEmail = async (email, username) => {
-    const mailOptions = {
-        from: `"CareerCraft AI" <${process.env.EMAIL_USER}>`,
+    await getResend().emails.send({
+        from: FROM_EMAIL,
         to: email,
         subject: 'Welcome to CareerCraft AI! 🚀',
         html: `
@@ -69,7 +59,7 @@ export const sendWelcomeEmail = async (email, username) => {
                 <p style="color: #666; font-size: 13px; line-height: 1.6; margin: 0 0 24px;">
                     Your account has been verified. Here's what you can do:
                 </p>
-                <div style="space-y: 12px;">
+                <div>
                     <div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: #fff; border: 1px solid #f0f0f0; border-radius: 10px; margin-bottom: 8px;">
                         <span style="font-size: 16px;">📄</span>
                         <span style="font-size: 13px; color: #333;">Upload documents & chat with AI</span>
@@ -92,9 +82,7 @@ export const sendWelcomeEmail = async (email, username) => {
             </p>
         </div>
         `,
-    };
-
-    await getTransporter().sendMail(mailOptions);
+    });
 };
 
 /**
@@ -103,8 +91,8 @@ export const sendWelcomeEmail = async (email, username) => {
 export const sendPasswordResetEmail = async (email, resetToken) => {
     const resetUrl = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
 
-    const mailOptions = {
-        from: `"CareerCraft AI" <${process.env.EMAIL_USER}>`,
+    await getResend().emails.send({
+        from: FROM_EMAIL,
         to: email,
         subject: 'Reset your password — CareerCraft AI',
         html: `
@@ -125,7 +113,5 @@ export const sendPasswordResetEmail = async (email, resetToken) => {
             </p>
         </div>
         `,
-    };
-
-    await getTransporter().sendMail(mailOptions);
+    });
 };

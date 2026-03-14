@@ -33,7 +33,7 @@ export const register = async (req, res) => {
                 existingUser.verificationOTPExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 min
                 await existingUser.save();
 
-                await sendVerificationEmail(email, otp);
+                try { await sendVerificationEmail(email, otp); } catch (e) { console.error('Email send failed (re-send):', e.message); }
                 return res.status(200).json({
                     message: 'Verification email re-sent. Please check your inbox.',
                     email,
@@ -60,7 +60,7 @@ export const register = async (req, res) => {
         await newUser.save();
 
         // Send verification email
-        await sendVerificationEmail(email, otp);
+        try { await sendVerificationEmail(email, otp); } catch (e) { console.error('Email send failed:', e.message); }
 
         res.status(201).json({
             message: 'Registration successful! Please check your email for the verification code.',
