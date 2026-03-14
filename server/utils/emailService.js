@@ -1,38 +1,40 @@
-import nodemailer from 'nodemailer';
-
-let transporter = null;
-
-const getTransporter = () => {
-    if (!transporter) {
-        transporter = nodemailer.createTransport({
-            host: 'smtp-relay.brevo.com',
-            port: 587,
-            secure: false,
-            auth: {
-                user: process.env.BREVO_SMTP_USER,
-                pass: process.env.BREVO_SMTP_KEY,
-            },
-        });
-        transporter.verify().then(() => {
-            console.log('✉️  Email service ready (Brevo)');
-        }).catch((err) => {
-            console.error('❌ Email service error:', err.message);
-        });
-    }
-    return transporter;
-};
+const BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email';
 
 const FROM_EMAIL = process.env.SENDER_EMAIL || 'arpitchhara369@gmail.com';
+const FROM_NAME = 'CareerCraft AI';
+
+/**
+ * Send email using Brevo HTTP API
+ */
+const sendEmail = async (to, subject, htmlContent) => {
+    const response = await fetch(BREVO_API_URL, {
+        method: 'POST',
+        headers: {
+            'accept': 'application/json',
+            'api-key': process.env.BREVO_API_KEY,
+            'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+            sender: { name: FROM_NAME, email: FROM_EMAIL },
+            to: [{ email: to }],
+            subject,
+            htmlContent,
+        }),
+    });
+
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || `Brevo API error: ${response.status}`);
+    }
+
+    return response.json();
+};
 
 /**
  * Send 6-digit OTP verification email
  */
 export const sendVerificationEmail = async (email, otp) => {
-    const mailOptions = {
-        from: `"CareerCraft AI" <${FROM_EMAIL}>`,
-        to: email,
-        subject: 'Verify your CareerCraft AI account',
-        html: `
+    await sendEmail(email, 'Verify your CareerCraft AI account', `
         <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 24px; color: #111;">
             <div style="text-align: center; margin-bottom: 32px;">
                 <h1 style="font-size: 20px; font-weight: 700; letter-spacing: -0.02em; margin: 0;">CareerCraft AI</h1>
@@ -49,21 +51,14 @@ export const sendVerificationEmail = async (email, otp) => {
                 If you didn't create an account, you can safely ignore this email.
             </p>
         </div>
-        `,
-    };
-
-    await getTransporter().sendMail(mailOptions);
+    `);
 };
 
 /**
  * Send welcome email after successful verification
  */
 export const sendWelcomeEmail = async (email, username) => {
-    const mailOptions = {
-        from: `"CareerCraft AI" <${FROM_EMAIL}>`,
-        to: email,
-        subject: 'Welcome to CareerCraft AI! 🚀',
-        html: `
+    await sendEmail(email, 'Welcome to CareerCraft AI! 🚀', `
         <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 24px; color: #111;">
             <div style="text-align: center; margin-bottom: 32px;">
                 <h1 style="font-size: 20px; font-weight: 700; letter-spacing: -0.02em; margin: 0;">CareerCraft AI</h1>
@@ -95,10 +90,7 @@ export const sendWelcomeEmail = async (email, username) => {
                 You're receiving this because you signed up for CareerCraft AI.
             </p>
         </div>
-        `,
-    };
-
-    await getTransporter().sendMail(mailOptions);
+    `);
 };
 
 /**
@@ -107,11 +99,7 @@ export const sendWelcomeEmail = async (email, username) => {
 export const sendPasswordResetEmail = async (email, resetToken) => {
     const resetUrl = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
 
-    const mailOptions = {
-        from: `"CareerCraft AI" <${FROM_EMAIL}>`,
-        to: email,
-        subject: 'Reset your password — CareerCraft AI',
-        html: `
+    await sendEmail(email, 'Reset your password — CareerCraft AI', `
         <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 24px; color: #111;">
             <div style="text-align: center; margin-bottom: 32px;">
                 <h1 style="font-size: 20px; font-weight: 700; letter-spacing: -0.02em; margin: 0;">CareerCraft AI</h1>
@@ -128,8 +116,5 @@ export const sendPasswordResetEmail = async (email, resetToken) => {
                 If you didn't request this, you can safely ignore this email. Your password won't change.
             </p>
         </div>
-        `,
-    };
-
-    await getTransporter().sendMail(mailOptions);
+    `);
 };
