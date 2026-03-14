@@ -1,23 +1,35 @@
-import { Resend } from 'resend';
+import nodemailer from 'nodemailer';
 
-let resend = null;
+let transporter = null;
 
-const getResend = () => {
-    if (!resend) {
-        resend = new Resend(process.env.RESEND_API_KEY);
+const getTransporter = () => {
+    if (!transporter) {
+        transporter = nodemailer.createTransport({
+            host: 'smtp-relay.brevo.com',
+            port: 587,
+            secure: false,
+            auth: {
+                user: process.env.BREVO_SMTP_USER,
+                pass: process.env.BREVO_SMTP_KEY,
+            },
+        });
+        transporter.verify().then(() => {
+            console.log('✉️  Email service ready (Brevo)');
+        }).catch((err) => {
+            console.error('❌ Email service error:', err.message);
+        });
     }
-    return resend;
+    return transporter;
 };
 
-// Use your verified domain, or 'onboarding@resend.dev' for testing
-const FROM_EMAIL = process.env.FROM_EMAIL || 'CareerCraft AI <onboarding@resend.dev>';
+const FROM_EMAIL = process.env.SENDER_EMAIL || 'arpitchhara369@gmail.com';
 
 /**
  * Send 6-digit OTP verification email
  */
 export const sendVerificationEmail = async (email, otp) => {
-    await getResend().emails.send({
-        from: FROM_EMAIL,
+    const mailOptions = {
+        from: `"CareerCraft AI" <${FROM_EMAIL}>`,
         to: email,
         subject: 'Verify your CareerCraft AI account',
         html: `
@@ -38,15 +50,17 @@ export const sendVerificationEmail = async (email, otp) => {
             </p>
         </div>
         `,
-    });
+    };
+
+    await getTransporter().sendMail(mailOptions);
 };
 
 /**
  * Send welcome email after successful verification
  */
 export const sendWelcomeEmail = async (email, username) => {
-    await getResend().emails.send({
-        from: FROM_EMAIL,
+    const mailOptions = {
+        from: `"CareerCraft AI" <${FROM_EMAIL}>`,
         to: email,
         subject: 'Welcome to CareerCraft AI! 🚀',
         html: `
@@ -82,7 +96,9 @@ export const sendWelcomeEmail = async (email, username) => {
             </p>
         </div>
         `,
-    });
+    };
+
+    await getTransporter().sendMail(mailOptions);
 };
 
 /**
@@ -91,8 +107,8 @@ export const sendWelcomeEmail = async (email, username) => {
 export const sendPasswordResetEmail = async (email, resetToken) => {
     const resetUrl = `${process.env.CLIENT_URL}/reset-password/${resetToken}`;
 
-    await getResend().emails.send({
-        from: FROM_EMAIL,
+    const mailOptions = {
+        from: `"CareerCraft AI" <${FROM_EMAIL}>`,
         to: email,
         subject: 'Reset your password — CareerCraft AI',
         html: `
@@ -113,5 +129,7 @@ export const sendPasswordResetEmail = async (email, resetToken) => {
             </p>
         </div>
         `,
-    });
+    };
+
+    await getTransporter().sendMail(mailOptions);
 };
