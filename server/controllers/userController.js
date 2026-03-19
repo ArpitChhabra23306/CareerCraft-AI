@@ -16,6 +16,8 @@ export const getProfile = async (req, res) => {
 // Import necessary models for stats
 import Document from '../models/Document.js';
 import QuizResult from '../models/QuizResult.js';
+import FlashcardDeck from '../models/FlashcardDeck.js';
+import InterviewSession from '../models/InterviewSession.js';
 
 export const getUserStats = async (req, res) => {
     try {
@@ -27,15 +29,17 @@ export const getUserStats = async (req, res) => {
         // Count Quizzes Taken
         const quizCount = await QuizResult.countDocuments({ user: userId });
 
-        // Count Flashcards (Need to check model name, assuming 'Flashcard' or 'Deck')
-        // For now return 0 if model not confirmed, or check logic.
-        // Let's return basics.
+        // Count Flashcards
+        const flashcardCount = await FlashcardDeck.countDocuments({ user: userId });
+
+        // Count Interviews
+        const interviewCount = await InterviewSession.countDocuments({ user: userId });
 
         res.json({
             documents: documentCount,
-            flashcards: 0, // Placeholder until model confirmed
+            flashcards: flashcardCount,
             quizzes: quizCount,
-            interviews: 0 // Placeholder
+            interviews: interviewCount
         });
     } catch (err) {
         console.error(err.message);
