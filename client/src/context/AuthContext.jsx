@@ -56,7 +56,7 @@ export const AuthProvider = ({ children }) => {
 
     const updateUserProfile = (userData) => {
         setUser((prevUser) => {
-            const updatedUser = { ...prevUser, ...userData };
+            const updatedUser = prevUser ? { ...prevUser, ...userData } : { ...userData };
             localStorage.setItem('user', JSON.stringify(updatedUser));
             return updatedUser;
         });

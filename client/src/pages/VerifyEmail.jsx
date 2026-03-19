@@ -15,7 +15,7 @@ const VerifyEmail = () => {
     const inputRefs = useRef([]);
     const navigate = useNavigate();
     const location = useLocation();
-    const { login: authLogin } = useContext(AuthContext);
+    const { updateUserProfile } = useContext(AuthContext);
 
     const email = location.state?.email || '';
 
@@ -79,11 +79,10 @@ const VerifyEmail = () => {
         setError('');
         try {
             const res = await api.post('/auth/verify-email', { email, otp: otpString });
-            // Auto-login
+            // Auto-login Update via Context natively
             localStorage.setItem('token', res.data.token);
-            localStorage.setItem('user', JSON.stringify(res.data.user));
-            // Force reload to pick up new auth state
-            window.location.href = '/dashboard';
+            updateUserProfile(res.data.user);
+            navigate('/dashboard', { replace: true });
         } catch (err) {
             setError(err.response?.data?.message || 'Verification failed');
             setOtp(['', '', '', '', '', '']);
