@@ -1,64 +1,81 @@
 import dotenv from 'dotenv';
 import DocumentChunk from '../models/DocumentChunk.js';
 import Document from '../models/Document.js';
+import mongoose from 'mongoose';
 dotenv.config();
 
 const JINA_API_KEY = process.env.JINA_API_KEY;
 const JINA_MODEL = 'jina-embeddings-v3';
-const CHUNK_SIZE = 800;      // characters per chunk
-const CHUNK_OVERLAP = 120;   // overlap between chunks for context continuity
+const CHUNK_SIZE = 500;      // smaller chunks = more precise retrieval
+const CHUNK_OVERLAP = 100;   // ~20% overlap for context continuity
 
 /**
- * Split text into overlapping chunks at sentence boundaries.
- * Avoids cutting mid-sentence for better embedding quality.
+ * Recursive character text splitter — splits at the best boundary available.
+ * Hierarchy: double-newline (paragraphs) → single newline → sentence end → word → hard cut.
  */
 export const chunkText = (text, chunkSize = CHUNK_SIZE, overlap = CHUNK_OVERLAP) => {
     if (!text || text.length === 0) return [];
 
-    // Clean up the text: normalize whitespace
-    const cleanText = text.replace(/\s+/g, ' ').trim();
+    // Normalize whitespace but preserve paragraph breaks
+    const cleanText = text
+        .replace(/\r\n/g, '\n')
+        .replace(/[ \t]+/g, ' ')          // collapse spaces/tabs
+        .replace(/\n{3,}/g, '\n\n')       // normalize multiple newlines to double
+        .trim();
 
     if (cleanText.length <= chunkSize) {
         return [cleanText];
     }
 
+    // Separators in priority order (best → worst)
+    const separators = ['\n\n', '\n', '. ', '? ', '! ', '; ', ', ', ' '];
+
     const chunks = [];
     let start = 0;
 
     while (start < cleanText.length) {
-        let end = Math.min(start + chunkSize, cleanText.length);
+        // If remaining text fits in one chunk, take it all
+        if (start + chunkSize >= cleanText.length) {
+            const remaining = cleanText.substring(start).trim();
+            if (remaining.length > 30) chunks.push(remaining);
+            break;
+        }
 
-        // Try to break at a sentence boundary (., !, ?, or newline)
-        if (end < cleanText.length) {
+        let end = start + chunkSize;
+        let bestBreak = -1;
+
+        // Try each separator in priority order
+        for (const sep of separators) {
             const segment = cleanText.substring(start, end);
-            const lastSentenceEnd = Math.max(
-                segment.lastIndexOf('. '),
-                segment.lastIndexOf('? '),
-                segment.lastIndexOf('! '),
-                segment.lastIndexOf('\n')
-            );
+            const lastIdx = segment.lastIndexOf(sep);
 
-            if (lastSentenceEnd > chunkSize * 0.3) {
-                // Found a good break point past 30% of the chunk
-                end = start + lastSentenceEnd + 1;
+            // Only accept if break point is past 40% of chunk (avoid tiny first half)
+            if (lastIdx > chunkSize * 0.4) {
+                bestBreak = start + lastIdx + sep.length;
+                break;
             }
         }
 
-        chunks.push(cleanText.substring(start, end).trim());
+        // If no good break found, fall back to hard cut at chunkSize
+        if (bestBreak === -1) {
+            bestBreak = end;
+        }
 
-        // Move start forward, with overlap
-        start = end - overlap;
+        const chunk = cleanText.substring(start, bestBreak).trim();
+        if (chunk.length > 30) {
+            chunks.push(chunk);
+        }
 
-        // Prevent infinite loops on very small remaining text
-        if (start >= cleanText.length - overlap) {
-            if (end < cleanText.length) {
-                chunks.push(cleanText.substring(end).trim());
-            }
-            break;
+        // Advance with overlap
+        start = bestBreak - overlap;
+
+        // Safety: ensure forward progress
+        if (start <= chunks.length > 0 ? (start) : 0) {
+            start = bestBreak;
         }
     }
 
-    return chunks.filter(c => c.length > 20); // Drop any tiny leftover fragments
+    return chunks;
 };
 
 /**
@@ -85,7 +102,7 @@ export const generateEmbeddings = async (texts) => {
             body: JSON.stringify({
                 model: JINA_MODEL,
                 input: batch,
-                task: 'retrieval.passage' // Optimized for document chunks
+                task: 'retrieval.passage'
             })
         });
 
@@ -95,8 +112,6 @@ export const generateEmbeddings = async (texts) => {
         }
 
         const data = await response.json();
-
-        // Sort by index to maintain order
         const sorted = data.data.sort((a, b) => a.index - b.index);
         allEmbeddings.push(...sorted.map(d => d.embedding));
     }
@@ -106,7 +121,7 @@ export const generateEmbeddings = async (texts) => {
 
 /**
  * Generate a single embedding for a query string.
- * Uses 'retrieval.query' task for optimal query-vs-passage matching.
+ * Uses 'retrieval.query' task for optimal asymmetric matching.
  */
 export const generateQueryEmbedding = async (queryText) => {
     if (!JINA_API_KEY) {
@@ -122,7 +137,7 @@ export const generateQueryEmbedding = async (queryText) => {
         body: JSON.stringify({
             model: JINA_MODEL,
             input: [queryText],
-            task: 'retrieval.query' // Optimized for search queries
+            task: 'retrieval.query'
         })
     });
 
@@ -136,32 +151,32 @@ export const generateQueryEmbedding = async (queryText) => {
 };
 
 /**
- * Full ingestion pipeline: chunk a document, embed all chunks, store in MongoDB.
- * Returns the number of chunks created.
+ * Full ingestion pipeline: chunk → embed → store in MongoDB.
  */
 export const ingestDocument = async (documentId) => {
     const doc = await Document.findById(documentId);
     if (!doc) throw new Error('Document not found');
     if (!doc.parsedText) throw new Error('Document has no parsed text. Open it first to trigger parsing.');
 
-    // Clean up any existing chunks for this document (re-ingestion)
+    // Clean up any existing chunks (re-ingestion)
     await DocumentChunk.deleteMany({ document: documentId });
 
-    // Step 1: Chunk the text
+    // Step 1: Chunk
     const chunks = chunkText(doc.parsedText);
     if (chunks.length === 0) {
         throw new Error('Document text produced no valid chunks');
     }
 
     console.log(`[RAG] Chunked "${doc.filename}" into ${chunks.length} chunks`);
+    console.log(`[RAG] Chunk sizes: ${chunks.map(c => c.length).join(', ')} chars`);
 
-    // Step 2: Generate embeddings for all chunks
+    // Step 2: Embed all chunks
     const embeddings = await generateEmbeddings(chunks);
     console.log(`[RAG] Generated ${embeddings.length} embeddings (${embeddings[0]?.length}d)`);
 
-    // Step 3: Store chunks + embeddings in MongoDB
+    // Step 3: Store in MongoDB
     const chunkDocs = chunks.map((content, index) => ({
-        document: documentId,
+        document: new mongoose.Types.ObjectId(documentId),
         chunkIndex: index,
         content: content,
         embedding: embeddings[index]
@@ -179,24 +194,23 @@ export const ingestDocument = async (documentId) => {
 };
 
 /**
- * Search for the most similar chunks to a query using MongoDB Atlas Vector Search.
- * Returns the top K most relevant text chunks.
+ * Search for the most relevant chunks using MongoDB Atlas Vector Search.
  */
 export const searchSimilarChunks = async (query, documentId, topK = 5) => {
     // Step 1: Embed the query
     const queryEmbedding = await generateQueryEmbedding(query);
 
-    // Step 2: Run MongoDB Atlas Vector Search aggregation
+    // Step 2: MongoDB Atlas $vectorSearch aggregation
     const results = await DocumentChunk.aggregate([
         {
             $vectorSearch: {
                 index: 'vector_index',
                 path: 'embedding',
                 queryVector: queryEmbedding,
-                numCandidates: topK * 10, // Search wider pool for better results
+                numCandidates: topK * 20,
                 limit: topK,
                 filter: {
-                    document: doc2ObjectId(documentId)
+                    document: new mongoose.Types.ObjectId(documentId)
                 }
             }
         },
@@ -209,11 +223,6 @@ export const searchSimilarChunks = async (query, documentId, topK = 5) => {
         }
     ]);
 
+    console.log(`[RAG] Vector search returned ${results.length} chunks (scores: ${results.map(r => r.score?.toFixed(3)).join(', ')})`);
     return results;
 };
-
-/**
- * Helper: convert string ID to ObjectId for vector search filter.
- */
-import mongoose from 'mongoose';
-const doc2ObjectId = (id) => new mongoose.Types.ObjectId(id);

@@ -27,6 +27,12 @@ const Documents = () => {
         e.preventDefault();
         if (!file) return;
 
+        // Client-side size check
+        if (file.size > 10 * 1024 * 1024) {
+            alert('File too large. Maximum size is 10MB.');
+            return;
+        }
+
         setUploading(true);
         const formData = new FormData();
         formData.append('file', file);
