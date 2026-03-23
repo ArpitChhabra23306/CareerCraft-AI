@@ -8,6 +8,8 @@ const DocumentSchema = new mongoose.Schema({
     fileSize: { type: Number },
     summary: { type: String },
     parsedText: { type: String }, // Cached extracted text from PDF
+    isEmbedded: { type: Boolean, default: false }, // Whether RAG embeddings exist
+    chunkCount: { type: Number, default: 0 }, // Number of vector chunks created
     uploadDate: { type: Date, default: Date.now }
 });
 

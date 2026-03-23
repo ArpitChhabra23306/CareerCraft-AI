@@ -69,7 +69,7 @@ const DocumentView = () => {
             </div>
 
             <div className="w-1/3">
-                <ChatInterface documentId={doc._id} />
+                <ChatInterface documentId={doc._id} isEmbedded={doc.isEmbedded || false} />
             </div>
         </div>
     );

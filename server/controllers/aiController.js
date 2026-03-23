@@ -5,6 +5,8 @@ import QuizResult from '../models/QuizResult.js';
 import { incrementUsage } from '../middleware/usageMiddleware.js';
 import { summarizeText, explainConcept, generateFlashcards, generateQuiz, generateTextGeneric } from '../services/geminiService.js';
 import { awardXP, updateStreak, awardDocumentChatXP, XP_VALUES } from '../services/gamificationService.js';
+import { ingestDocument, searchSimilarChunks } from '../services/embeddingService.js';
+import { generateRAGResponse } from '../services/groqService.js';
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 const pdf = require('pdf-parse');
@@ -41,33 +43,80 @@ const getDocumentText = async (doc) => {
 
 export const chatWithDocument = async (req, res) => {
     try {
-        const { documentId, question } = req.body;
-        console.log(`Chatting with doc: ${documentId}`);
+        const { documentId, question, useRAG } = req.body;
+        console.log(`Chatting with doc: ${documentId} | RAG: ${!!useRAG}`);
         const doc = await Document.findById(documentId);
         if (!doc) return res.status(404).json({ message: 'Document not found' });
 
-        const text = await getDocumentText(doc);
-        const context = text.substring(0, 50000);
+        let answer;
+        let mode = 'gemini';
 
-        const answer = await explainConcept(question, context);
+        if (useRAG && doc.isEmbedded) {
+            // RAG Mode: Retrieve relevant chunks → Groq (Llama 3.3)
+            const chunks = await searchSimilarChunks(question, documentId, 5);
+            if (chunks.length === 0) {
+                return res.status(400).json({ message: 'No relevant content found. Try a different question.' });
+            }
+            const result = await generateRAGResponse(question, chunks, doc.filename);
+            answer = result.answer;
+            mode = 'rag-groq';
+        } else {
+            // Legacy Mode: Truncated text → Gemini
+            const text = await getDocumentText(doc);
+            const context = text.substring(0, 50000);
+            answer = await explainConcept(question, context);
+        }
 
         // Award XP for document chat (capped at 25 XP per day)
         let xpResult = null;
         try {
             xpResult = await awardDocumentChatXP(req.user.id);
             await updateStreak(req.user.id);
-            // Track AI chat usage for subscription limits
             await incrementUsage(req.user.id, 'aiChatQueries');
         } catch (xpErr) {
             console.error('XP Award Error (non-blocking):', xpErr.message);
         }
 
-        res.json({ answer, xpAwarded: xpResult?.xpAwarded || 0 });
+        res.json({ answer, mode, xpAwarded: xpResult?.xpAwarded || 0 });
     } catch (err) {
-        console.error("Chat Error:", err);
+        console.error('Chat Error:', err);
         if (err.message.includes('429') || err.message.includes('Too Many Requests') || err.message.includes('Quota')) {
-            return res.status(429).json({ message: "AI Usage Limit Reached. Please wait a minute and try again." });
+            return res.status(429).json({ message: 'AI Usage Limit Reached. Please wait a minute and try again.' });
         }
+        res.status(500).json({ error: err.message });
+    }
+};
+
+/**
+ * POST /ai/embed
+ * Trigger RAG ingestion: chunk + embed a document's text.
+ */
+export const embedDocument = async (req, res) => {
+    try {
+        const { documentId } = req.body;
+        if (!documentId) return res.status(400).json({ message: 'documentId is required' });
+
+        const doc = await Document.findById(documentId);
+        if (!doc) return res.status(404).json({ message: 'Document not found' });
+        if (doc.user.toString() !== req.user.id) {
+            return res.status(403).json({ message: 'Not authorized' });
+        }
+
+        // Ensure parsed text exists first
+        if (!doc.parsedText) {
+            await getDocumentText(doc);
+        }
+
+        console.log(`[RAG] Starting ingestion for: ${doc.filename}`);
+        const chunkCount = await ingestDocument(documentId);
+
+        res.json({
+            message: `Document embedded successfully`,
+            chunkCount,
+            isEmbedded: true
+        });
+    } catch (err) {
+        console.error('Embed Error:', err);
         res.status(500).json({ error: err.message });
     }
 };

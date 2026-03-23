@@ -87,8 +87,8 @@ const aiService = {
         return res.data;
     },
 
-    chat: async (documentId, question, documentContent = "") => {
-        if (documentContent) {
+    chat: async (documentId, question, useRAG = false, documentContent = "") => {
+        if (documentContent && !useRAG) {
             const prompt = `Based on the context provided, answer the user's question.
              Context: ${documentContent.substring(0, 4000)}...
              
@@ -98,14 +98,19 @@ const aiService = {
             if (response) return { answer: response };
         }
 
-        console.log("Using Server AI for Chat");
+        console.log(`Using Server AI for Chat | RAG: ${useRAG}`);
         try {
-            const res = await api.post('/ai/chat', { documentId, question });
+            const res = await api.post('/ai/chat', { documentId, question, useRAG });
             return res.data;
         } catch (serverError) {
             console.error("Server Chat Fallback Failed:", serverError);
             return { answer: "I'm sorry, I cannot connect to the AI right now. Please try again in a moment." };
         }
+    },
+
+    embedDocument: async (documentId) => {
+        const res = await api.post('/ai/embed', { documentId });
+        return res.data;
     }
 };
 

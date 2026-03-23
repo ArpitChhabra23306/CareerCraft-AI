@@ -1,4 +1,5 @@
 import Document from '../models/Document.js';
+import DocumentChunk from '../models/DocumentChunk.js';
 import cloudinary from '../config/cloudinary.js';
 import { awardXP, updateStreak, XP_VALUES } from '../services/gamificationService.js';
 import { incrementUsage } from '../middleware/usageMiddleware.js';
@@ -74,6 +75,9 @@ export const deleteDocument = async (req, res) => {
                 console.warn('Cloudinary deletion warning:', cloudErr.message);
             }
         }
+
+        // Delete associated RAG chunks
+        await DocumentChunk.deleteMany({ document: id });
 
         await Document.findByIdAndDelete(id);
         res.status(200).json({ message: 'Document deleted' });
