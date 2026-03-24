@@ -101,25 +101,25 @@ const MockupDevice = ({ className = "" }) => {
                 {/* Laptop body */}
                 <div className="rounded-xl overflow-hidden border border-[#e0e0e0] dark:border-[#2A2F3A] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.15)] dark:shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)] bg-[#f8f8f8] dark:bg-[#0F1115]">
                     {/* Browser chrome */}
-                    <div className="flex items-center gap-2 px-4 py-2.5 bg-[#E3DAC6] dark:bg-[#0d0d0d] border-b border-[#e0e0e0] dark:border-[#2A2F3A]">
+                    <div className="flex items-center gap-2 px-4 py-2.5 bg-[#DDD5C0] dark:bg-[#0d0d0d] border-b border-[#e0e0e0] dark:border-[#2A2F3A]">
                         <div className="flex gap-1.5">
                             <div className="w-2.5 h-2.5 rounded-full bg-[#ff5f56]" />
                             <div className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e]" />
                             <div className="w-2.5 h-2.5 rounded-full bg-[#27ca3f]" />
                         </div>
                         <div className="flex-1 mx-8">
-                            <div className="bg-[#F5F2EA] dark:bg-[#2A2F3A] rounded-md h-6 flex items-center px-3 text-[10px] text-[#aaa] dark:text-[#8D8474] font-mono">
+                            <div className="bg-[#EDE8DC] dark:bg-[#2A2F3A] rounded-md h-6 flex items-center px-3 text-[10px] text-[#aaa] dark:text-[#8D8474] font-mono">
                                 careercraft.ai/dashboard
                             </div>
                         </div>
                     </div>
 
                     {/* Dashboard preview content */}
-                    <div className="p-6 space-y-4 bg-[#F5F2EA] dark:bg-[#0F1115]">
+                    <div className="p-6 space-y-4 bg-[#EDE8DC] dark:bg-[#0F1115]">
                         {/* Top bar */}
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-lg bg-[#0F1115] dark:bg-[#F5F2EA] flex items-center justify-center">
+                                <div className="w-8 h-8 rounded-lg bg-[#0F1115] dark:bg-[#E2D9C8] flex items-center justify-center">
                                     <BrainCircuit className="w-4 h-4 text-white dark:text-[#0F1115]" strokeWidth={1.5} />
                                 </div>
                                 <div className="h-3 w-24 bg-[#E3DAC6] dark:bg-[#2A2F3A] rounded-full" />
@@ -127,23 +127,23 @@ const MockupDevice = ({ className = "" }) => {
                             <div className="flex gap-2">
                                 <div className="h-7 w-7 rounded-lg bg-[#EEE7D8] dark:bg-[#1F2430]" />
                                 <div className="h-7 w-7 rounded-lg bg-[#EEE7D8] dark:bg-[#1F2430]" />
-                                <div className="h-7 w-20 rounded-lg bg-[#0F1115] dark:bg-[#F5F2EA]" />
+                                <div className="h-7 w-20 rounded-lg bg-[#0F1115] dark:bg-[#E2D9C8]" />
                             </div>
                         </div>
 
                         {/* Stats row */}
                         <div className="grid grid-cols-4 gap-3">
                             {[{ l: 'Documents', v: '24' }, { l: 'Quizzes', v: '12' }, { l: 'XP', v: '2,840' }, { l: 'Streak', v: '7d' }].map((s, i) => (
-                                <div key={i} className="p-3 rounded-xl bg-[#F2EEE4] dark:bg-[#0F1115] border border-[#E3DAC6] dark:border-[#2A2F3A]">
+                                <div key={i} className="p-3 rounded-xl bg-[#E8E2D4] dark:bg-[#0F1115] border border-[#E3DAC6] dark:border-[#2A2F3A]">
                                     <p className="text-[9px] text-[#aaa] dark:text-[#A79F90] uppercase tracking-wider">{s.l}</p>
-                                    <p className="text-[16px] font-bold text-[#0F1115] dark:text-[#F5F2EA] mt-0.5">{s.v}</p>
+                                    <p className="text-[16px] font-bold text-[#0F1115] dark:text-[#E2D9C8] mt-0.5">{s.v}</p>
                                 </div>
                             ))}
                         </div>
 
                         {/* Content area */}
                         <div className="grid grid-cols-3 gap-3">
-                            <div className="col-span-2 p-4 rounded-xl bg-[#F2EEE4] dark:bg-[#0F1115] border border-[#E3DAC6] dark:border-[#2A2F3A]">
+                            <div className="col-span-2 p-4 rounded-xl bg-[#E8E2D4] dark:bg-[#0F1115] border border-[#E3DAC6] dark:border-[#2A2F3A]">
                                 <div className="flex items-center gap-2 mb-3">
                                     <MessageSquare size={12} className="text-[#7C7365]" />
                                     <span className="text-[10px] font-medium text-[#7C7365]">AI Chat</span>
@@ -154,8 +154,8 @@ const MockupDevice = ({ className = "" }) => {
                                         <div className="h-6 flex-1 bg-[#E3DAC6] dark:bg-[#2A2F3A] rounded-lg" />
                                     </div>
                                     <div className="flex gap-2 justify-end">
-                                        <div className="h-6 w-2/3 bg-[#0F1115] dark:bg-[#F5F2EA] rounded-lg opacity-80" />
-                                        <div className="h-6 w-6 rounded-full bg-[#0F1115] dark:bg-[#F5F2EA] flex-shrink-0" />
+                                        <div className="h-6 w-2/3 bg-[#0F1115] dark:bg-[#E2D9C8] rounded-lg opacity-80" />
+                                        <div className="h-6 w-6 rounded-full bg-[#0F1115] dark:bg-[#E2D9C8] flex-shrink-0" />
                                     </div>
                                     <div className="flex gap-2">
                                         <div className="h-6 w-6 rounded-full bg-[#D6CCB5] dark:bg-[#2A2F3A] flex-shrink-0" />
@@ -164,22 +164,22 @@ const MockupDevice = ({ className = "" }) => {
                                 </div>
                             </div>
                             <div className="space-y-3">
-                                <div className="p-3 rounded-xl bg-[#F2EEE4] dark:bg-[#0F1115] border border-[#E3DAC6] dark:border-[#2A2F3A]">
+                                <div className="p-3 rounded-xl bg-[#E8E2D4] dark:bg-[#0F1115] border border-[#E3DAC6] dark:border-[#2A2F3A]">
                                     <div className="flex items-center gap-2 mb-2">
                                         <Zap size={10} className="text-[#7C7365]" />
                                         <span className="text-[9px] font-medium text-[#7C7365]">Quiz</span>
                                     </div>
                                     <div className="w-full h-2 bg-[#E3DAC6] dark:bg-[#2A2F3A] rounded-full overflow-hidden">
-                                        <div className="h-full w-3/4 bg-[#0F1115] dark:bg-[#F5F2EA] rounded-full" />
+                                        <div className="h-full w-3/4 bg-[#0F1115] dark:bg-[#E2D9C8] rounded-full" />
                                     </div>
                                     <p className="text-[9px] text-[#aaa] mt-1">75% complete</p>
                                 </div>
-                                <div className="p-3 rounded-xl bg-[#F2EEE4] dark:bg-[#0F1115] border border-[#E3DAC6] dark:border-[#2A2F3A]">
+                                <div className="p-3 rounded-xl bg-[#E8E2D4] dark:bg-[#0F1115] border border-[#E3DAC6] dark:border-[#2A2F3A]">
                                     <div className="flex items-center gap-2 mb-2">
                                         <Trophy size={10} className="text-[#7C7365]" />
                                         <span className="text-[9px] font-medium text-[#7C7365]">Level</span>
                                     </div>
-                                    <p className="text-[14px] font-bold text-[#0F1115] dark:text-[#F5F2EA]">12</p>
+                                    <p className="text-[14px] font-bold text-[#0F1115] dark:text-[#E2D9C8]">12</p>
                                     <p className="text-[9px] text-[#aaa]">840 / 1000 XP</p>
                                 </div>
                             </div>
@@ -273,10 +273,10 @@ const FeatureCard = ({ icon: Icon, title, description, delay }) => {
                     />
                 )}
                 <div className="relative z-10">
-                    <div className="w-12 h-12 rounded-2xl bg-[#EEE7D8] dark:bg-[#2A2F3A] border border-[#ebebeb] dark:border-[#2A2F3A] flex items-center justify-center mb-6 group-hover:bg-[#0F1115] dark:group-hover:bg-[#F5F2EA] group-hover:border-[#0F1115] dark:group-hover:border-white transition-all duration-500">
+                    <div className="w-12 h-12 rounded-2xl bg-[#EEE7D8] dark:bg-[#2A2F3A] border border-[#ebebeb] dark:border-[#2A2F3A] flex items-center justify-center mb-6 group-hover:bg-[#0F1115] dark:group-hover:bg-[#E2D9C8] group-hover:border-[#0F1115] dark:group-hover:border-white transition-all duration-500">
                         <Icon size={20} className="text-[#7C7365] dark:text-[#7C7365] group-hover:text-white dark:group-hover:text-[#0F1115] transition-colors duration-500" strokeWidth={1.5} />
                     </div>
-                    <h3 className="text-[15px] font-semibold text-[#0F1115] dark:text-[#F5F2EA] mb-2 tracking-[-0.01em]">{title}</h3>
+                    <h3 className="text-[15px] font-semibold text-[#0F1115] dark:text-[#E2D9C8] mb-2 tracking-[-0.01em]">{title}</h3>
                     <p className="text-[#8D8474] dark:text-[#8D8474] text-[13px] leading-relaxed">{description}</p>
                 </div>
             </div>
@@ -290,16 +290,16 @@ const TestimonialCard = ({ name, role, content, initials, delay }) => (
         <div className="p-8 rounded-[20px] bg-[#F2EEE4] dark:bg-[#0F1115] border border-[#E3DAC6] dark:border-[#2A2F3A] h-full">
             <div className="flex items-center gap-1 mb-5">
                 {[...Array(5)].map((_, i) => (
-                    <Star key={i} size={13} className="fill-[#0F1115] dark:fill-[#F5F2EA] text-[#0F1115] dark:text-[#F5F2EA]" />
+                    <Star key={i} size={13} className="fill-[#0F1115] dark:fill-[#E2D9C8] text-[#0F1115] dark:text-[#E2D9C8]" />
                 ))}
             </div>
             <p className="text-[#A79F90] dark:text-[#B8B1A3] mb-6 text-[14px] leading-[1.7]">"{content}"</p>
             <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full bg-[#0F1115] dark:bg-[#F5F2EA] flex items-center justify-center text-white dark:text-[#0F1115] text-xs font-medium tracking-wide">
+                <div className="w-9 h-9 rounded-full bg-[#0F1115] dark:bg-[#E2D9C8] flex items-center justify-center text-white dark:text-[#0F1115] text-xs font-medium tracking-wide">
                     {initials}
                 </div>
                 <div>
-                    <p className="font-semibold text-[#0F1115] dark:text-[#F5F2EA] text-[13px]">{name}</p>
+                    <p className="font-semibold text-[#0F1115] dark:text-[#E2D9C8] text-[13px]">{name}</p>
                     <p className="text-[#A79F90] dark:text-[#8D8474] text-[12px]">{role}</p>
                 </div>
             </div>
@@ -311,8 +311,8 @@ const TestimonialCard = ({ name, role, content, initials, delay }) => (
 const FAQItem = ({ question, answer, isOpen, onClick }) => (
     <div className="border-b border-[#E3DAC6] dark:border-[#2A2F3A] last:border-0">
         <button onClick={onClick} className="w-full py-6 flex items-center justify-between text-left group">
-            <span className="font-medium text-[#0F1115] dark:text-[#F5F2EA] text-[14px] group-hover:text-[#8D8474] dark:group-hover:text-[#8D8474] transition-colors">{question}</span>
-            <div className={`w-6 h-6 rounded-full border ${isOpen ? 'border-[#0F1115] dark:border-[#F5F2EA] bg-[#0F1115] dark:bg-[#F5F2EA]' : 'border-[#CFC3A8] dark:border-[#E6C55A]'} flex items-center justify-center flex-shrink-0 ml-6 transition-all duration-300`}>
+            <span className="font-medium text-[#0F1115] dark:text-[#E2D9C8] text-[14px] group-hover:text-[#8D8474] dark:group-hover:text-[#8D8474] transition-colors">{question}</span>
+            <div className={`w-6 h-6 rounded-full border ${isOpen ? 'border-[#0F1115] dark:border-[#E2D9C8] bg-[#0F1115] dark:bg-[#E2D9C8]' : 'border-[#CFC3A8] dark:border-[#E6C55A]'} flex items-center justify-center flex-shrink-0 ml-6 transition-all duration-300`}>
                 <ChevronDown size={12} className={`transition-all duration-300 ${isOpen ? 'rotate-180 text-white dark:text-[#0F1115]' : 'text-[#8D8474] dark:text-[#8D8474]'}`} />
             </div>
         </button>
@@ -326,20 +326,20 @@ const FAQItem = ({ question, answer, isOpen, onClick }) => (
 const PricingCard = ({ name, price, features, popular, delay }) => (
     <Reveal delay={delay} className={popular ? 'md:-translate-y-2' : ''}>
         <div className={`relative p-8 rounded-[20px] border transition-all duration-500 h-full ${popular
-            ? 'bg-[#0F1115] dark:bg-[#F5F2EA] border-[#2A2F3A] dark:border-[#CFC3A8] text-white dark:text-[#0F1115]'
+            ? 'bg-[#0F1115] dark:bg-[#E2D9C8] border-[#2A2F3A] dark:border-[#CFC3A8] text-white dark:text-[#0F1115]'
             : 'bg-[#F2EEE4] dark:bg-[#0F1115] border-[#E3DAC6] dark:border-[#2A2F3A] hover:bg-[#F5F2EA] dark:hover:bg-[#1F2430] hover:shadow-[0_20px_60px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_20px_60px_rgba(0,0,0,0.3)]'
             }`}>
             {popular && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#F5F2EA] dark:bg-[#0F1115] text-[#0F1115] dark:text-[#F5F2EA] text-[10px] font-bold uppercase tracking-[0.15em] px-4 py-1 rounded-full border border-[#E3DAC6] dark:border-[#2A2F3A]">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#E2D9C8] dark:bg-[#0F1115] text-[#0F1115] dark:text-[#E2D9C8] text-[10px] font-bold uppercase tracking-[0.15em] px-4 py-1 rounded-full border border-[#E3DAC6] dark:border-[#2A2F3A]">
                     Popular
                 </div>
             )}
             <p className={`text-[12px] font-semibold uppercase tracking-[0.15em] mb-1 ${popular ? 'text-white/50 dark:text-[#0F1115]/50' : 'text-[#A79F90] dark:text-[#8D8474]'}`}>{name}</p>
             <div className="mb-6">
-                <span className={`text-4xl font-bold tracking-tight ${popular ? 'text-white dark:text-[#0F1115]' : 'text-[#0F1115] dark:text-[#F5F2EA]'}`}>₹{price}</span>
+                <span className={`text-4xl font-bold tracking-tight ${popular ? 'text-white dark:text-[#0F1115]' : 'text-[#0F1115] dark:text-[#E2D9C8]'}`}>₹{price}</span>
                 <span className={`text-[13px] ${popular ? 'text-white/40 dark:text-[#0F1115]/40' : 'text-[#B8B1A3] dark:text-[#B8B1A3]'}`}>/mo</span>
             </div>
-            <div className={`w-full h-px mb-6 ${popular ? 'bg-[#F5F2EA]/10 dark:bg-[#0F1115]/10' : 'bg-[#E3DAC6] dark:bg-[#2A2F3A]'}`} />
+            <div className={`w-full h-px mb-6 ${popular ? 'bg-[#E2D9C8]/10 dark:bg-[#0F1115]/10' : 'bg-[#E3DAC6] dark:bg-[#2A2F3A]'}`} />
             <ul className="space-y-3 mb-8">
                 {features.map((f, i) => (
                     <li key={i} className={`flex items-center gap-3 text-[13px] ${popular ? 'text-white/70 dark:text-[#0F1115]/70' : 'text-[#7C7365] dark:text-[#7C7365]'}`}>
@@ -349,8 +349,8 @@ const PricingCard = ({ name, price, features, popular, delay }) => (
                 ))}
             </ul>
             <button className={`w-full py-3 rounded-xl text-[13px] font-semibold transition-all duration-300 ${popular
-                ? 'bg-[#F5F2EA] dark:bg-[#0F1115] text-[#0F1115] dark:text-[#F5F2EA] hover:bg-[#E3DAC6] dark:hover:bg-[#2A2F3A]'
-                : 'bg-[#0F1115] dark:bg-[#F5F2EA] text-white dark:text-[#0F1115] hover:bg-[#2A2F3A] dark:hover:bg-[#CFC3A8]'
+                ? 'bg-[#E2D9C8] dark:bg-[#0F1115] text-[#0F1115] dark:text-[#E2D9C8] hover:bg-[#E3DAC6] dark:hover:bg-[#2A2F3A]'
+                : 'bg-[#0F1115] dark:bg-[#E2D9C8] text-white dark:text-[#0F1115] hover:bg-[#2A2F3A] dark:hover:bg-[#CFC3A8]'
                 }`}>
                 Get Started
             </button>
@@ -362,7 +362,7 @@ const PricingCard = ({ name, price, features, popular, delay }) => (
 const Marquee = () => {
     const items = ['Trusted by 10,000+ learners', '4.9★ average rating', 'AI-Powered', 'Free to start', '24/7 AI assistance', 'Secure & Private'];
     return (
-        <div className="overflow-hidden border-y border-[#E3DAC6] dark:border-[#141414] py-3.5 bg-[#F2EEE4] dark:bg-[#0d0d0d]">
+        <div className="overflow-hidden border-y border-[#E3DAC6] dark:border-[#141414] py-3.5 bg-[#E6E0D2] dark:bg-[#0d0d0d]">
             <div className="flex animate-marquee whitespace-nowrap">
                 {[...items, ...items, ...items].map((item, i) => (
                     <span key={i} className="mx-8 text-[12px] font-medium text-[#A79F90] dark:text-[#8D8474] uppercase tracking-[0.15em] flex items-center gap-2">
@@ -422,7 +422,7 @@ const Home = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-[#F5F2EA] dark:bg-[#0F1115] text-[#0F1115] dark:text-[#F5F2EA] antialiased selection:bg-[#0F1115] selection:text-white dark:selection:bg-[#F5F2EA] dark:selection:text-[#0F1115] transition-colors duration-500" style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>
+        <div className="min-h-screen bg-[#EDE8DC] dark:bg-[#0F1115] text-[#0F1115] dark:text-[#E2D9C8] antialiased selection:bg-[#0F1115] selection:text-white dark:selection:bg-[#E2D9C8] dark:selection:text-[#0F1115] transition-colors duration-500" style={{ fontFamily: "'Inter', system-ui, sans-serif" }}>
 
             {/* #3 Grain/Noise Texture Overlay */}
             <div className="fixed inset-0 z-[1] pointer-events-none opacity-[0.025] dark:opacity-[0.04]"
@@ -434,11 +434,11 @@ const Home = () => {
             />
 
             {/* ══ NAVBAR ══ */}
-            <nav className="fixed w-full z-50 bg-[#F5F2EA]/80 dark:bg-[#0F1115]/80 backdrop-blur-xl border-b border-[#EEE7D8] dark:border-[#1F2430]">
+            <nav className="fixed w-full z-50 bg-[#EDE8DC]/80 dark:bg-[#0F1115]/80 backdrop-blur-xl border-b border-[#E3DAC6] dark:border-[#1F2430]">
                 <div className="max-w-6xl mx-auto px-6">
                     <div className="flex justify-between items-center h-16">
                         <div className="flex items-center gap-2.5">
-                            <div className="w-8 h-8 bg-[#0F1115] dark:bg-[#F5F2EA] rounded-lg flex items-center justify-center">
+                                <div className="w-8 h-8 bg-[#0F1115] dark:bg-[#E2D9C8] rounded-lg flex items-center justify-center">
                                 <BrainCircuit className="text-white dark:text-[#0F1115] h-4 w-4" strokeWidth={1.5} />
                             </div>
                             <span className="text-[15px] font-semibold tracking-[-0.02em]">CareerCraft AI</span>
@@ -455,7 +455,7 @@ const Home = () => {
                                 {isDark ? <Sun className="h-3.5 w-3.5 text-[#7C7365]" strokeWidth={1.5} /> : <Moon className="h-3.5 w-3.5 text-[#7C7365]" strokeWidth={1.5} />}
                             </button>
                             {user ? (
-                                <Link to="/dashboard" className="bg-[#0F1115] dark:bg-[#F5F2EA] text-white dark:text-[#0F1115] px-5 py-2 rounded-lg text-[13px] font-semibold hover:bg-[#E6C55A] dark:hover:bg-[#B8B1A3] transition-colors">
+                                <Link to="/dashboard" className="bg-[#0F1115] dark:bg-[#E2D9C8] text-white dark:text-[#0F1115] px-5 py-2 rounded-lg text-[13px] font-semibold hover:bg-[#E6C55A] dark:hover:bg-[#B8B1A3] transition-colors">
                                     Dashboard
                                 </Link>
                             ) : (
@@ -463,7 +463,7 @@ const Home = () => {
                                     <Link to="/login" className="text-[#8D8474] dark:text-[#8D8474] hover:text-[#0F1115] dark:hover:text-[#F5F2EA] font-medium transition-colors hidden sm:block text-[13px]">
                                         Sign in
                                     </Link>
-                                    <Link to="/register" className="bg-[#0F1115] dark:bg-[#F5F2EA] text-white dark:text-[#0F1115] px-5 py-2 rounded-lg text-[13px] font-semibold hover:bg-[#E6C55A] dark:hover:bg-[#B8B1A3] transition-colors">
+                                    <Link to="/register" className="bg-[#0F1115] dark:bg-[#E2D9C8] text-white dark:text-[#0F1115] px-5 py-2 rounded-lg text-[13px] font-semibold hover:bg-[#E6C55A] dark:hover:bg-[#B8B1A3] transition-colors">
                                         Get Started
                                     </Link>
                                 </>
@@ -487,7 +487,7 @@ const Home = () => {
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6 }}
-                            className="inline-flex items-center gap-2 border border-[#F5F2EA] dark:border-[#2A2F3A] px-4 py-1.5 rounded-full mb-8 bg-[#F5F2EA]/60 dark:bg-[#0F1115]/60 backdrop-blur-sm"
+                            className="inline-flex items-center gap-2 border border-[#E3DAC6] dark:border-[#2A2F3A] px-4 py-1.5 rounded-full mb-8 bg-[#EDE8DC]/60 dark:bg-[#0F1115]/60 backdrop-blur-sm"
                         >
                             <div className="w-1.5 h-1.5 rounded-full bg-[#0F1115] dark:bg-[#F5F2EA] animate-pulse" />
                             <span className="text-[#7C7365] dark:text-[#7C7365] text-[12px] font-medium tracking-wide uppercase">AI-Powered Learning</span>
@@ -523,7 +523,7 @@ const Home = () => {
                                 <motion.div
                                     whileHover={{ scale: 1.03, boxShadow: '0 20px 50px rgba(0,0,0,0.12)' }}
                                     whileTap={{ scale: 0.98 }}
-                                    className="group bg-[#0F1115] dark:bg-[#F5F2EA] text-white dark:text-[#0F1115] px-8 py-3.5 rounded-xl text-[14px] font-semibold transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer"
+                                    className="group bg-[#0F1115] dark:bg-[#E2D9C8] text-white dark:text-[#0F1115] px-8 py-3.5 rounded-xl text-[14px] font-semibold transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer"
                                 >
                                     Start Learning Free
                                     <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" strokeWidth={2} />
@@ -533,7 +533,7 @@ const Home = () => {
                                 <motion.div
                                     whileHover={{ scale: 1.03 }}
                                     whileTap={{ scale: 0.98 }}
-                                    className="border border-[#F5F2EA] dark:border-[#2A2F3A] text-[#A79F90] dark:text-[#7C7365] px-8 py-3.5 rounded-xl text-[14px] font-semibold hover:border-[#B8B1A3] dark:hover:border-[#444] hover:text-[#0F1115] dark:hover:text-[#F5F2EA] transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer bg-[#F5F2EA]/60 dark:bg-[#0F1115]/60 backdrop-blur-sm"
+                                    className="border border-[#E3DAC6] dark:border-[#2A2F3A] text-[#A79F90] dark:text-[#7C7365] px-8 py-3.5 rounded-xl text-[14px] font-semibold hover:border-[#B8B1A3] dark:hover:border-[#444] hover:text-[#0F1115] dark:hover:text-[#F5F2EA] transition-all duration-300 inline-flex items-center justify-center gap-2 cursor-pointer bg-[#EDE8DC]/60 dark:bg-[#0F1115]/60 backdrop-blur-sm"
                                 >
                                     <Play size={15} strokeWidth={2} />
                                     See How It Works
@@ -603,7 +603,9 @@ const Home = () => {
 
             {/* ══ HOW IT WORKS ══ */}
             <section id="how-it-works" className="py-28 px-4 relative z-10">
-                <div className="max-w-4xl mx-auto">
+                {/* Warm tonal depth layer */}
+                <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 80% 60% at 50% 50%, rgba(210,196,168,0.18), transparent)' }} />
+                <div className="max-w-4xl mx-auto relative">
                     <div className="text-center mb-20">
                         <Reveal>
                             <p className="text-[#B8B1A3] dark:text-[#B8B1A3] text-[11px] font-semibold uppercase tracking-[0.2em] mb-4">How It Works</p>
@@ -626,7 +628,7 @@ const Home = () => {
                             <Reveal key={i} delay={i * 0.12} className="text-center">
                                 <motion.div
                                     whileHover={{ scale: 1.05 }}
-                                    className="w-12 h-12 mx-auto mb-6 rounded-full bg-[#F2EEE4] dark:bg-[#0F1115] border border-[#E3DAC6] dark:border-[#2A2F3A] flex items-center justify-center"
+                                    className="w-12 h-12 mx-auto mb-6 rounded-full bg-[#E8E2D4] dark:bg-[#0F1115] border border-[#D6CCB5] dark:border-[#2A2F3A] flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.06)]"
                                 >
                                     <span className="text-[13px] font-bold tracking-tight">{step.num}</span>
                                 </motion.div>
@@ -740,7 +742,7 @@ const Home = () => {
                                         <motion.div
                                             whileHover={{ scale: 1.04, boxShadow: '0 12px 40px rgba(255,255,255,0.1)' }}
                                             whileTap={{ scale: 0.97 }}
-                                            className="bg-[#F5F2EA] dark:bg-[#0F1115] text-[#0F1115] dark:text-[#F5F2EA] px-8 py-3.5 rounded-xl text-[14px] font-semibold transition-colors inline-flex items-center justify-center gap-2 cursor-pointer"
+                                            className="bg-[#EDE8DC] dark:bg-[#13110E] text-[#0F1115] dark:text-[#E2D9C8] px-8 py-3.5 rounded-xl text-[14px] font-semibold transition-colors inline-flex items-center justify-center gap-2 cursor-pointer"
                                         >
                                             Start Free Today
                                             <ArrowRight size={16} strokeWidth={2} />
@@ -766,7 +768,7 @@ const Home = () => {
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
                         <div>
                             <div className="flex items-center gap-2.5 mb-5">
-                                <div className="w-7 h-7 bg-[#0F1115] dark:bg-[#F5F2EA] rounded-lg flex items-center justify-center">
+                                <div className="w-7 h-7 bg-[#0F1115] dark:bg-[#E2D9C8] rounded-lg flex items-center justify-center">
                                     <BrainCircuit className="text-white dark:text-[#0F1115] h-3.5 w-3.5" strokeWidth={1.5} />
                                 </div>
                                 <span className="text-[14px] font-semibold">CareerCraft AI</span>

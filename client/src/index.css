@@ -10,13 +10,13 @@
 
     /* Glass effect with tint options */
     .glass {
-        background: rgba(255, 255, 255, 0.8);
+        background: rgba(237, 232, 220, 0.82);
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
     }
 
     .dark .glass {
-        background: rgba(17, 24, 39, 0.8);
+        background: rgba(19, 17, 14, 0.85);
     }
 
     .glass-indigo {
@@ -357,7 +357,7 @@
 body {
     @apply transition-colors duration-300 ease-in-out;
     @apply text-gray-900 dark:text-gray-100;
-    @apply bg-[#F5F2EA] dark:bg-gray-950;
+    @apply bg-[#EDE8DC] dark:bg-[#13110E];
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
@@ -396,7 +396,7 @@ body {
 
 .dark ::selection {
     background: rgba(238, 238, 238, 0.15);
-    color: #F5F2EA;
+    color: #EDE8DC;
 }
 
 /* Focus ring styling */
