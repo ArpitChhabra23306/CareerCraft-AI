@@ -70,7 +70,7 @@ export const chunkText = (text, chunkSize = CHUNK_SIZE, overlap = CHUNK_OVERLAP)
         start = bestBreak - overlap;
 
         // Safety: ensure forward progress
-        if (start <= chunks.length > 0 ? (start) : 0) {
+        if (start <= (chunks.length > 0 ? (bestBreak - overlap) : 0)) {
             start = bestBreak;
         }
     }
@@ -168,7 +168,6 @@ export const ingestDocument = async (documentId) => {
     }
 
     console.log(`[RAG] Chunked "${doc.filename}" into ${chunks.length} chunks`);
-    console.log(`[RAG] Chunk sizes: ${chunks.map(c => c.length).join(', ')} chars`);
 
     // Step 2: Embed all chunks
     const embeddings = await generateEmbeddings(chunks);
@@ -189,7 +188,7 @@ export const ingestDocument = async (documentId) => {
     doc.chunkCount = chunks.length;
     await doc.save();
 
-    console.log(`[RAG] Ingestion complete for "${doc.filename}": ${chunks.length} chunks stored`);
+    console.log(`[RAG] Ingestion complete: ${chunks.length} chunks stored`);
     return chunks.length;
 };
 
@@ -223,6 +222,6 @@ export const searchSimilarChunks = async (query, documentId, topK = 5) => {
         }
     ]);
 
-    console.log(`[RAG] Vector search returned ${results.length} chunks (scores: ${results.map(r => r.score?.toFixed(3)).join(', ')})`);
+    console.log(`[RAG] Vector search returned ${results.length} chunks`);
     return results;
 };

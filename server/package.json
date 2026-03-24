@@ -15,6 +15,7 @@
   "dependencies": {
     "@getbrevo/brevo": "^5.0.1",
     "@google/genai": "^1.38.0",
+    "axios": "^1.13.6",
     "bcryptjs": "^3.0.3",
     "cloudinary": "^1.41.3",
     "cors": "^2.8.6",
