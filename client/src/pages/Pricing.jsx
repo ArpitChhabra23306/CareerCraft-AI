@@ -60,6 +60,10 @@ const PLANS = {
 
 const PlanCard = ({ planKey, plan, currentPlan, onSubscribe, loading, index }) => {
     const isCurrentPlan = currentPlan === planKey;
+    let isDowngrade = false;
+    if (currentPlan === 'enterprise' && (planKey === 'pro' || planKey === 'free')) isDowngrade = true;
+    if (currentPlan === 'pro' && planKey === 'free') isDowngrade = true;
+    
     const Icon = plan.icon;
 
     return (
@@ -125,9 +129,9 @@ const PlanCard = ({ planKey, plan, currentPlan, onSubscribe, loading, index }) =
 
             <button
                 onClick={() => onSubscribe(planKey)}
-                disabled={isCurrentPlan || loading || planKey === 'free'}
+                disabled={isCurrentPlan || isDowngrade || loading || planKey === 'free'}
                 className={`w-full py-3 px-4 rounded-xl text-[13px] font-semibold transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-40
-                    ${isCurrentPlan
+                    ${(isCurrentPlan || isDowngrade)
                         ? plan.popular
                             ? 'bg-[#F5F2EA]/20 dark:bg-[#0F1115]/20 cursor-default'
                             : 'bg-[#E3DAC6] dark:bg-[#2A2F3A] text-[#0F1115] dark:text-[#F5F2EA] cursor-default'
@@ -146,6 +150,8 @@ const PlanCard = ({ planKey, plan, currentPlan, onSubscribe, loading, index }) =
                         <Check size={14} strokeWidth={1.5} />
                         Current Plan
                     </>
+                ) : isDowngrade ? (
+                    'Included in Plan'
                 ) : planKey === 'free' ? (
                     'Free Forever'
                 ) : (
@@ -169,7 +175,7 @@ const Pricing = () => {
     const fetchSubscriptionStatus = async () => {
         try {
             const res = await api.get('/subscription/status');
-            setCurrentPlan(res.data.subscription?.plan || 'free');
+            setCurrentPlan(res.data.subscription?.plan?.toLowerCase() || 'free');
         } catch (err) {
             console.error('Failed to fetch subscription status:', err);
         }

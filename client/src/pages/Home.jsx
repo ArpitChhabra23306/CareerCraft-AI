@@ -323,36 +323,43 @@ const FAQItem = ({ question, answer, isOpen, onClick }) => (
 );
 
 /* ─── Pricing Card ─── */
-const PricingCard = ({ name, price, features, popular, delay }) => (
+const PricingCard = ({ name, price, features, popular, isCurrentPlan, isUpgrade, delay }) => (
     <Reveal delay={delay} className={popular ? 'md:-translate-y-2' : ''}>
-        <div className={`relative p-8 rounded-[20px] border transition-all duration-500 h-full ${popular
+        <div className={`relative p-8 rounded-[20px] border transition-all duration-500 h-full ${popular || isCurrentPlan
             ? 'bg-[#0F1115] dark:bg-[#E2D9C8] border-[#2A2F3A] dark:border-[#CFC3A8] text-white dark:text-[#0F1115]'
             : 'bg-[#F2EEE4] dark:bg-[#0F1115] border-[#E3DAC6] dark:border-[#2A2F3A] hover:bg-[#F5F2EA] dark:hover:bg-[#1F2430] hover:shadow-[0_20px_60px_rgba(0,0,0,0.04)] dark:hover:shadow-[0_20px_60px_rgba(0,0,0,0.3)]'
             }`}>
-            {popular && (
+            {popular && !isCurrentPlan && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#E2D9C8] dark:bg-[#0F1115] text-[#0F1115] dark:text-[#E2D9C8] text-[10px] font-bold uppercase tracking-[0.15em] px-4 py-1 rounded-full border border-[#E3DAC6] dark:border-[#2A2F3A]">
                     Popular
                 </div>
             )}
-            <p className={`text-[12px] font-semibold uppercase tracking-[0.15em] mb-1 ${popular ? 'text-white/50 dark:text-[#0F1115]/50' : 'text-[#A79F90] dark:text-[#8D8474]'}`}>{name}</p>
+            {isCurrentPlan && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#D4AF37] text-white text-[10px] font-bold uppercase tracking-[0.15em] px-4 py-1 rounded-full shadow-md">
+                    Current Plan
+                </div>
+            )}
+            <p className={`text-[12px] font-semibold uppercase tracking-[0.15em] mb-1 ${(popular || isCurrentPlan) ? 'text-white/50 dark:text-[#0F1115]/50' : 'text-[#A79F90] dark:text-[#8D8474]'}`}>{name}</p>
             <div className="mb-6">
-                <span className={`text-4xl font-bold tracking-tight ${popular ? 'text-white dark:text-[#0F1115]' : 'text-[#0F1115] dark:text-[#E2D9C8]'}`}>₹{price}</span>
-                <span className={`text-[13px] ${popular ? 'text-white/40 dark:text-[#0F1115]/40' : 'text-[#B8B1A3] dark:text-[#B8B1A3]'}`}>/mo</span>
+                <span className={`text-4xl font-bold tracking-tight ${(popular || isCurrentPlan) ? 'text-white dark:text-[#0F1115]' : 'text-[#0F1115] dark:text-[#E2D9C8]'}`}>₹{price}</span>
+                <span className={`text-[13px] ${(popular || isCurrentPlan) ? 'text-white/40 dark:text-[#0F1115]/40' : 'text-[#B8B1A3] dark:text-[#B8B1A3]'}`}>/mo</span>
             </div>
-            <div className={`w-full h-px mb-6 ${popular ? 'bg-[#E2D9C8]/10 dark:bg-[#0F1115]/10' : 'bg-[#E3DAC6] dark:bg-[#2A2F3A]'}`} />
+            <div className={`w-full h-px mb-6 ${(popular || isCurrentPlan) ? 'bg-[#E2D9C8]/10 dark:bg-[#0F1115]/10' : 'bg-[#E3DAC6] dark:bg-[#2A2F3A]'}`} />
             <ul className="space-y-3 mb-8">
                 {features.map((f, i) => (
-                    <li key={i} className={`flex items-center gap-3 text-[13px] ${popular ? 'text-white/70 dark:text-[#0F1115]/70' : 'text-[#7C7365] dark:text-[#7C7365]'}`}>
-                        <Check size={14} className={popular ? 'text-white/50 dark:text-[#0F1115]/50' : 'text-[#B8B1A3] dark:text-[#B8B1A3]'} strokeWidth={2} />
+                    <li key={i} className={`flex items-center gap-3 text-[13px] ${(popular || isCurrentPlan) ? 'text-white/70 dark:text-[#0F1115]/70' : 'text-[#7C7365] dark:text-[#7C7365]'}`}>
+                        <Check size={14} className={(popular || isCurrentPlan) ? 'text-white/50 dark:text-[#0F1115]/50' : 'text-[#B8B1A3] dark:text-[#B8B1A3]'} strokeWidth={2} />
                         {f}
                     </li>
                 ))}
             </ul>
-            <button className={`w-full py-3 rounded-xl text-[13px] font-semibold transition-all duration-300 ${popular
-                ? 'bg-[#E2D9C8] dark:bg-[#0F1115] text-[#0F1115] dark:text-[#E2D9C8] hover:bg-[#E3DAC6] dark:hover:bg-[#2A2F3A]'
-                : 'bg-[#0F1115] dark:bg-[#E2D9C8] text-white dark:text-[#0F1115] hover:bg-[#2A2F3A] dark:hover:bg-[#CFC3A8]'
+            <button
+                disabled={isCurrentPlan}
+                className={`w-full py-3 rounded-xl text-[13px] font-semibold transition-all duration-300 ${(popular || isCurrentPlan)
+                    ? 'bg-[#E2D9C8] dark:bg-[#0F1115] text-[#0F1115] dark:text-[#E2D9C8] hover:bg-[#E3DAC6] dark:hover:bg-[#2A2F3A] disabled:opacity-50 disabled:cursor-not-allowed'
+                    : 'bg-[#0F1115] dark:bg-[#E2D9C8] text-white dark:text-[#0F1115] hover:bg-[#2A2F3A] dark:hover:bg-[#CFC3A8]'
                 }`}>
-                Get Started
+                {isCurrentPlan ? 'Active' : (isUpgrade ? 'Upgrade' : 'Get Started')}
             </button>
         </div>
     </Reveal>
@@ -658,16 +665,68 @@ const Home = () => {
                             <p className="text-[#8D8474] dark:text-[#8D8474] text-[14px]">No hidden fees. Cancel anytime.</p>
                         </Reveal>
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <PricingCard name="Free" price="0" features={['3 Documents', '50 AI Chats/month', '2 Quizzes/day']} delay={0.1} />
-                        <PricingCard name="Pro" price="299" features={['Unlimited Documents', '500 AI Chats/month', 'Unlimited Quizzes', 'Mock Interviews']} popular delay={0.15} />
-                        <PricingCard name="Enterprise" price="999" features={['Everything in Pro', 'Unlimited AI', 'Priority Support']} delay={0.2} />
-                    </div>
-                    <div className="text-center mt-10">
-                        <Link to="/pricing" className="inline-flex items-center gap-2 text-[#8D8474] dark:text-[#8D8474] hover:text-[#0F1115] dark:hover:text-[#F5F2EA] font-medium text-[13px] hover:gap-3 transition-all">
-                            View full comparison <ArrowUpRight size={14} />
-                        </Link>
-                    </div>
+                        {/* Dynamic Pricing Logic based on User Subscription */}
+                        {user?.subscription === 'Enterprise' ? (
+                            <div className="max-w-md mx-auto">
+                                <PricingCard
+                                    name="Enterprise"
+                                    price="999"
+                                    features={['Everything in Pro', 'Unlimited AI', 'Priority Support']}
+                                    isCurrentPlan={true}
+                                    delay={0.1}
+                                />
+                                <p className="text-center text-[#8D8474] mt-8 text-[13px]">You are on the highest tier. Enjoy all features!</p>
+                            </div>
+                        ) : user?.subscription === 'Pro' ? (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+                                <PricingCard
+                                    name="Pro"
+                                    price="299"
+                                    features={['Unlimited Documents', '500 AI Chats/month', 'Unlimited Quizzes', 'Mock Interviews']}
+                                    isCurrentPlan={true}
+                                    delay={0.1}
+                                />
+                                <PricingCard
+                                    name="Enterprise"
+                                    price="999"
+                                    features={['Everything in Pro', 'Unlimited AI', 'Priority Support']}
+                                    isUpgrade={true}
+                                    delay={0.2}
+                                />
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <PricingCard
+                                    name="Free"
+                                    price="0"
+                                    features={['3 Documents', '50 AI Chats/month', '2 Quizzes/day']}
+                                    isCurrentPlan={user ? true : false}
+                                    delay={0.1}
+                                />
+                                <PricingCard
+                                    name="Pro"
+                                    price="299"
+                                    features={['Unlimited Documents', '500 AI Chats/month', 'Unlimited Quizzes', 'Mock Interviews']}
+                                    popular
+                                    isUpgrade={user ? true : false}
+                                    delay={0.15}
+                                />
+                                <PricingCard
+                                    name="Enterprise"
+                                    price="999"
+                                    features={['Everything in Pro', 'Unlimited AI', 'Priority Support']}
+                                    isUpgrade={user ? true : false}
+                                    delay={0.2}
+                                />
+                            </div>
+                        )}
+                        <div className="text-center mt-10">
+                            {user?.subscription !== 'Enterprise' && (
+                                <Link to="/pricing" className="inline-flex items-center gap-2 text-[#8D8474] dark:text-[#8D8474] hover:text-[#0F1115] dark:hover:text-[#F5F2EA] font-medium text-[13px] hover:gap-3 transition-all">
+                                    View full comparison <ArrowUpRight size={14} />
+                                </Link>
+                            )}
+                        </div>
                 </div>
             </section>
 

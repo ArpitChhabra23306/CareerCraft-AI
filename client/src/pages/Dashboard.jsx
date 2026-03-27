@@ -42,7 +42,7 @@ const SkeletonCard = () => (
 
 // Subscription Banner Component
 const SubscriptionBanner = ({ subscription }) => {
-    const plan = subscription?.plan || 'free';
+    const plan = (subscription?.subscription?.plan || 'free').toLowerCase();
     const isPro = plan === 'pro';
     const isEnterprise = plan === 'enterprise';
     const isPaid = isPro || isEnterprise;
