@@ -119,8 +119,11 @@ const MockupDevice = ({ className = "" }) => {
                         {/* Top bar */}
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3">
-                                <div className="w-8 h-8 rounded-lg bg-[#0F1115] dark:bg-[#E2D9C8] flex items-center justify-center">
-                                    <BrainCircuit className="w-4 h-4 text-white dark:text-[#0F1115]" strokeWidth={1.5} />
+                                <div className="relative flex items-center justify-center w-8 h-8">
+                                    <div className="absolute inset-0 bg-gradient-to-tr from-[#D4AF37] to-[#8D8474] rounded-lg blur-[6px] opacity-40 dark:opacity-60"></div>
+                                    <div className="relative w-full h-full bg-gradient-to-b from-[#FAF8F5] to-[#E3DAC6] dark:from-[#2A2F3A] dark:to-[#0F1115] rounded-lg flex items-center justify-center border border-[#D4AF37]/30 shadow-sm">
+                                        <Sparkles className="text-[#0F1115] dark:text-[#E2D9C8] h-4 w-4" strokeWidth={1.5} />
+                                    </div>
                                 </div>
                                 <div className="h-3 w-24 bg-[#E3DAC6] dark:bg-[#2A2F3A] rounded-full" />
                             </div>
@@ -358,7 +361,7 @@ const PricingCard = ({ name, price, features, popular, isCurrentPlan, isUpgrade,
                 className={`w-full py-3 rounded-xl text-[13px] font-semibold transition-all duration-300 ${(popular || isCurrentPlan)
                     ? 'bg-[#E2D9C8] dark:bg-[#0F1115] text-[#0F1115] dark:text-[#E2D9C8] hover:bg-[#E3DAC6] dark:hover:bg-[#2A2F3A] disabled:opacity-50 disabled:cursor-not-allowed'
                     : 'bg-[#0F1115] dark:bg-[#E2D9C8] text-white dark:text-[#0F1115] hover:bg-[#2A2F3A] dark:hover:bg-[#CFC3A8]'
-                }`}>
+                    }`}>
                 {isCurrentPlan ? 'Active' : (isUpgrade ? 'Upgrade' : 'Get Started')}
             </button>
         </div>
@@ -445,10 +448,15 @@ const Home = () => {
                 <div className="max-w-6xl mx-auto px-6">
                     <div className="flex justify-between items-center h-16">
                         <div className="flex items-center gap-2.5">
-                                <div className="w-8 h-8 bg-[#0F1115] dark:bg-[#E2D9C8] rounded-lg flex items-center justify-center">
-                                <BrainCircuit className="text-white dark:text-[#0F1115] h-4 w-4" strokeWidth={1.5} />
+                            <div className="relative flex items-center justify-center w-8 h-8">
+                                <div className="absolute inset-0 bg-gradient-to-tr from-[#D4AF37] to-[#8D8474] rounded-lg blur-[6px] opacity-40 dark:opacity-60"></div>
+                                <div className="relative w-full h-full bg-gradient-to-b from-[#FAF8F5] to-[#E3DAC6] dark:from-[#2A2F3A] dark:to-[#0F1115] rounded-lg flex items-center justify-center border border-[#D4AF37]/30 shadow-sm">
+                                    <Sparkles className="text-[#0F1115] dark:text-[#E2D9C8] h-4 w-4" strokeWidth={1.5} />
+                                </div>
                             </div>
-                            <span className="text-[15px] font-semibold tracking-[-0.02em]">CareerCraft AI</span>
+                            <span className="text-[15px] font-bold tracking-tight text-[#0F1115] dark:text-[#F5F2EA]">
+                                CareerCraft<span className="text-[#8D8474] italic font-serif ml-0.5">.ai</span>
+                            </span>
                         </div>
                         <div className="hidden md:flex items-center gap-8">
                             {['Features', 'How it Works', 'Pricing', 'FAQ'].map((item) => (
@@ -665,68 +673,68 @@ const Home = () => {
                             <p className="text-[#8D8474] dark:text-[#8D8474] text-[14px]">No hidden fees. Cancel anytime.</p>
                         </Reveal>
                     </div>
-                        {/* Dynamic Pricing Logic based on User Subscription */}
-                        {user?.subscription === 'Enterprise' ? (
-                            <div className="max-w-md mx-auto">
-                                <PricingCard
-                                    name="Enterprise"
-                                    price="999"
-                                    features={['Everything in Pro', 'Unlimited AI', 'Priority Support']}
-                                    isCurrentPlan={true}
-                                    delay={0.1}
-                                />
-                                <p className="text-center text-[#8D8474] mt-8 text-[13px]">You are on the highest tier. Enjoy all features!</p>
-                            </div>
-                        ) : user?.subscription === 'Pro' ? (
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
-                                <PricingCard
-                                    name="Pro"
-                                    price="299"
-                                    features={['Unlimited Documents', '500 AI Chats/month', 'Unlimited Quizzes', 'Mock Interviews']}
-                                    isCurrentPlan={true}
-                                    delay={0.1}
-                                />
-                                <PricingCard
-                                    name="Enterprise"
-                                    price="999"
-                                    features={['Everything in Pro', 'Unlimited AI', 'Priority Support']}
-                                    isUpgrade={true}
-                                    delay={0.2}
-                                />
-                            </div>
-                        ) : (
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <PricingCard
-                                    name="Free"
-                                    price="0"
-                                    features={['3 Documents', '50 AI Chats/month', '2 Quizzes/day']}
-                                    isCurrentPlan={user ? true : false}
-                                    delay={0.1}
-                                />
-                                <PricingCard
-                                    name="Pro"
-                                    price="299"
-                                    features={['Unlimited Documents', '500 AI Chats/month', 'Unlimited Quizzes', 'Mock Interviews']}
-                                    popular
-                                    isUpgrade={user ? true : false}
-                                    delay={0.15}
-                                />
-                                <PricingCard
-                                    name="Enterprise"
-                                    price="999"
-                                    features={['Everything in Pro', 'Unlimited AI', 'Priority Support']}
-                                    isUpgrade={user ? true : false}
-                                    delay={0.2}
-                                />
-                            </div>
-                        )}
-                        <div className="text-center mt-10">
-                            {user?.subscription !== 'Enterprise' && (
-                                <Link to="/pricing" className="inline-flex items-center gap-2 text-[#8D8474] dark:text-[#8D8474] hover:text-[#0F1115] dark:hover:text-[#F5F2EA] font-medium text-[13px] hover:gap-3 transition-all">
-                                    View full comparison <ArrowUpRight size={14} />
-                                </Link>
-                            )}
+                    {/* Dynamic Pricing Logic based on User Subscription */}
+                    {user?.subscription === 'Enterprise' ? (
+                        <div className="max-w-md mx-auto">
+                            <PricingCard
+                                name="Enterprise"
+                                price="999"
+                                features={['Everything in Pro', 'Unlimited AI', 'Priority Support']}
+                                isCurrentPlan={true}
+                                delay={0.1}
+                            />
+                            <p className="text-center text-[#8D8474] mt-8 text-[13px]">You are on the highest tier. Enjoy all features!</p>
                         </div>
+                    ) : user?.subscription === 'Pro' ? (
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+                            <PricingCard
+                                name="Pro"
+                                price="299"
+                                features={['Unlimited Documents', '500 AI Chats/month', 'Unlimited Quizzes', 'Mock Interviews']}
+                                isCurrentPlan={true}
+                                delay={0.1}
+                            />
+                            <PricingCard
+                                name="Enterprise"
+                                price="999"
+                                features={['Everything in Pro', 'Unlimited AI', 'Priority Support']}
+                                isUpgrade={true}
+                                delay={0.2}
+                            />
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <PricingCard
+                                name="Free"
+                                price="0"
+                                features={['3 Documents', '50 AI Chats/month', '2 Quizzes/day']}
+                                isCurrentPlan={user ? true : false}
+                                delay={0.1}
+                            />
+                            <PricingCard
+                                name="Pro"
+                                price="299"
+                                features={['Unlimited Documents', '500 AI Chats/month', 'Unlimited Quizzes', 'Mock Interviews']}
+                                popular
+                                isUpgrade={user ? true : false}
+                                delay={0.15}
+                            />
+                            <PricingCard
+                                name="Enterprise"
+                                price="999"
+                                features={['Everything in Pro', 'Unlimited AI', 'Priority Support']}
+                                isUpgrade={user ? true : false}
+                                delay={0.2}
+                            />
+                        </div>
+                    )}
+                    <div className="text-center mt-10">
+                        {user?.subscription !== 'Enterprise' && (
+                            <Link to="/pricing" className="inline-flex items-center gap-2 text-[#8D8474] dark:text-[#8D8474] hover:text-[#0F1115] dark:hover:text-[#F5F2EA] font-medium text-[13px] hover:gap-3 transition-all">
+                                View full comparison <ArrowUpRight size={14} />
+                            </Link>
+                        )}
+                    </div>
                 </div>
             </section>
 
@@ -827,10 +835,15 @@ const Home = () => {
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
                         <div>
                             <div className="flex items-center gap-2.5 mb-5">
-                                <div className="w-7 h-7 bg-[#0F1115] dark:bg-[#E2D9C8] rounded-lg flex items-center justify-center">
-                                    <BrainCircuit className="text-white dark:text-[#0F1115] h-3.5 w-3.5" strokeWidth={1.5} />
+                                <div className="relative flex items-center justify-center w-7 h-7">
+                                    <div className="absolute inset-0 bg-gradient-to-tr from-[#D4AF37] to-[#8D8474] rounded-lg blur-[6px] opacity-40 dark:opacity-60"></div>
+                                    <div className="relative w-full h-full bg-gradient-to-b from-[#FAF8F5] to-[#E3DAC6] dark:from-[#2A2F3A] dark:to-[#0F1115] rounded-lg flex items-center justify-center border border-[#D4AF37]/30 shadow-sm">
+                                        <Sparkles className="text-[#0F1115] dark:text-[#E2D9C8] h-3.5 w-3.5" strokeWidth={1.5} />
+                                    </div>
                                 </div>
-                                <span className="text-[14px] font-semibold">CareerCraft AI</span>
+                                <span className="text-[14px] font-bold tracking-tight text-[#0F1115] dark:text-[#F5F2EA]">
+                                    CareerCraft<span className="text-[#8D8474] italic font-serif ml-0.5">.ai</span>
+                                </span>
                             </div>
                             <p className="text-[#A79F90] dark:text-[#8D8474] text-[13px] leading-relaxed">AI-powered learning for students and professionals.</p>
                         </div>

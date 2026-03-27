@@ -18,6 +18,7 @@ import {
     X,
     Trophy,
     CreditCard,
+    Sparkles,
 } from 'lucide-react';
 
 const SidebarItem = ({ icon: Icon, label, path, active, collapsed }) => (
@@ -85,14 +86,22 @@ const Layout = () => {
                 {/* Header */}
                 <div className={`p-5 border-b border-[#E3DAC6] dark:border-[#2A2F3A] flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'}`}>
                     <Link to="/dashboard" className={`flex items-center gap-2.5 ${isCollapsed ? 'hidden' : 'flex'}`}>
-                        <div className="w-8 h-8 bg-[#0F1115] dark:bg-[#F5F2EA] rounded-lg flex items-center justify-center">
-                            <BrainCircuit className="text-white dark:text-[#0F1115] h-4 w-4" strokeWidth={1.5} />
+                        <div className="relative flex items-center justify-center w-8 h-8">
+                            <div className="absolute inset-0 bg-gradient-to-tr from-[#D4AF37] to-[#8D8474] rounded-lg blur-[6px] opacity-40 dark:opacity-60"></div>
+                            <div className="relative w-full h-full bg-gradient-to-b from-[#FAF8F5] to-[#E3DAC6] dark:from-[#2A2F3A] dark:to-[#0F1115] rounded-lg flex items-center justify-center border border-[#D4AF37]/30 shadow-sm">
+                                <Sparkles className="text-[#0F1115] dark:text-[#E2D9C8] h-4 w-4" strokeWidth={1.5} />
+                            </div>
                         </div>
-                        <span className="text-[14px] font-semibold text-[#0F1115] dark:text-[#F5F2EA] tracking-[-0.02em]">CareerCraft</span>
+                        <span className="text-[15px] font-bold tracking-tight text-[#0F1115] dark:text-[#F5F2EA]">
+                            CareerCraft<span className="text-[#8D8474] italic font-serif ml-0.5">.ai</span>
+                        </span>
                     </Link>
                     {isCollapsed && (
-                        <div className="w-8 h-8 bg-[#0F1115] dark:bg-[#F5F2EA] rounded-lg flex items-center justify-center">
-                            <BrainCircuit className="text-white dark:text-[#0F1115] h-4 w-4" strokeWidth={1.5} />
+                        <div className="relative flex items-center justify-center w-8 h-8">
+                            <div className="absolute inset-0 bg-gradient-to-tr from-[#D4AF37] to-[#8D8474] rounded-lg blur-[6px] opacity-40 dark:opacity-60"></div>
+                            <div className="relative w-full h-full bg-gradient-to-b from-[#FAF8F5] to-[#E3DAC6] dark:from-[#2A2F3A] dark:to-[#0F1115] rounded-lg flex items-center justify-center border border-[#D4AF37]/30 shadow-sm">
+                                <Sparkles className="text-[#0F1115] dark:text-[#E2D9C8] h-4 w-4" strokeWidth={1.5} />
+                            </div>
                         </div>
                     )}
                     <button
@@ -171,11 +180,16 @@ const Layout = () => {
             <main className="flex-1 flex flex-col h-screen overflow-hidden">
                 {/* Mobile Header */}
                 <header className="md:hidden bg-[#F5F2EA]/80 dark:bg-[#0F1115]/80 backdrop-blur-xl border-b border-[#E3DAC6] dark:border-[#2A2F3A] p-4 flex justify-between items-center z-20">
-                    <Link to="/dashboard" className="flex items-center gap-2">
-                        <div className="w-8 h-8 bg-[#0F1115] dark:bg-[#F5F2EA] rounded-lg flex items-center justify-center">
-                            <BrainCircuit className="text-white dark:text-[#0F1115]" size={16} strokeWidth={1.5} />
+                    <Link to="/dashboard" className="flex items-center gap-2.5">
+                        <div className="relative flex items-center justify-center w-8 h-8">
+                            <div className="absolute inset-0 bg-gradient-to-tr from-[#D4AF37] to-[#8D8474] rounded-lg blur-[6px] opacity-40 dark:opacity-60"></div>
+                            <div className="relative w-full h-full bg-gradient-to-b from-[#FAF8F5] to-[#E3DAC6] dark:from-[#2A2F3A] dark:to-[#0F1115] rounded-lg flex items-center justify-center border border-[#D4AF37]/30 shadow-sm">
+                                <Sparkles className="text-[#0F1115] dark:text-[#E2D9C8] h-4 w-4" strokeWidth={1.5} />
+                            </div>
                         </div>
-                        <span className="text-[14px] font-semibold text-[#0F1115] dark:text-[#F5F2EA] tracking-[-0.02em]">CareerCraft</span>
+                        <span className="text-[15px] font-bold tracking-tight text-[#0F1115] dark:text-[#F5F2EA]">
+                            CareerCraft<span className="text-[#8D8474] italic font-serif ml-0.5">.ai</span>
+                        </span>
                     </Link>
                     <div className="flex items-center gap-2">
                         <button
