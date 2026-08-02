@@ -3,7 +3,7 @@ import FlashcardDeck from '../models/FlashcardDeck.js';
 import Quiz from '../models/Quiz.js';
 import QuizResult from '../models/QuizResult.js';
 import { incrementUsage } from '../middleware/usageMiddleware.js';
-import { summarizeText, explainConcept, generateFlashcards, generateQuiz, generateTextGeneric } from '../services/geminiService.js';
+import { summarizeText, explainConcept, generateFlashcards, generateQuiz, generateTextGeneric } from '../services/openaiService.js';
 import { awardXP, updateStreak, awardDocumentChatXP, XP_VALUES } from '../services/gamificationService.js';
 import { ingestDocument, searchSimilarChunks } from '../services/embeddingService.js';
 import { generateRAGResponse } from '../services/groqService.js';
@@ -49,7 +49,7 @@ export const chatWithDocument = async (req, res) => {
         if (!doc) return res.status(404).json({ message: 'Document not found' });
 
         let answer;
-        let mode = 'gemini';
+        let mode = 'openai';
 
         if (useRAG && doc.isEmbedded) {
             // RAG Mode: Retrieve relevant chunks → Groq (Llama 3.3)
@@ -61,7 +61,7 @@ export const chatWithDocument = async (req, res) => {
             answer = result.answer;
             mode = 'rag-groq';
         } else {
-            // Legacy Mode: Truncated text → Gemini
+            // Legacy Mode: Truncated text → OpenAI
             const text = await getDocumentText(doc);
             const context = text.substring(0, 50000);
             answer = await explainConcept(question, context);
