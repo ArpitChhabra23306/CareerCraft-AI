@@ -20,12 +20,12 @@ const ChatInterface = ({ documentId, isEmbedded: initialEmbedded = false }) => {
             setIsEmbedded(true);
             setUseRAG(true);
             setMessages(prev => [...prev, {
-                role: 'model',
+                role: 'assistant',
                 content: `Document embedded successfully into ${result.chunkCount} searchable chunks. RAG mode is now active — your questions will use semantic search for more precise answers.`
             }]);
         } catch (err) {
             const errorMsg = err.response?.data?.error || 'Failed to embed document.';
-            setMessages(prev => [...prev, { role: 'model', content: `Embedding failed: ${errorMsg}` }]);
+            setMessages(prev => [...prev, { role: 'assistant', content: `Embedding failed: ${errorMsg}` }]);
         } finally {
             setEmbedding(false);
         }
@@ -42,10 +42,10 @@ const ChatInterface = ({ documentId, isEmbedded: initialEmbedded = false }) => {
 
         try {
             const result = await aiService.chat(documentId, userMsg.content, useRAG);
-            setMessages(prev => [...prev, { role: 'model', content: result.answer }]);
+            setMessages(prev => [...prev, { role: 'assistant', content: result.answer }]);
         } catch (err) {
             const errorMsg = err.response?.data?.message || err.response?.data?.error || 'Error getting response.';
-            setMessages(prev => [...prev, { role: 'model', content: errorMsg }]);
+            setMessages(prev => [...prev, { role: 'assistant', content: errorMsg }]);
         } finally {
             setLoading(false);
         }
