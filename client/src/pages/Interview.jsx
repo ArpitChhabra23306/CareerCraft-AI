@@ -64,7 +64,7 @@ const Interview = () => {
             const res = await api.post('/interview/message', { sessionId: activeSession._id, message: userMsg.content });
             setMessages(res.data.messages);
         } catch (err) {
-            setMessages(prev => [...prev, { role: 'model', content: 'Error getting response.' }]);
+            setMessages(prev => [...prev, { role: 'assistant', content: 'Error getting response.' }]);
         } finally {
             setChatLoading(false);
         }

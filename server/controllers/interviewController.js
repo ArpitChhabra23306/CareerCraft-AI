@@ -1,5 +1,5 @@
 import InterviewSession from '../models/InterviewSession.js';
-import { getInterviewResponse } from '../services/geminiService.js';
+import { getInterviewResponse } from '../services/openaiService.js';
 import { awardXP, updateStreak, XP_VALUES } from '../services/gamificationService.js';
 import { incrementUsage } from '../middleware/usageMiddleware.js';
 
@@ -17,7 +17,7 @@ export const startInterview = async (req, res) => {
 
         // Initial greeting from AI
         const initialMessage = await getInterviewResponse([], "Start the interview.", role, difficulty, company, skills);
-        newSession.messages.push({ role: 'model', content: initialMessage });
+        newSession.messages.push({ role: 'assistant', content: initialMessage });
 
         await newSession.save();
 
@@ -43,11 +43,10 @@ export const sendInterviewMessage = async (req, res) => {
         // Check if user authorized
         if (session.user.toString() !== req.user.id) return res.status(403).json({ message: 'Not authorized' });
 
-        // Format history for Gemini
-        // Current history from DB
+        // Standard OpenAI history format
         const history = session.messages.map(msg => ({
             role: msg.role,
-            parts: [{ text: msg.content }]
+            content: msg.content
         }));
 
         // Add user message to DB
@@ -57,7 +56,7 @@ export const sendInterviewMessage = async (req, res) => {
         const aiResponse = await getInterviewResponse(history, message, session.role, session.difficulty, session.company, session.skills);
 
         // Add AI response to DB
-        session.messages.push({ role: 'model', content: aiResponse });
+        session.messages.push({ role: 'assistant', content: aiResponse });
 
         // Count user messages to determine if interview is substantial
         const userMessageCount = session.messages.filter(m => m.role === 'user').length;
